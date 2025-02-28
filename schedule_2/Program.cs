@@ -40,4 +40,10 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+//Controller Route
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Schedule}/{action=Index}/{id?}");
+
+
 app.Run();

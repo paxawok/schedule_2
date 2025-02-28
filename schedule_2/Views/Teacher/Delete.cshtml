@@ -1,0 +1,13 @@
+@model schedule_2.Models.Teacher
+
+@{
+    ViewData["Title"] = "Видалити викладача";
+}
+
+<h2>Видалити викладача</h2>
+<p>Ви впевнені, що хочете видалити <strong>@Model.FirstName @Model.LastName</strong>?</p>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">Видалити</button>
+    <a asp-action="Index" class="btn btn-secondary">Скасувати</a>
+</form>

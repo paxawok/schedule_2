@@ -1,0 +1,21 @@
+@model schedule_2.Models.Teacher
+
+@{
+    ViewData["Title"] = "Деталі викладача";
+}
+
+<h2>@Model.FirstName @Model.LastName</h2>
+<p><strong>Email:</strong> @Model.Email</p>
+
+<h3>Курси:</h3>
+<ul>
+    @foreach (var course in Model.Courses)
+    {
+    <li>@course.Name</li>
+    }
+</ul>
+
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Редагувати</a>
+    <a asp-action="Index" class="btn btn-secondary">Назад</a>
+</p>
