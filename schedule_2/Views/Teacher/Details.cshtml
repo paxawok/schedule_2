@@ -1,0 +1,22 @@
+﻿@model schedule_2.Models.Teacher
+
+<h2>Деталі викладача</h2>
+<div>
+    <h4>@Model.LastName @Model.FirstName</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Email</dt>
+        <dd>@Model.Email</dd>
+        <dt>Курси</dt>
+        <dd>
+            @foreach (var course in Model.Courses)
+            {
+                <p>@course.Name (@course.Description)</p>
+            }
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Редагувати</a> |
+    <a asp-action="Index">Повернутися до списку</a>
+</div>
