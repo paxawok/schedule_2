@@ -1,0 +1,48 @@
+﻿@model IEnumerable<schedule_2.Models.Group>
+
+<h2>Список груп</h2>
+<form asp-action="Create" method="get" style="display:inline;">
+    <button type="submit" class="btn btn-primary">Створити нову</button>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Назва</th>
+            <th>Події</th>
+            <th>Курси</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>
+                    @foreach (var eventItem in item.Events)
+                    {
+                        <span>@eventItem.Title, </span>
+                    }
+                </td>
+                <td>
+                    @foreach (var course in item.Courses)
+                    {
+                        <span>@course.Name, </span>
+                    }
+                </td>
+                <td>
+                    <form asp-action="Details" asp-route-id="@item.Id" method="get" style="display:inline;">
+                        <button type="submit" class="btn btn-info">Деталі</button>
+                    </form> |
+                    <form asp-action="Edit" asp-route-id="@item.Id" method="get" style="display:inline;">
+                        <button type="submit" class="btn btn-warning">Редагувати</button>
+                    </form> |
+                    <form asp-action="Delete" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Ви впевнені?')">Видалити</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
