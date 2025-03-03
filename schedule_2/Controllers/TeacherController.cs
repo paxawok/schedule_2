@@ -25,7 +25,7 @@ namespace schedule_2.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var teacher = await _context.Teachers
-                .Include(t => t.Courses) // Завантажуємо пов'язані курси
+                .Include(t => t.TeacherCourses)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (teacher == null)

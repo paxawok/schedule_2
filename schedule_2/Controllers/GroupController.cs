@@ -36,7 +36,7 @@ namespace schedule_2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Group group)
+        public async Task<IActionResult> Create(Models.Group group)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +57,7 @@ namespace schedule_2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Group group)
+        public async Task<IActionResult> Edit(int id, Models.Group group)
         {
             if (id != group.Id)
                 return NotFound();

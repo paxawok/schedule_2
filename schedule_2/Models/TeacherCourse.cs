@@ -1,6 +1,6 @@
 namespace schedule_2.Models
 {
-    // Проміжна таблиця Many-to-Many між Teacher і Course
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Many-to-Many пїЅпїЅ Teacher пїЅ Course
     public class TeacherCourse
     {
         public int TeacherId { get; set; }

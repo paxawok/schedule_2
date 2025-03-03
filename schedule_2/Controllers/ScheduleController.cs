@@ -19,7 +19,7 @@ namespace schedule_2.Controllers
         public async Task<IActionResult> Index()
         {
             var schedules = await _context.Schedules
-                .Include(s => s.Group)
+                .Include(s => s.Groups)
                 .Include(s => s.Teacher)
                 .Include(s => s.Course)
                 .Include(s => s.Classroom)
@@ -31,7 +31,7 @@ namespace schedule_2.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var schedule = await _context.Schedules
-                .Include(s => s.Group)
+                .Include(s => s.Groups)
                 .Include(s => s.Teacher)
                 .Include(s => s.Course)
                 .Include(s => s.Classroom)
