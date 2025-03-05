@@ -22,6 +22,8 @@
         public Schedule Schedule { get; set; } = null!;
 
         // Many-to-many with Group
-        public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
+        public virtual ICollection<EventGroup> EventGroups { get; set; } = new List<EventGroup>();
+        // Many-to-many with Subgroup (через SubgroupEvent)
+        public virtual ICollection<SubgroupEvent> SubgroupEvents { get; set; } = new List<SubgroupEvent>();
     }
 }

@@ -7,6 +7,6 @@
         public required string LastName { get; set; }
         public required string Email { get; set; }
         public virtual ICollection<Event> Events { get; set; } = new List<Event>();
-        public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
+        public virtual ICollection<CourseTeacher> CourseTeachers { get; set; } = new List<CourseTeacher>(); // M:M з Course
     }
 }

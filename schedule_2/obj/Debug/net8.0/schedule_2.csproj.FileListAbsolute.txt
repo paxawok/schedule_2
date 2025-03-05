@@ -154,4 +154,3 @@ E:\Study KNU\VIII\git\schedule_2\schedule_2\obj\Debug\net8.0\refint\schedule_2.d
 E:\Study KNU\VIII\git\schedule_2\schedule_2\obj\Debug\net8.0\schedule_2.pdb
 E:\Study KNU\VIII\git\schedule_2\schedule_2\obj\Debug\net8.0\schedule_2.genruntimeconfig.cache
 E:\Study KNU\VIII\git\schedule_2\schedule_2\obj\Debug\net8.0\ref\schedule_2.dll
-E:\Study KNU\VIII\git\schedule_2\schedule_2\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

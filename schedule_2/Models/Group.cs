@@ -4,7 +4,8 @@
     {
         public int Id { get; set; }
         public required string Name { get; set; }
-        public virtual ICollection<Event> Events { get; set; } = new List<Event>();
-        public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
+        public virtual ICollection<EventGroup> EventGroups { get; set; } = new List<EventGroup>(); // M:M з Event
+        public virtual ICollection<CourseGroup> CourseGroups { get; set; } = new List<CourseGroup>(); // M:M з Course
+        public virtual ICollection<Subgroup> Subgroups { get; set; } = new List<Subgroup>(); // 1:M з підгрупами
     }
 }
