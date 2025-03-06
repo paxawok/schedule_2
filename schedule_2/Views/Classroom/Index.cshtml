@@ -1,16 +1,15 @@
-﻿@model IEnumerable<schedule_2.Models.Teacher>
+﻿@model IEnumerable<schedule_2.Models.Classroom>
 
-<h2>Список викладачів</h2>
+<h2>Список аудиторій</h2>
 
 <!-- Кнопка для відкриття модального вікна створення -->
-<button type="button" class="btn btn-primary" onclick="showCreate()">Створити нового викладача</button>
+<button type="button" class="btn btn-primary" onclick="showCreate()">Створити нову аудиторію</button>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Ім'я</th>
-            <th>Призвище</th>
-            <th>Електронна пошта</th>
+            <th>Назва</th>
+            <th>Вмістимість</th>
             <th>Події</th>
             <th>Дії</th>
         </tr>
@@ -19,9 +18,8 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.FirstName</td>
-                <td>@item.LastName</td>
-                <td>@item.Email</td>
+                <td>@item.Name</td>
+                <td>@item.Capacity</td>
                 <td>
                     @foreach (var eventItem in item.Events)
                     {
@@ -38,7 +36,7 @@
     </tbody>
 </table>
 
-<!-- Модальне вікно для створення викладача -->
+<!-- Модальне вікно для створення аудиторії -->
 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -78,16 +76,16 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Відкриття модального вікна для створення викладача
+        // Відкриття модального вікна для створення аудиторії
         function showCreate() {
             $.ajax({
-                url: '/Teacher/Create',
+                url: '/Classroom/Create',
                 success: function (result) {
                     $('#createModal .modal-content').html(result);
                     $('#createModal').modal('show');
                 },
                 error: function () {
-                    alert('Помилка завантаження форми створення викладача.');
+                    alert('Помилка завантаження форми створення аудиторії.');
                 }
             });
         }
@@ -95,7 +93,7 @@
         // Відкриття модального вікна для деталей
         function showDetails(id) {
             $.ajax({
-                url: '/Teacher/DetailsModal/' + id,
+                url: '/Classroom/DetailsModal/' + id,
                 success: function (result) {
                     $('#detailsModal .modal-content').html(result);
                     $('#detailsModal').modal('show');
@@ -109,7 +107,7 @@
         // Відкриття модального вікна для редагування
         function showEdit(id) {
             $.ajax({
-                url: '/Teacher/EditModal/' + id,
+                url: '/Classroom/EditModal/' + id,
                 success: function (result) {
                     $('#editModal .modal-content').html(result);
                     $('#editModal').modal('show');
@@ -123,7 +121,7 @@
         // Відкриття модального вікна для видалення
         function showDelete(id) {
             $.ajax({
-                url: '/Teacher/DeleteModal/' + id,
+                url: '/Classroom/DeleteModal/' + id,
                 success: function (result) {
                     $('#deleteModal .modal-content').html(result);
                     $('#deleteModal').modal('show');
@@ -134,8 +132,8 @@
             });
         }
 
-        // Обробка форми створення викладача через AJAX
-        $(document).on('submit', '#createTeacherForm', function (e) {
+        // Обробка форми створення аудиторії через AJAX
+        $(document).on('submit', '#createClassroomForm', function (e) {
             e.preventDefault();
             var form = $(this);
             $.ajax({
@@ -159,7 +157,7 @@
         });
 
         // Обробка форми редагування через AJAX
-        $(document).on('submit', '#editTeacherForm', function (e) {
+        $(document).on('submit', '#editClassroomForm', function (e) {
             e.preventDefault();
             var form = $(this);
             $.ajax({
@@ -182,12 +180,26 @@
             });
         });
 
-        // Обробка видалення викладача через AJAX
-        $(document).on('submit', '#deleteTeacherForm', function (e) {
+        // Відкриття модального вікна для видалення
+        function showDelete(id) {
+            $.ajax({
+                url: '/Classroom/DeleteModal/' + id,
+                success: function (result) {
+                    $('#deleteModal .modal-content').html(result);
+                    $('#deleteModal').modal('show');
+                },
+                error: function () {
+                    alert('Помилка завантаження підтвердження видалення.');
+                }
+            });
+        }
+
+        // Обробка видалення аудиторії через AJAX
+        $(document).on('submit', '#deleteClassroomForm', function (e) {
             e.preventDefault();
             var form = $(this);
             $.ajax({
-                url: '/Teacher/DeleteConfirmed/' + $('#deleteTeacherId').val(),
+                url: '/Classroom/DeleteConfirmed/' + $('#deleteClassroomId').val(),
                 type: 'POST',
                 data: form.serialize(),
                 success: function (response) {

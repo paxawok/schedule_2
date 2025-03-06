@@ -1,0 +1,108 @@
+﻿@model IEnumerable<schedule_2.Models.Event>
+
+<h2>Список подій</h2>
+<form asp-action="Create" method="get" style="display:inline;">
+    <button type="submit" class="btn btn-primary">Створити нову подію</button>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Назва</th>
+            <th>Викладач</th>
+            <th>Курс</th>
+            <th>Дата та час початку</th>
+            <th>Дата та час кінця</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Teacher.FirstName</td>
+                <td>@item.Teacher.LastName</td>
+                <td>@item.Course.Name</td>
+                <td>@item.StartDateTime.ToShortDateString() @item.StartDateTime.ToShortTimeString()</td>
+                <td>@item.EndDateTime.ToShortDateString() @item.EndDateTime.ToShortTimeString()</td>
+                <td>
+                    <button type="button" class="btn btn-info" onclick="showDetails(@item.Id)">Деталі</button> |
+                    <button type="button" class="btn btn-warning" onclick="showEdit(@item.Id)">Редагувати</button> |
+                    <button type="button" class="btn btn-danger" onclick="showDelete(@item.Id)">Видалити</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Модальне вікно для деталей -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
+</div>
+
+<!-- Модальне вікно для редагування -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
+</div>
+
+<!-- Модальне вікно для видалення -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showDetails(id) {
+            $.ajax({
+                url: '/Event/DetailsModal/' + id,
+                success: function (result) {
+                    $('#detailsModal .modal-content').html(result);
+                    $('#detailsModal').modal('show');
+                },
+                error: function () {
+                    alert('Помилка завантаження деталей.');
+                }
+            });
+        }
+
+        function showEdit(id) {
+            $.ajax({
+                url: '/Event/EditModal/' + id,
+                success: function (result) {
+                    $('#editModal .modal-content').html(result);
+                    $('#editModal').modal('show');
+                },
+                error: function () {
+                    alert('Помилка завантаження форми редагування.');
+                }
+            });
+        }
+
+        function showDelete(id) {
+            $.ajax({
+                url: '/Event/DeleteModal/' + id,
+                success: function (result) {
+                    $('#deleteModal .modal-content').html(result);
+                    $('#deleteModal').modal('show');
+                },
+                error: function () {
+                    alert('Помилка завантаження підтвердження видалення.');
+                }
+            });
+        }
+    </script>
+}

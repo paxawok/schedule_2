@@ -1,0 +1,103 @@
+﻿@model schedule_2.Models.Event
+
+@{
+    ViewData["Title"] = "Створення нової події";
+}
+
+<form id="createEventForm" asp-action="CreateModal" method="post">
+    <div class="form-group">
+        <label for="Title">Назва події</label>
+        <input type="text" id="Title" name="Title" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="StartDateTime">Дата та час початку</label>
+        <input type="datetime-local" id="StartDateTime" name="StartDateTime" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="EndDateTime">Дата та час кінця</label>
+        <input type="datetime-local" id="EndDateTime" name="EndDateTime" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="TeacherId">Викладач</label>
+        <select id="TeacherId" name="TeacherId" class="form-control">
+            @foreach (var teacher in ViewBag.Teachers)
+            {
+                <option value="@teacher.Id">@teacher.FullName</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="CourseId">Курс</label>
+        <select id="CourseId" name="CourseId" class="form-control">
+            @foreach (var course in ViewBag.Courses)
+            {
+                <option value="@course.Id">@course.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="ClassroomId">Кабінет</label>
+        <select id="ClassroomId" name="ClassroomId" class="form-control">
+            @foreach (var classroom in ViewBag.Classrooms)
+            {
+                <option value="@classroom.Id">@classroom.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="ScheduleId">Розклад</label>
+        <select id="ScheduleId" name="ScheduleId" class="form-control">
+            @foreach (var schedule in ViewBag.Schedules)
+            {
+                <option value="@schedule.Id">@schedule.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="Groups">Групи</label>
+        <select id="Groups" name="selectedGroups" class="form-control" multiple>
+            @foreach (var group in ViewBag.Groups)
+            {
+                <option value="@group.Id">@group.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="Subgroups">Підгрупи</label>
+        <select id="Subgroups" name="selectedSubgroups" class="form-control" multiple>
+            @foreach (var subgroup in ViewBag.Groups)
+            {
+                <option value="@subgroup.Id">@subgroup.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Створити подію</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).on('submit', '#createEventForm', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#createModal').modal('hide');
+                        location.reload(); // Оновлюємо сторінку для відображення змін
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('Помилка при збереженні.');
+                }
+            });
+        });
+    </script>
+}

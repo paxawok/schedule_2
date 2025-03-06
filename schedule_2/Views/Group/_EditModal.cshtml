@@ -1,0 +1,36 @@
+﻿@model schedule_2.Models.Group
+
+<div class="modal-header">
+    <h5 class="modal-title">Редагувати групу</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form asp-action="EditModal" method="post" id="editGroupForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="Name" class="control-label">Назва групи</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Події</label>
+            <select multiple asp-items="@ViewBag.Events" name="selectedEvents" class="form-control"></select>
+        </div>
+
+        <div class="form-group">
+            <label>Курси</label>
+            <select multiple asp-items="@ViewBag.Courses" name="selectedCourses" class="form-control"></select>
+        </div>
+
+        <div class="form-group">
+            <label>Підгрупи</label>
+            <select multiple asp-items="@ViewBag.Subgroups" name="selectedSubgroups" class="form-control"></select>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+    <button type="submit" form="editGroupForm" class="btn btn-primary">Зберегти</button>
+</div>

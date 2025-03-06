@@ -1,0 +1,39 @@
+﻿@model schedule_2.Models.Group
+
+<div class="modal-header">
+    <h5 class="modal-title">Деталі групи</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <dl class="dl-horizontal">
+        <dt>Назва групи</dt>
+        <dd>@Model.Name</dd>
+
+        <dt>Події</dt>
+        <dd>
+            @foreach (var eventGroup in Model.EventGroups)
+            {
+                <p>@eventGroup.Event.Title (@eventGroup.Event.StartDateTime.ToShortDateString() - @eventGroup.Event.EndDateTime.ToShortDateString())</p>
+            }
+        </dd>
+
+        <dt>Курси</dt>
+        <dd>
+            @foreach (var courseGroup in Model.CourseGroups)
+            {
+                <p>@courseGroup.Course.Name</p>
+            }
+        </dd>
+
+        <dt>Підгрупи</dt>
+        <dd>
+            @foreach (var subgroup in Model.Subgroups)
+            {
+                <p>@subgroup.Name</p>
+            }
+        </dd>
+    </dl>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+</div>

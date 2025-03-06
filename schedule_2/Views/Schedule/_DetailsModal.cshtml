@@ -1,20 +1,17 @@
-﻿@model schedule_2.Models.Teacher
+﻿@model schedule_2.Models.Schedule
 
 <div class="modal-header">
-    <h5 class="modal-title">Деталі викладача</h5>
+    <h5 class="modal-title">Деталі розкладу</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
     <dl class="dl-horizontal">
-        <dt>Ім'я</dt>
-        <dd>@Model.FirstName</dd>
-
-        <dt>Призвище</dt>
-        <dd>@Model.LastName</dd>
-
-        <dt>Електронна пошта</dt>
-        <dd>@Model.Email</dd>
-
+        <dt>Назва розкладу</dt>
+        <dd>@Model.Name</dd>
+        <dt>Початок</dt>
+        <dd>@Model.StartDate.ToString("dd/MM/yyyy HH:mm")</dd>
+        <dt>Кінець</dt>
+        <dd>@Model.EndDate.ToString("dd/MM/yyyy HH:mm")</dd>
         <dt>Події</dt>
         <dd>
             @foreach (var eventItem in Model.Events)

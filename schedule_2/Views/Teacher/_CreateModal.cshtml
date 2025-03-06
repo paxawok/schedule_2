@@ -1,0 +1,23 @@
+﻿@model schedule_2.Models.Teacher
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Створити нового викладача</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form id="createTeacherForm" method="post" asp-action="Create">
+        <div class="mb-3">
+            <label for="FirstName" class="form-label">Ім'я</label>
+            <input type="text" class="form-control" id="FirstName" name="FirstName" required />
+        </div>
+        <div class="mb-3">
+            <label for="LastName" class="form-label">Призвище</label>
+            <input type="text" class="form-control" id="LastName" name="LastName" required />
+        </div>
+        <div class="mb-3">
+            <label for="Email" class="form-label">Електронна пошта</label>
+            <input type="email" class="form-control" id="Email" name="Email" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Створити</button>
+    </form>
+</div>

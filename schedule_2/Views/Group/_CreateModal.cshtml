@@ -1,0 +1,46 @@
+﻿@model schedule_2.Models.Group
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Створити нову групу</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form id="createGroupForm" method="post" asp-action="Create">
+        <div class="mb-3">
+            <label for="Name" class="form-label">Назва групи</label>
+            <input type="text" class="form-control" id="Name" name="Name" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="EventGroups" class="form-label">Події</label>
+            <select id="EventGroups" name="EventGroups" class="form-control" multiple>
+                @foreach (var eventItem in ViewBag.AllEvents as List<schedule_2.Models.Event>)
+                {
+                    <option value="@eventItem.Id">@eventItem.Title</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="CourseGroups" class="form-label">Курси</label>
+            <select id="CourseGroups" name="CourseGroups" class="form-control" multiple>
+                @foreach (var courseItem in ViewBag.AllCourses as List<schedule_2.Models.Course>)
+                {
+                    <option value="@courseItem.Id">@courseItem.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="Subgroups" class="form-label">Підгрупи</label>
+            <select id="Subgroups" name="Subgroups" class="form-control" multiple>
+                @foreach (var subgroupItem in ViewBag.AllSubgroups as List<schedule_2.Models.Subgroup>)
+                {
+                    <option value="@subgroupItem.Id">@subgroupItem.Name</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Створити</button>
+    </form>
+</div>

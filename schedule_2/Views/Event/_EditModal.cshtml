@@ -1,0 +1,71 @@
+﻿@model schedule_2.Models.Event
+
+<div class="modal-header">
+    <h5 class="modal-title">Редагувати подію</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form asp-action="EditModal" method="post" id="editEventForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="Title" class="control-label">Назва</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="StartDateTime" class="control-label">Дата та час початку</label>
+            <input asp-for="StartDateTime" class="form-control" type="datetime-local" />
+            <span asp-validation-for="StartDateTime" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="EndDateTime" class="control-label">Дата та час кінця</label>
+            <input asp-for="EndDateTime" class="form-control" type="datetime-local" />
+            <span asp-validation-for="EndDateTime" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Викладач</label>
+            <select asp-for="TeacherId" class="form-control">
+                @foreach (var teacher in ViewBag.Teachers)
+                {
+                    <option value="@teacher.Id" selected="@((teacher.Id == Model.TeacherId) ? "selected" : "")">@teacher.FullName</option>
+                }
+            </select>
+            <span asp-validation-for="TeacherId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Курс</label>
+            <select asp-for="CourseId" class="form-control">
+                @foreach (var course in ViewBag.Courses)
+                {
+                    <option value="@course.Id" selected=@(course.Id == Model.CourseId ? "selected" : "")>@course.Name</option>
+                }
+            </select>
+            <span asp-validation-for="CourseId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Аудиторія</label>
+            <select asp-for="ClassroomId" class="form-control">
+                @foreach (var classroom in ViewBag.Classrooms)
+                {
+                    <option value="@classroom.Id" selected=@(classroom.Id == Model.ClassroomId ? "selected" : "")>@classroom.Name</option>
+                }
+            </select>
+            <span asp-validation-for="ClassroomId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Розклад</label>
+            <select asp-for="ScheduleId" class="form-control">
+                @foreach (var schedule in ViewBag.Schedules)
+                {
+                    <option value="@schedule.Id" selected=@(schedule.Id == Model.ScheduleId ? "selected" : "")>@schedule.Name</option>
+                }
+            </select>
+            <span asp-validation-for="ScheduleId" class="text-danger"></span>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+    <button type="submit" form="editEventForm" class="btn btn-primary">Зберегти</button>
+</div>

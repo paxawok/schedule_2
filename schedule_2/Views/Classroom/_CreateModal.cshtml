@@ -1,0 +1,19 @@
+﻿@model schedule_2.Models.Classroom
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Створити нову аудиторію</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form id="createClassroomForm" method="post" asp-action="Create">
+        <div class="mb-3">
+            <label for="Name" class="form-label">Назва аудиторії</label>
+            <input type="text" class="form-control" id="Name" name="Name" required />
+        </div>
+        <div class="mb-3">
+            <label for="Capacity" class="form-label">Вмістимість</label>
+            <input type="number" class="form-control" id="Capacity" name="Capacity" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Створити</button>
+    </form>
+</div>
