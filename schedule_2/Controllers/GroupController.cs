@@ -21,7 +21,9 @@ namespace schedule_2.Controllers
         {
             var groups = await _context.Groups
                 .Include(g => g.EventGroups)
+                    .ThenInclude(eg => eg.Event)
                 .Include(g => g.CourseGroups)
+                    .ThenInclude(cg => cg.Course)
                 .Include(g => g.Subgroups)
                 .ToListAsync();
             return View(groups);
@@ -33,7 +35,9 @@ namespace schedule_2.Controllers
         {
             var group = await _context.Groups
                 .Include(g => g.EventGroups)
+                    .ThenInclude(eg => eg.Event)
                 .Include(g => g.CourseGroups)
+                    .ThenInclude(cg => cg.Course)
                 .Include(g => g.Subgroups)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -114,12 +118,18 @@ namespace schedule_2.Controllers
         {
             var group = await _context.Groups
                 .Include(g => g.EventGroups)
+                    .ThenInclude(eg => eg.Event)
                 .Include(g => g.CourseGroups)
+                    .ThenInclude(cg => cg.Course)
                 .Include(g => g.Subgroups)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (group == null)
                 return NotFound();
+
+            ViewBag.AllEvents = _context.Events.ToList() ?? new List<Event>();
+            ViewBag.AllCourses = _context.Courses.ToList() ?? new List<Course>();
+            ViewBag.AllSubgroups = _context.Subgroups.ToList() ?? new List<Subgroup>();
 
             return PartialView("_EditModal", group);
         }
@@ -127,33 +137,64 @@ namespace schedule_2.Controllers
         // POST: /Group/Edit/{id} (AJAX для оновлення через модальне вікно)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditModal(int id, Group group)
+        public async Task<IActionResult> EditModal(int id, Group group, int[] EventGroups, int[] CourseGroups, int[] Subgroups)
         {
             if (id != group.Id)
                 return Json(new { success = false, message = "ID не співпадає." });
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var groupInDb = await _context.Groups
+                var groupInDb = await _context.Groups
                         .Include(g => g.EventGroups)
+                            .ThenInclude(eg => eg.Event)
                         .Include(g => g.CourseGroups)
+                            .ThenInclude(cg => cg.Course)
                         .Include(g => g.Subgroups)
                         .FirstOrDefaultAsync(g => g.Id == id);
 
-                    if (groupInDb == null)
-                        return Json(new { success = false, message = "Група не знайдена." });
+                if (groupInDb == null)
+                    return Json(new { success = false, message = "Група не знайдена." });
 
-                    groupInDb.Name = group.Name;
+                groupInDb.Name = group.Name;
 
-                    await _context.SaveChangesAsync();
-                    return Json(new { success = true, message = "Дані успішно оновлено." });
-                }
-                catch (DbUpdateConcurrencyException)
+                if (EventGroups != null && EventGroups.Length > 0)
                 {
-                    return Json(new { success = false, message = "Помилка оновлення даних." });
+                    foreach (var eventId in EventGroups)
+                    {
+                        var eventGroup = await _context.Events.FindAsync(eventId);
+                        if (eventGroup != null)
+                        {
+                            group.EventGroups.Add(new EventGroup { GroupId = group.Id, EventId = eventGroup.Id });
+                        }
+                    }
                 }
+
+                if (CourseGroups != null && CourseGroups.Length > 0)
+                {
+                    foreach (var courseId in CourseGroups)
+                    {
+                        var courseGroup = await _context.Courses.FindAsync(courseId);
+                        if (courseGroup != null)
+                        {
+                            group.CourseGroups.Add(new CourseGroup { GroupId = group.Id, CourseId = courseGroup.Id });
+                        }
+                    }
+                }
+
+                if (Subgroups != null && Subgroups.Length > 0)
+                {
+                    foreach (var subgroupId in Subgroups)
+                    {
+                        var subgroup = await _context.Subgroups.FindAsync(subgroupId);
+                        if (subgroup != null)
+                        {
+                            group.Subgroups.Add(subgroup);
+                        }
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, message = "Дані успішно оновлено." });
             }
             return PartialView("_EditModal", group);
         }

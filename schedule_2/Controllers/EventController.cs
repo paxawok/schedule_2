@@ -76,6 +76,7 @@ namespace schedule_2.Controllers
             {
                 try
                 {
+                    // Додаємо нову подію
                     _context.Add(eventItem);
                     await _context.SaveChangesAsync();
 
@@ -98,23 +99,26 @@ namespace schedule_2.Controllers
                     }
 
                     await _context.SaveChangesAsync();
-                    return Json(new { success = true, message = "Подію успішно створено." });
+
+                    // Повертаємо результат на сторінку після успішного створення
+                    return RedirectToAction("Index"); // Переходимо на сторінку зі списком подій
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    return Json(new { success = false, message = "Помилка створення події." });
+                    ModelState.AddModelError("", "Помилка створення події.");
                 }
             }
 
-            // Вибірки для форми створення події
+            // Повторно передаємо вибірки для форми у випадку помилки
             ViewBag.Teachers = new SelectList(await _context.Teachers.ToListAsync(), "Id", "FullName", eventItem.TeacherId);
             ViewBag.Courses = new SelectList(await _context.Courses.ToListAsync(), "Id", "Name", eventItem.CourseId);
             ViewBag.Classrooms = new SelectList(await _context.Classrooms.ToListAsync(), "Id", "Name", eventItem.ClassroomId);
             ViewBag.Schedules = new SelectList(await _context.Schedules.ToListAsync(), "Id", "Name", eventItem.ScheduleId);
             ViewBag.Groups = new SelectList(await _context.Groups.ToListAsync(), "Id", "Name");
 
-            return PartialView("_CreateModal", eventItem);
+            return PartialView("_CreateModal", eventItem); // Повертаємо форму в разі помилки
         }
+
 
         // GET: /Event/Edit/{id} (Partial View для модального вікна)
         [HttpGet]
@@ -247,4 +251,3 @@ namespace schedule_2.Controllers
         }
     }
 }
-

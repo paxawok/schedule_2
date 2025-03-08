@@ -38,7 +38,7 @@
             <select asp-for="CourseId" class="form-control">
                 @foreach (var course in ViewBag.Courses)
                 {
-                    <option value="@course.Id" selected=@(course.Id == Model.CourseId ? "selected" : "")>@course.Name</option>
+                    <option value="@course.Id" selected="@((course.Id == Model.CourseId) ? "selected" : "")">@course.Name</option>
                 }
             </select>
             <span asp-validation-for="CourseId" class="text-danger"></span>
@@ -48,7 +48,7 @@
             <select asp-for="ClassroomId" class="form-control">
                 @foreach (var classroom in ViewBag.Classrooms)
                 {
-                    <option value="@classroom.Id" selected=@(classroom.Id == Model.ClassroomId ? "selected" : "")>@classroom.Name</option>
+                    <option value="@classroom.Id" selected="@((classroom.Id == Model.ClassroomId) ? "selected" : "")">@classroom.Name</option>
                 }
             </select>
             <span asp-validation-for="ClassroomId" class="text-danger"></span>
@@ -58,7 +58,7 @@
             <select asp-for="ScheduleId" class="form-control">
                 @foreach (var schedule in ViewBag.Schedules)
                 {
-                    <option value="@schedule.Id" selected=@(schedule.Id == Model.ScheduleId ? "selected" : "")>@schedule.Name</option>
+                    <option value="@schedule.Id" selected="@((schedule.Id == Model.ScheduleId) ? "selected" : "")">@schedule.Name</option>
                 }
             </select>
             <span asp-validation-for="ScheduleId" class="text-danger"></span>
@@ -69,3 +69,29 @@
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
     <button type="submit" form="editEventForm" class="btn btn-primary">Зберегти</button>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).on('submit', '#editEventForm', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#editModal').modal('hide');
+                        location.reload(); // Оновлюємо сторінку для відображення змін
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('Помилка при збереженні.');
+                }
+            });
+        });
+    </script>
+}

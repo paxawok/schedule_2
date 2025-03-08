@@ -14,3 +14,29 @@
         <button type="submit" class="btn btn-danger">Видалити</button>
     </form>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).on('submit', '#deleteEventForm', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#deleteModal').modal('hide');
+                        location.reload(); // Оновлюємо сторінку для відображення змін
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('Помилка при видаленні події.');
+                }
+            });
+        });
+    </script>
+}

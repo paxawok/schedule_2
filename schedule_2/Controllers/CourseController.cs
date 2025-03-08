@@ -22,9 +22,21 @@ namespace schedule_2.Controllers
             var courses = await _context.Courses
                 .Include(c => c.Events)
                 .Include(c => c.CourseTeachers)
+                    .ThenInclude(ct => ct.Teacher)
                 .Include(c => c.CourseGroups)
+                    .ThenInclude(cg => cg.Group)
                 .Include(c => c.SubgroupCourses)
+                    .ThenInclude(sg => sg.Subgroup)
                 .ToListAsync();
+
+            // Перевірка на null і ініціалізація колекцій, якщо вони порожні
+            foreach (var course in courses)
+            {
+                course.CourseGroups ??= new List<CourseGroup>();
+                course.CourseTeachers ??= new List<CourseTeacher>();
+                course.SubgroupCourses ??= new List<SubgroupCourse>();
+            }
+
             return View(courses);
         }
 
@@ -35,8 +47,11 @@ namespace schedule_2.Controllers
             var course = await _context.Courses
                 .Include(c => c.Events)
                 .Include(c => c.CourseTeachers)
+                    .ThenInclude(ct => ct.Teacher)
                 .Include(c => c.CourseGroups)
+                    .ThenInclude(cg => cg.Group)
                 .Include(c => c.SubgroupCourses)
+                    .ThenInclude(sg => sg.Subgroup)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (course == null)
@@ -136,7 +151,6 @@ namespace schedule_2.Controllers
             return PartialView("_EditModal", course);
         }
 
-
         // POST: /Course/Edit/{id} (AJAX для оновлення через модальне вікно)
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -149,21 +163,19 @@ namespace schedule_2.Controllers
             {
                 var courseInDb = await _context.Courses
                     .Include(c => c.CourseTeachers)
-                    .ThenInclude(ct => ct.Teacher)
+                        .ThenInclude(ct => ct.Teacher)
                     .Include(c => c.CourseGroups)
-                    .ThenInclude(cg => cg.Group)
+                        .ThenInclude(cg => cg.Group)
                     .Include(c => c.SubgroupCourses)
-                    .ThenInclude(sc => sc.Subgroup)
+                        .ThenInclude(sc => sc.Subgroup)
                     .FirstOrDefaultAsync(c => c.Id == id);
 
                 if (courseInDb == null)
                     return Json(new { success = false, message = "Курс не знайдено." });
 
-                // Оновлення основних даних курсу
                 courseInDb.Name = course.Name;
                 courseInDb.Description = course.Description;
 
-                // Оновлення викладачів
                 courseInDb.CourseTeachers.Clear();
                 if (courseTeachers != null && courseTeachers.Length > 0)
                 {

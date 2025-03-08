@@ -1,10 +1,4 @@
-﻿@model schedule_2.Models.Event
-
-@{
-    ViewData["Title"] = "Створення нової події";
-}
-
-<form id="createEventForm" asp-action="CreateModal" method="post">
+﻿<form id="createEventForm" asp-action="CreateModal" method="post">
     <div class="form-group">
         <label for="Title">Назва події</label>
         <input type="text" id="Title" name="Title" class="form-control" required />
@@ -75,29 +69,3 @@
         <button type="submit" class="btn btn-primary">Створити подію</button>
     </div>
 </form>
-
-@section Scripts {
-    <script>
-        $(document).on('submit', '#createEventForm', function (e) {
-            e.preventDefault();
-            var form = $(this);
-            $.ajax({
-                url: form.attr('action'),
-                type: 'POST',
-                data: form.serialize(),
-                success: function (response) {
-                    if (response.success) {
-                        alert(response.message);
-                        $('#createModal').modal('hide');
-                        location.reload(); // Оновлюємо сторінку для відображення змін
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function () {
-                    alert('Помилка при збереженні.');
-                }
-            });
-        });
-    </script>
-}

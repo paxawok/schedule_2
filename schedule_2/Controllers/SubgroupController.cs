@@ -23,7 +23,9 @@ namespace schedule_2.Controllers
             var subgroups = await _context.Subgroups
                 .Include(s => s.Group)
                 .Include(s => s.SubgroupCourses)
+                    .ThenInclude(sc => sc.Course)
                 .Include(s => s.SubgroupEvents)
+                    .ThenInclude(se => se.Event)
                 .ToListAsync();
             return View(subgroups);
         }
@@ -35,7 +37,9 @@ namespace schedule_2.Controllers
             var subgroup = await _context.Subgroups
                 .Include(s => s.Group)
                 .Include(s => s.SubgroupCourses)
+                    .ThenInclude(sc => sc.Course)
                 .Include(s => s.SubgroupEvents)
+                    .ThenInclude(se => se.Event)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (subgroup == null)
@@ -58,21 +62,50 @@ namespace schedule_2.Controllers
         // POST: /Subgroup/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Subgroup subgroup)
+        public async Task<IActionResult> Create(Subgroup subgroup, int[] SubgroupEvents, int[] SubgroupCourses, int[] Groups)
         {
             if (ModelState.IsValid)
             {
-                _context.Subgroups.Add(subgroup);
+                if (SubgroupEvents != null && SubgroupEvents.Length > 0)
+                {
+                    foreach (var eventId in SubgroupEvents)
+                    {
+                        var eventGroup = await _context.Events.FindAsync(eventId);
+                        if (eventGroup != null)
+                        {
+                            subgroup.SubgroupEvents.Add(new SubgroupEvent { SubgroupId = subgroup.Id, EventId = eventGroup.Id });
+                        }
+                    }
+                }
 
-                try
+                if (SubgroupCourses != null && SubgroupCourses.Length > 0)
                 {
-                    await _context.SaveChangesAsync();
-                    return Json(new { success = true, message = "Підгрупу успішно створено!" });
+                    foreach (var courseId in SubgroupCourses)
+                    {
+                        var subgroupcourse = await _context.Courses.FindAsync(courseId);
+                        if (subgroupcourse != null)
+                        {
+                            subgroup.SubgroupCourses.Add(new SubgroupCourse { SubgroupId = subgroup.Id, CourseId = subgroupcourse.Id });
+                        }
+                    }
                 }
-                catch (Exception ex)
+
+                if (Groups != null && Groups.Length > 0)
                 {
-                    return Json(new { success = false, message = "Сталася помилка при створенні підгрупи: " + ex.Message });
+                    foreach (var groupId in Groups)
+                    {
+                        var group = await _context.Groups.FindAsync(groupId);
+                        if (group != null)
+                        {
+                            subgroup.GroupId = group.Id;
+                            subgroup.Group = group;
+                        }
+                    }
                 }
+
+                _context.Subgroups.Add(subgroup);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, message = "Підгрупу успішно створено!" });
             }
 
             return Json(new { success = false, message = "Невірні дані. Перевірте форму." });
@@ -85,7 +118,9 @@ namespace schedule_2.Controllers
             var subgroup = await _context.Subgroups
                 .Include(s => s.Group)
                 .Include(s => s.SubgroupCourses)
+                    .ThenInclude(sc => sc.Course)
                 .Include(s => s.SubgroupEvents)
+                    .ThenInclude(se => se.Event)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (subgroup == null)
@@ -109,7 +144,9 @@ namespace schedule_2.Controllers
                     var subgroupInDb = await _context.Subgroups
                         .Include(s => s.Group)
                         .Include(s => s.SubgroupCourses)
+                            .ThenInclude(sc => sc.Course)
                         .Include(s => s.SubgroupEvents)
+                            .ThenInclude(se => se.Event)
                         .FirstOrDefaultAsync(s => s.Id == id);
 
                     if (subgroupInDb == null)
@@ -136,7 +173,9 @@ namespace schedule_2.Controllers
             var subgroup = await _context.Subgroups
                 .Include(s => s.Group)
                 .Include(s => s.SubgroupCourses)
+                    .ThenInclude(sc => sc.Course)
                 .Include(s => s.SubgroupEvents)
+                    .ThenInclude(se => se.Event)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (subgroup == null)

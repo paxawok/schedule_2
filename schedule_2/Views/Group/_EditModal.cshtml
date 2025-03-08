@@ -16,17 +16,35 @@
 
         <div class="form-group">
             <label>Події</label>
-            <select multiple asp-items="@ViewBag.Events" name="selectedEvents" class="form-control"></select>
+            <select multiple asp-items="@ViewBag.Events" name="selectedEvents" class="form-control">
+                <option value="">-- Вибрати події --</option>
+                @foreach (var eventItem in ViewBag.AllEvents as List<schedule_2.Models.Event>)
+                {
+                    <option value="@eventItem.Id">@eventItem.Title</option>
+                }
+            </select>
         </div>
 
         <div class="form-group">
             <label>Курси</label>
-            <select multiple asp-items="@ViewBag.Courses" name="selectedCourses" class="form-control"></select>
+            <select multiple asp-items="@ViewBag.Courses" name="selectedCourses" class="form-control">
+                <option value="">-- Вибрати курс --</option>
+                @foreach (var courseItem in ViewBag.AllCourses as List<schedule_2.Models.Course>)
+                {
+                    <option value="@courseItem.Id">@courseItem.Name</option>
+                }
+            </select>
         </div>
 
         <div class="form-group">
             <label>Підгрупи</label>
-            <select multiple asp-items="@ViewBag.Subgroups" name="selectedSubgroups" class="form-control"></select>
+            <select multiple asp-items="@ViewBag.Subgroups" name="selectedSubgroups" class="form-control">
+                <option value="">-- Вибрати підгрупу --</option>
+                @foreach (var subgroupItem in ViewBag.AllSubgroups as List<schedule_2.Models.Subgroup>)
+                {
+                    <option value="@subgroupItem.Id">@subgroupItem.Name</option>
+                }
+            </select>
         </div>
     </form>
 </div>

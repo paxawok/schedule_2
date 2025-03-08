@@ -11,39 +11,32 @@
             <input type="text" class="form-control" id="Name" name="Name" required />
         </div>
         <div class="mb-3">
-            <label for="GroupId" class="form-label">Група</label>
-            <select class="form-select" id="GroupId" name="GroupId" required>
+            <label for="Groups" class="form-label">Група</label>
+            <select class="form-select" id="GroupId" name="Groups" required>
                 <option value="">Оберіть групу</option>
-                @if (ViewBag.Groups != null)
+                @foreach (var group in ViewBag.AllGroups as List<schedule_2.Models.Group>)
                 {
-                    @foreach (var group in ViewBag.Groups as List<schedule_2.Models.Group>)
-                    {
-                        <option value="@group.Id">@group.Name</option>
-                    }
+                    <option value="@group.Id">@group.Name</option>
                 }
             </select>
         </div>
         <div class="mb-3">
             <label for="SubgroupCourses" class="form-label">Курси</label>
-            <select multiple class="form-select" id="SubgroupCourses" name="SubgroupCourses" required>
-                @if (ViewBag.Courses != null)
+            <select multiple class="form-select" id="SubgroupCourses" name="SubgroupCourses">
+                <option value="">Оберіть курс</option>
+                @foreach (var course in ViewBag.AllCourses as List<schedule_2.Models.Course>)
                 {
-                    @foreach (var course in ViewBag.Courses as List<schedule_2.Models.Course>)
-                    {
-                        <option value="@course.Id">@course.Name</option>
-                    }
+                    <option value="@course.Id">@course.Name</option>
                 }
             </select>
         </div>
         <div class="mb-3">
             <label for="SubgroupEvents" class="form-label">Події</label>
-            <select multiple class="form-select" id="SubgroupEvents" name="SubgroupEvents" required>
-                @if (ViewBag.Events != null)
+            <select multiple class="form-select" id="SubgroupEvents" name="SubgroupEvents">
+                <option value="">Оберіть події</option>
+                @foreach (var eventItem in ViewBag.AllEvents as List<schedule_2.Models.Event>)
                 {
-                    @foreach (var eventItem in ViewBag.Events as List<schedule_2.Models.Event>)
-                    {
-                        <option value="@eventItem.Id">@eventItem.Title</option>
-                    }
+                    <option value="@eventItem.Id">@eventItem.Title</option>
                 }
             </select>
         </div>
