@@ -13,12 +13,19 @@
     </div>
     <div class="form-group">
         <label for="TeacherId">Викладач</label>
-        <select id="TeacherId" name="TeacherId" class="form-control">
-            @foreach (var teacher in ViewBag.Teachers)
-            {
-                <option value="@teacher.Id">@teacher.FullName</option>
-            }
-        </select>
+        @if (ViewBag.Teachers != null)
+        {
+            <select id="TeacherId" name="TeacherId" class="form-control">
+                @foreach (var teacher in ViewBag.Teachers)
+                {
+                    <option value="@teacher.Id">@teacher.Name</option>
+                }
+            </select>
+        }
+        else
+        {
+            <p>No teachers available</p>
+        }
     </div>
     <div class="form-group">
         <label for="CourseId">Курс</label>
