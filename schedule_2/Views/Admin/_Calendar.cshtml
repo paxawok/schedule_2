@@ -1,0 +1,28 @@
+﻿<<div id="calendar-wrapper">
+    <table id="calendar" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int hour = 0; hour < 24; hour++)
+            {
+                <tr>
+                    <td class="time-column">@($"{hour:D2}:00")</td>
+                    @for (int day = 0; day < 7; day++)
+                    {
+                        <td class="calendar-cell" data-time="@hour" data-day="@day"></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

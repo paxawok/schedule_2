@@ -14,18 +14,28 @@
     <link rel="stylesheet" href="~/schedule_2.styles.css" asp-append-version="true" />
 
     <style>
-        /* Фіксуємо футер внизу */
+        /* Робимо сторінку на всю висоту */
         html, body {
             height: 100%;
             margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
         }
 
-        .content {
-            flex: 1; /* Розтягуємо контент на всю доступну висоту */
+        /* Контейнер для контенту */
+        .wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
+        /* Основний контент, що займає вільний простір */
+        .content {
+            flex: 1;
+        }
+
+        /* Футер завжди внизу, але не прилипає при скролі */
         .footer {
             width: 100%;
             background: #f8f9fa; /* Світлий фон */
@@ -35,30 +45,60 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="border-bottom py-2">
-        <div style="height: 70px" class="container d-flex justify-content-between align-items-center">
-            <a style="font-size: 32px !important" class="navbar-brand fs-4 fw-bold text-dark" asp-area="" asp-controller="Home" asp-action="Index">Shedule</a>
-            <div class="d-flex align-items-center gap-2">
-                <span style="font-size: 20px; padding-right: 5px" class="fw-bold">UA</span>
-                <div style="width: 34px; height: 34px; background-color: blue; border-radius: 50%;"></div>
+    <!-- Основний контейнер -->
+    <div class="wrapper">
+        <!-- Header -->
+        <header class="border-bottom py-2">
+            <div style="height: 70px" class="container d-flex justify-content-between align-items-center">
+                <a style="font-size: 32px !important" class="navbar-brand fs-4 fw-bold text-dark" asp-area="" asp-controller="Home" asp-action="Index">Schedule</a>
+                <div class="d-flex align-items-center gap-2">
+                    <span style="font-size: 20px; padding-right: 5px" class="fw-bold">UA</span>
+                    <div style="width: 34px; height: 34px; background-color: blue; border-radius: 50%;"></div>
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <!-- Main Content -->
-    <div class="container content mt-5">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        <!-- Main Content -->
+        <div class="container content mt-5">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
-    <!-- Footer (приклеєний до низу) -->
+    <!-- Footer (тепер він завжди внизу) -->
     <footer class="footer border-top text-muted py-3">
         <div class="container">
-            &copy; 2025 - MIT-41 - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none">Privacy</a>
+            &copy; 2025 - MIT-41
         </div>
     </footer>
+
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Select an Entity to Edit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Choose what you want to edit:</p>
+                    <div class="d-flex flex-column gap-2">
+                        <a href="/Event" class="btn btn-primary">Edit Event</a>
+                        <a href="/Teacher" class="btn btn-primary">Edit Teacher</a>
+                        <a href="/Classroom" class="btn btn-primary">Edit Classroom</a>
+                        <a href="/Course" class="btn btn-primary">Edit Course</a>
+                        <a href="/Group" class="btn btn-primary">Edit Group</a>
+                        <a href="/Schedule" class="btn btn-primary">Edit Schedule</a>
+                        <a href="/Subgroup" class="btn btn-primary">Edit Subgroup</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

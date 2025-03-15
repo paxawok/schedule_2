@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Admin Panel";
+}
+
+<div class="container-fluid">
+
+    <!-- Верхній блок з кнопками -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap" id="top-controls">
+
+        <!-- Кнопка Edit -->
+        <button class="btn btn-primary" id="openEditModal">Edit</button>
+
+        <!-- Перемикач тижня -->
+        <div class="d-flex align-items-center">
+            <button class="btn btn-light me-2" id="prevWeek">&lt;</button>
+            <h3 class="fw-bold mb-0 mx-2">Week 1</h3>
+            <button class="btn btn-light ms-2" id="nextWeek">&gt;</button>
+        </div>
+
+        <!-- Фільтри Group і Teacher -->
+        <div>
+            <button class="btn btn-secondary me-2">Group ⌄</button>
+            <button class="btn btn-secondary">Teacher ⌄</button>
+        </div>
+
+    </div>
+
+    <!-- Календар -->
+    <div id="calendar-container">
+        @await Html.PartialAsync("_Calendar")
+    </div>
+
+</div>
+
+<script src="~/js/admin.js"></script>
