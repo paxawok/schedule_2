@@ -1,0 +1,59 @@
+﻿@model schedule_2.Models.Event
+
+<div class="modal-header">
+    <h5 class="modal-title">Деталі події</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <dl class="dl-horizontal">
+        <dt>Назва</dt>
+        <dd>@Model.Title</dd>
+
+        <dt>Викладач</dt>
+        <dd>@Model.Teacher.FirstName @Model.Teacher.LastName</dd>
+
+        <dt>Курс</dt>
+        <dd>@Model.Course.Name</dd>
+
+        <dt>Дата та час початку</dt>
+        <dd>@Model.StartDateTime.ToShortDateString() @Model.StartDateTime.ToShortTimeString()</dd>
+
+        <dt>Дата та час кінця</dt>
+        <dd>@Model.EndDateTime.ToShortDateString() @Model.EndDateTime.ToShortTimeString()</dd>
+
+        <dt>Аудиторія</dt>
+        <dd>@Model.Classroom.Name</dd>
+
+        <dt>Розклад</dt>
+        <dd>@Model.Schedule.Name</dd>
+
+        @if (Model.EventGroups != null && Model.EventGroups.Any())
+        {
+            <dt>Групи</dt>
+            <dd>
+                @foreach (var group in Model.EventGroups)
+                {
+                    <span>@group.Group.Name</span>
+
+                    <br />
+                }
+            </dd>
+        }
+
+        @if (Model.SubgroupEvents != null && Model.SubgroupEvents.Any())
+        {
+            <dt>Підгрупи</dt>
+            <dd>
+                @foreach (var subgroupEvent in Model.SubgroupEvents)
+                {
+                    <span>@subgroupEvent.Subgroup.Name</span>
+
+                    <br />
+                }
+            </dd>
+        }
+    </dl>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+</div>

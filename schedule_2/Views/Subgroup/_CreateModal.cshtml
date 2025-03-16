@@ -1,0 +1,45 @@
+﻿@model schedule_2.Models.Subgroup
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Створити нову підгрупу</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form id="createSubgroupForm" method="post" asp-action="Create">
+        <div class="mb-3">
+            <label for="Name" class="form-label">Назва підгрупи</label>
+            <input type="text" class="form-control" id="Name" name="Name" required />
+        </div>
+        <div class="mb-3">
+            <label for="Groups" class="form-label">Група</label>
+            <select class="form-select" id="GroupId" name="Groups" required>
+                <option value="">Оберіть групу</option>
+                @foreach (var group in ViewBag.AllGroups as List<schedule_2.Models.Group>)
+                {
+                    <option value="@group.Id">@group.Name</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="SubgroupCourses" class="form-label">Курси</label>
+            <select multiple class="form-select" id="SubgroupCourses" name="SubgroupCourses">
+                <option value="">Оберіть курс</option>
+                @foreach (var course in ViewBag.AllCourses as List<schedule_2.Models.Course>)
+                {
+                    <option value="@course.Id">@course.Name</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="SubgroupEvents" class="form-label">Події</label>
+            <select multiple class="form-select" id="SubgroupEvents" name="SubgroupEvents">
+                <option value="">Оберіть події</option>
+                @foreach (var eventItem in ViewBag.AllEvents as List<schedule_2.Models.Event>)
+                {
+                    <option value="@eventItem.Id">@eventItem.Title</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Створити</button>
+    </form>
+</div>

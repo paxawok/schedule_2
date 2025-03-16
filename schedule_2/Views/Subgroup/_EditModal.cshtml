@@ -1,0 +1,34 @@
+﻿@model schedule_2.Models.Subgroup
+
+<div class="modal-header">
+    <h5 class="modal-title">Редагувати підгрупу</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form asp-action="EditModal" method="post" id="editSubgroupForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="Name" class="control-label">Назва</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="GroupId" class="control-label">Група</label>
+            <select asp-for="GroupId" class="form-control" asp-items="ViewBag.Groups">
+                <option value="">-- Виберіть групу --</option>
+            </select>
+            <span asp-validation-for="GroupId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Курси</label>
+            <select asp-for="SubgroupCourses" class="form-control" asp-items="ViewBag.Courses" multiple="multiple">
+            </select>
+            <span asp-validation-for="SubgroupCourses" class="text-danger"></span>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+    <button type="submit" form="editSubgroupForm" class="btn btn-primary">Зберегти</button>
+</div>

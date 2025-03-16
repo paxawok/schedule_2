@@ -1,0 +1,17 @@
+﻿@model schedule_2.Models.Schedule
+
+<div class="modal-header">
+    <h5 class="modal-title">Підтвердження видалення</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <p>Ви впевнені, що хочете видалити розклад <strong>@Model.Name</strong>?</p>
+    <p>Це видалить усі пов’язані події.</p>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+    <form asp-action="DeleteConfirmed" method="post" id="deleteScheduleForm">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn btn-danger">Видалити</button>
+    </form>
+</div>

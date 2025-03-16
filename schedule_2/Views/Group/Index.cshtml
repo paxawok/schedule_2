@@ -1,0 +1,218 @@
+﻿@model IEnumerable<schedule_2.Models.Group>
+
+<h2>Список груп</h2>
+
+<!-- Кнопка для відкриття модального вікна створення -->
+<button type="button" class="btn btn-primary" onclick="showCreate()">Створити нову групу</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Назва</th>
+            <th>Події</th>
+            <th>Курси</th>
+            <th>Підгрупи</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>
+                    @foreach (var eventGroup in item.EventGroups)
+                    {
+                        <span>@eventGroup.Event.Title, </span>
+                    }
+                </td>
+                <td>
+                    @foreach (var courseGroup in item.CourseGroups)
+                    {
+                        <span>@courseGroup.Course.Name, </span>
+                    }
+                </td>
+                <td>
+                    @foreach (var subgroup in item.Subgroups)
+                    {
+                        <span>@subgroup.Name, </span>
+                    }
+                </td>
+                <td>
+                    <button type="button" class="btn btn-info" onclick="showDetails(@item.Id)">Деталі</button> |
+                    <button type="button" class="btn btn-warning" onclick="showEdit(@item.Id)">Редагувати</button> |
+                    <button type="button" class="btn btn-danger" onclick="showDelete(@item.Id)">Видалити</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Модальне вікно для створення групи -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
+</div>
+
+<!-- Модальне вікно для деталей -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
+</div>
+
+<!-- Модальне вікно для редагування -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
+</div>
+
+<!-- Модальне вікно для видалення -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Відкриття модального вікна для створення групи
+        function showCreate() {
+            $.ajax({
+                url: '/Group/Create',
+                success: function (result) {
+                    $('#createModal .modal-content').html(result);
+                    $('#createModal').modal('show');
+                },
+                error: function () {
+                    alert('Помилка завантаження форми створення групи.');
+                }
+            });
+        }
+
+        // Відкриття модального вікна для деталей
+        function showDetails(id) {
+            $.ajax({
+                url: '/Group/DetailsModal/' + id,
+                success: function (result) {
+                    $('#detailsModal .modal-content').html(result);
+                    $('#detailsModal').modal('show');
+                },
+                error: function () {
+                    alert('Помилка завантаження деталей.');
+                }
+            });
+        }
+
+        // Відкриття модального вікна для редагування
+        function showEdit(id) {
+            $.ajax({
+                url: '/Group/EditModal/' + id,
+                success: function (result) {
+                    $('#editModal .modal-content').html(result);
+                    $('#editModal').modal('show');
+                },
+                error: function () {
+                    alert('Помилка завантаження форми редагування.');
+                }
+            });
+        }
+
+        // Відкриття модального вікна для видалення
+        function showDelete(id) {
+            $.ajax({
+                url: '/Group/DeleteModal/' + id,
+                success: function (result) {
+                    $('#deleteModal .modal-content').html(result);
+                    $('#deleteModal').modal('show');
+                },
+                error: function () {
+                    alert('Помилка завантаження підтвердження видалення.');
+                }
+            });
+        }
+
+        // Обробка форми створення групи через AJAX
+        $(document).on('submit', '#createGroupForm', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#createModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                        $('#createModal .modal-content').html(response);
+                    }
+                },
+                error: function () {
+                    alert('Помилка при збереженні.');
+                }
+            });
+        });
+
+        // Обробка форми редагування через AJAX
+        $(document).on('submit', '#editGroupForm', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#editModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                        $('#editModal .modal-content').html(response);
+                    }
+                },
+                error: function () {
+                    alert('Помилка при оновленні.');
+                }
+            });
+        });
+
+        // Обробка видалення групи через AJAX
+        $(document).on('submit', '#deleteGroupForm', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: '/Group/DeleteConfirmed/' + $('#deleteGroupId').val(),
+                type: 'POST',
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#deleteModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('Помилка при видаленні.');
+                }
+            });
+        });
+    </script>
+}
