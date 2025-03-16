@@ -47,32 +47,35 @@
 <body>
     <!-- Основний контейнер -->
     <div class="wrapper">
-        <!-- Header -->
-        <header class="border-bottom py-2">
-            <div style="height: 70px" class="container d-flex justify-content-between align-items-center">
-                <a style="font-size: 32px !important" class="navbar-brand fs-4 fw-bold text-dark" asp-area="" asp-controller="Home" asp-action="Index">Schedule</a>
-                <div class="d-flex align-items-center gap-2">
-                    <span style="font-size: 20px; padding-right: 5px" class="fw-bold">UA</span>
-                    <div style="width: 34px; height: 34px; background-color: blue; border-radius: 50%;"></div>
+        <div class="content">
+            <!-- Header -->
+            <header class="border-bottom py-2">
+                <div style="height: 70px" class="container d-flex justify-content-between align-items-center">
+                    <a style="font-size: 32px !important" class="navbar-brand fs-4 fw-bold text-dark" asp-area="" asp-controller="Home" asp-action="Index">Schedule</a>
+                    <div class="d-flex align-items-center gap-2">
+                        <span style="font-size: 20px; padding-right: 5px" class="fw-bold">UA</span>
+                        <div style="width: 34px; height: 34px; background-color: blue; border-radius: 50%;"></div>
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>
 
-        <!-- Main Content -->
-        <div class="container content mt-5">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
+            <!-- Main Content -->
+            <div class="container content mt-5">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
         </div>
     </div>
 
-    <!-- Footer (тепер він завжди внизу) -->
-    <footer class="footer border-top text-muted py-3">
+    <!-- Footer  -->
+    <footer class="border-top text-muted py-3">
         <div class="container">
             &copy; 2025 - MIT-41
         </div>
     </footer>
 
+    <!-- Edit window -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
