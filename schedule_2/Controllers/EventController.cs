@@ -150,6 +150,8 @@ namespace schedule_2.Controllers
                 return Json(new { success = false, message = "Помилка при створенні події: " + ex.Message });
             }
         }
+        
+        
         // GET: /Event/Edit/{id} - Modal View
         [HttpGet]
         public async Task<IActionResult> EditModal(int id)
@@ -271,6 +273,7 @@ namespace schedule_2.Controllers
                 }
             }
         }
+        
         // GET: /Event/Delete/{id} - Modal View
         [HttpGet]
         public async Task<IActionResult> DeleteModal(int id)
@@ -293,36 +296,31 @@ namespace schedule_2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            using (var transaction = await _context.Database.BeginTransactionAsync())
+            try
             {
-                try
-                {
-                    var eventItem = await _context.Events
-                        .Include(e => e.EventGroups)
-                        .Include(e => e.SubgroupEvents)
-                        .FirstOrDefaultAsync(m => m.Id == id);
+                var eventItem = await _context.Events
+                    .Include(e => e.EventGroups)
+                    .Include(e => e.SubgroupEvents)
+                    .FirstOrDefaultAsync(m => m.Id == id);
 
-                    if (eventItem == null)
-                        return Json(new { success = false, message = "Подію не знайдено." });
+                if (eventItem == null)
+                    return Json(new { success = false, message = "Подію не знайдено." });
 
-                    // Видаляємо всі зв'язки з групами
-                    _context.EventGroups.RemoveRange(eventItem.EventGroups);
+                // Видаляємо всі зв'язки з групами
+                _context.EventGroups.RemoveRange(eventItem.EventGroups);
 
-                    // Видаляємо всі зв'язки з підгрупами
-                    _context.SubgroupEvents.RemoveRange(eventItem.SubgroupEvents);
+                // Видаляємо всі зв'язки з підгрупами
+                _context.SubgroupEvents.RemoveRange(eventItem.SubgroupEvents);
 
-                    // Видаляємо саму подію
-                    _context.Events.Remove(eventItem);
+                // Видаляємо саму подію
+                _context.Events.Remove(eventItem);
 
-                    await _context.SaveChangesAsync();
-                    await transaction.CommitAsync();
-                    return Json(new { success = true, message = "Подію успішно видалено!" });
-                }
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
-                    return Json(new { success = false, message = "Помилка при видаленні події: " + ex.Message });
-                }
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, message = "Подію успішно видалено!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Помилка при видаленні події: " + ex.Message });
             }
         }
 
