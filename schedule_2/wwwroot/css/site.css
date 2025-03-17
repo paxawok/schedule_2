@@ -37,3 +37,36 @@ footer {
     align-items: center;
     height: 70px;
 }
+
+/*Profile*/
+/*.profile-menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 180px;
+    display: none;
+    z-index: 100;
+}
+*/
+
+.profile-menu {
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 200px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 1000;
+}
+
+    .profile-menu p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .profile-menu .btn {
+        font-size: 14px;
+    }
