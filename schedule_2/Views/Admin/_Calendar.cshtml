@@ -1,4 +1,4 @@
-﻿<<div id="calendar-wrapper">
+﻿<div id="calendar-wrapper">
     <table id="calendar" class="table table-bordered">
         <thead>
             <tr>
@@ -13,16 +13,62 @@
             </tr>
         </thead>
         <tbody>
-            @for (int hour = 0; hour < 24; hour++)
-            {
-                <tr>
-                    <td class="time-column">@($"{hour:D2}:00")</td>
-                    @for (int day = 0; day < 7; day++)
-                    {
-                        <td class="calendar-cell" data-time="@hour" data-day="@day"></td>
-                    }
-                </tr>
-            }
+            <tr>
+                <td class="time-column">09:00 - 10:20</td>
+                @for (int day = 0; day < 7; day++)
+                {
+                    <td class="calendar-cell" data-time="09:00" data-day="@day"></td>
+                }
+            </tr>
+            <tr>
+                <td class="time-column">10:30 - 11:50</td>
+                @for (int day = 0; day < 7; day++)
+                {
+                    <td class="calendar-cell" data-time="10:30" data-day="@day"></td>
+                }
+            </tr>
+            <tr>
+                <td class="time-column">12:10 - 13:30</td>
+                @for (int day = 0; day < 7; day++)
+                {
+                    <td class="calendar-cell" data-time="12:10" data-day="@day"></td>
+                }
+            </tr>
+            <tr>
+                <td class="time-column">13:40 - 15:00</td>
+                @for (int day = 0; day < 7; day++)
+                {
+                    <td class="calendar-cell" data-time="13:40" data-day="@day"></td>
+                }
+            </tr>
+            <tr>
+                <td class="time-column">15:10 - 16:30</td>
+                @for (int day = 0; day < 7; day++)
+                {
+                    <td class="calendar-cell" data-time="15:10" data-day="@day"></td>
+                }
+            </tr>
+            <tr>
+                <td class="time-column">16:40 - 18:00</td>
+                @for (int day = 0; day < 7; day++)
+                {
+                    <td class="calendar-cell" data-time="16:40" data-day="@day"></td>
+                }
+            </tr>
+            <tr>
+                <td class="time-column">18:10 - 19:30</td>
+                @for (int day = 0; day < 7; day++)
+                {
+                    <td class="calendar-cell" data-time="18:10" data-day="@day"></td>
+                }
+            </tr>
+            <tr>
+                <td class="time-column">19:40 - 20:50</td>
+                @for (int day = 0; day < 7; day++)
+                {
+                    <td class="calendar-cell" data-time="19:40" data-day="@day"></td>
+                }
+            </tr>
         </tbody>
     </table>
 </div>
