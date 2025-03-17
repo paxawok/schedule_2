@@ -1,0 +1,29 @@
+﻿@model schedule_2.Models.Teacher
+
+<div class="modal-header">
+    <h5 class="modal-title">Деталі викладача</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <dl class="dl-horizontal">
+        <dt>Ім'я</dt>
+        <dd>@Model.FirstName</dd>
+
+        <dt>Призвище</dt>
+        <dd>@Model.LastName</dd>
+
+        <dt>Електронна пошта</dt>
+        <dd>@Model.Email</dd>
+
+        <dt>Події</dt>
+        <dd>
+            @foreach (var eventItem in Model.Events)
+            {
+                <p>@eventItem.Title (@eventItem.StartDateTime.ToShortDateString() - @eventItem.EndDateTime.ToShortDateString())</p>
+            }
+        </dd>
+    </dl>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+</div>

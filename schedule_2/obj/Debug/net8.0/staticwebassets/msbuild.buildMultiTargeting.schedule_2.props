@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\schedule_2.props" />
+</Project>

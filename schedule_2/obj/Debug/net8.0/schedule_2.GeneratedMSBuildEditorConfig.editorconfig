@@ -24,12 +24,116 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Classroom/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3Nyb29tXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Classroom/_CreateModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3Nyb29tXF9DcmVhdGVNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Classroom/_DeleteModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3Nyb29tXF9EZWxldGVNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Classroom/_DetailsModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3Nyb29tXF9EZXRhaWxzTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Classroom/_EditModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3Nyb29tXF9FZGl0TW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Course/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Course/_CreateModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXF9DcmVhdGVNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Course/_DeleteModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXF9EZWxldGVNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Course/_DetailsModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXF9EZXRhaWxzTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Course/_EditModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXF9FZGl0TW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Event/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Event/_CreateModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRcX0NyZWF0ZU1vZGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Event/_DeleteModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRcX0RlbGV0ZU1vZGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Event/_DetailsModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRcX0RldGFpbHNNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Event/_EditModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRcX0VkaXRNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Group/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Group/_CreateModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBcX0NyZWF0ZU1vZGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Group/_DeleteModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBcX0RlbGV0ZU1vZGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Group/_DetailsModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBcX0RldGFpbHNNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Group/_EditModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBcX0VkaXRNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Schedule/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Schedule/Weekly.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcV2Vla2x5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Schedule/_CreateModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcX0NyZWF0ZU1vZGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Schedule/_DeleteModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcX0RlbGV0ZU1vZGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Schedule/_DetailsModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcX0RldGFpbHNNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Schedule/_EditModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcX0VkaXRNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Shared/Error.cshtml]
@@ -42,6 +146,46 @@ build_metadata.AdditionalFiles.CssScope =
 
 [E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Subgroup/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViZ3JvdXBcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Subgroup/_CreateModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViZ3JvdXBcX0NyZWF0ZU1vZGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Subgroup/_DeleteModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViZ3JvdXBcX0RlbGV0ZU1vZGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Subgroup/_DetailsModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViZ3JvdXBcX0RldGFpbHNNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Subgroup/_EditModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViZ3JvdXBcX0VkaXRNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Teacher/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlclxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Teacher/_CreateModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlclxfQ3JlYXRlTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Teacher/_DeleteModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlclxfRGVsZXRlTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Teacher/_DetailsModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlclxfRGV0YWlsc01vZGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Teacher/_EditModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlclxfRWRpdE1vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/_ViewImports.cshtml]

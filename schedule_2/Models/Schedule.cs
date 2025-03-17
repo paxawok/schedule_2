@@ -3,12 +3,9 @@
     public class Schedule
     {
         public int Id { get; set; }
-        public int GroupId { get; set; }
-        public int TeacherId { get; set; }
-        public int CourseId { get; set; }
-        public int ClassroomId { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public DayOfWeek DayOfWeek { get; set; }
+        public required string Name { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public virtual ICollection<Event> Events { get; set; } = new List<Event>();
     }
 }

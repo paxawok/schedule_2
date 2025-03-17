@@ -1,0 +1,159 @@
+﻿@model IEnumerable<schedule_2.Models.Event>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Список подій</h2>
+        </div>
+        <div class="col-auto">
+            <button type="button" class="btn btn-primary" onclick="showCreate()">
+                <i class="bi bi-plus-circle"></i> Створити нову подію
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Назва</th>
+                    <th>Викладач</th>
+                    <th>Курс</th>
+                    <th>Аудиторія</th>
+                    <th>Розклад</th>
+                    <th>Дата початку</th>
+                    <th>Дата закінчення</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Title</td>
+                        <td>@item.Teacher.LastName @item.Teacher.FirstName</td>
+                        <td>@item.Course.Name</td>
+                        <td>@item.Classroom.Name</td>
+                        <td>@item.Schedule.Name</td>
+                        <td>@item.StartDateTime.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>@item.EndDateTime.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-sm btn-info" onclick="showDetails(@item.Id)">
+                                    <i class="bi bi-eye"></i> Деталі
+                                </button>
+                                <button type="button" class="btn btn-sm btn-warning" onclick="showEdit(@item.Id)">
+                                    <i class="bi bi-pencil"></i> Редагувати
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" onclick="showDelete(@item.Id)">
+                                    <i class="bi bi-trash"></i> Видалити
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal windows -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Content will be loaded via AJAX -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Content will be loaded via AJAX -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Content will be loaded via AJAX -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Content will be loaded via AJAX -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Function to show create modal
+        function showCreate() {
+            $.ajax({
+                url: '/Event/CreateModal',
+                type: 'GET',
+                success: function (result) {
+                    $('#createModal .modal-content').html(result);
+                    $('#createModal').modal('show');
+                },
+                error: function (error) {
+                    console.error('Error loading create modal:', error);
+                    alert('Помилка при завантаженні форми створення події.');
+                }
+            });
+        }
+
+        // Function to show details modal
+        function showDetails(id) {
+            $.ajax({
+                url: '/Event/DetailsModal/' + id,
+                type: 'GET',
+                success: function (result) {
+                    $('#detailsModal .modal-content').html(result);
+                    $('#detailsModal').modal('show');
+                },
+                error: function (error) {
+                    console.error('Error loading details modal:', error);
+                    alert('Помилка при завантаженні деталей події.');
+                }
+            });
+        }
+
+        // Function to show edit modal
+        function showEdit(id) {
+            $.ajax({
+                url: '/Event/EditModal/' + id,
+                type: 'GET',
+                success: function (result) {
+                    $('#editModal .modal-content').html(result);
+                    $('#editModal').modal('show');
+                },
+                error: function (error) {
+                    console.error('Error loading edit modal:', error);
+                    alert('Помилка при завантаженні форми редагування події.');
+                }
+            });
+        }
+
+        // Function to show delete modal
+        function showDelete(id) {
+            $.ajax({
+                url: '/Event/DeleteModal/' + id,
+                type: 'GET',
+                success: function (result) {
+                    $('#deleteModal .modal-content').html(result);
+                    $('#deleteModal').modal('show');
+                },
+                error: function (error) {
+                    console.error('Error loading delete modal:', error);
+                    alert('Помилка при завантаженні форми видалення події.');
+                }
+            });
+        }
+    </script>
+}

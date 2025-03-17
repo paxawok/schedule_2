@@ -1,0 +1,56 @@
+﻿@model schedule_2.Models.Course
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Редагувати курс</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form id="editCourseForm" method="post" asp-action="EditModal" asp-route-id="@Model.Id">
+        <div class="mb-3">
+            <label for="Name" class="form-label">Назва курсу</label>
+            <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required />
+        </div>
+        <div class="mb-3">
+            <label for="Description" class="form-label">Опис</label>
+            <textarea class="form-control" id="Description" name="Description">@Model.Description</textarea>
+        </div>
+
+        <!-- Викладачі -->
+        <div class="mb-3">
+            <label for="CourseTeachers" class="form-label">Вибір викладачів</label>
+            <select class="form-control" id="CourseTeachers" name="courseTeachers" multiple>
+                <option value="">-- Вибрати викладача --</option>
+                @foreach (var teacher in ViewData["Teachers"] as List<schedule_2.Models.Teacher>)
+                {
+                    <option value="@teacher.Id">@teacher.LastName</option>
+                }
+            </select>
+        </div>
+
+        <!-- Групи -->
+        <div class="mb-3">
+            <label for="CourseGroups" class="form-label">Вибір групи</label>
+            <select class="form-control" id="CourseGroups" name="courseGroups" multiple>
+                <option value="">-- Вибрати групу --</option>
+                @foreach (var group in ViewData["Groups"] as List<schedule_2.Models.Group>)
+                {
+                    <option value="@group.Id">@group.Name</option>
+                }
+            </select>
+        </div>
+
+        <!-- Підгрупи -->
+        <div class="mb-3">
+            <label for="SubgroupCourses" class="form-label">Вибір підгрупи</label>
+            <select class="form-control" id="SubgroupCourses" name="subgroupCourses" multiple>
+                <option value="">-- Вибрати підгрупу --</option>
+                @foreach (var subgroup in ViewData["Subgroups"] as List<schedule_2.Models.Subgroup>)
+                {
+                    <option value="@subgroup.Id">@subgroup.Name</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+    </form>
+</div>

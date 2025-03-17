@@ -1,0 +1,131 @@
+﻿@model schedule_2.Models.Schedule
+
+@{
+    ViewData["Title"] = "Тижневий розклад";
+    var weekDays = ViewBag.WeekDays as List<DateTime>;
+    var timeSlots = ViewBag.TimeSlots as List<(TimeSpan Start, TimeSpan End, string Label)>;
+    var weeklySchedule = ViewBag.WeeklySchedule as Dictionary<DateTime, Dictionary<TimeSpan, List<Event>>>;
+    var currentDate = ViewBag.CurrentDate as DateTime?;
+    var previousWeek = ViewBag.PreviousWeek as DateTime?;
+    var nextWeek = ViewBag.NextWeek as DateTime?;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Тижневий розклад: @Model.Name</h2>
+    <div>
+        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@previousWeek?.ToString("yyyy-MM-dd")" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left"></i> Попередній тиждень
+        </a>
+        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@DateTime.Today.ToString("yyyy-MM-dd")" class="btn btn-outline-secondary">
+            Поточний тиждень
+        </a>
+        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@nextWeek?.ToString("yyyy-MM-dd")" class="btn btn-outline-primary">
+            Наступний тиждень <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th style="width: 100px;">Час</th>
+                @foreach (var day in weekDays)
+                {
+                    <th style="width: 14%;" class="text-center @(day.Date == DateTime.Today ? "table-primary" : "")">
+                        @day.ToString("dddd") <br>
+                        <small>@day.ToString("dd.MM.yyyy")</small>
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var timeSlot in timeSlots)
+            {
+                <tr>
+                    <td class="align-middle text-center fw-bold">@timeSlot.Label</td>
+
+                    @foreach (var day in weekDays)
+                    {
+                        <td class="event-cell">
+                            @foreach (var eventItem in weeklySchedule[day][timeSlot.Start])
+                            {
+                                <div class="event-card" style="border-color: @GetEventColor(eventItem)">
+                                    <div class="event-header" style="background-color: @GetEventColor(eventItem)">
+                                        <h6 class="mb-0 text-white">@eventItem.Title</h6>
+                                    </div>
+                                    <div class="event-body">
+                                        <p class="mb-1"><i class="bi bi-person-fill"></i> @eventItem.Teacher.LastName @eventItem.Teacher.FirstName[0].</p>
+                                        <p class="mb-1"><i class="bi bi-book-fill"></i> @eventItem.Course.Name</p>
+                                        <p class="mb-1"><i class="bi bi-building-fill"></i> @eventItem.Classroom.Name</p>
+                                        <p class="mb-0">
+                                            <i class="bi bi-people-fill"></i>
+                                            @string.Join(", ", eventItem.EventGroups.Select(eg => eg.Group.Name))
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Повернутися до списку</a>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .event-cell {
+            height: 150px;
+            vertical-align: top;
+            padding: 5px;
+        }
+        .event-card {
+            border-radius: 4px;
+            overflow: hidden;
+            border-left: 4px solid;
+            margin-bottom: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .event-header {
+            padding: 5px 8px;
+            color: white;
+        }
+        .event-body {
+            padding: 8px;
+            background-color: white;
+            font-size: 0.8rem;
+        }
+        .event-body p {
+            margin-bottom: 0.25rem;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+    </style>
+}
+
+@functions {
+    public string GetEventColor(Event eventItem)
+    {
+        // Тут можна задати різні кольори залежно від типу події
+        // Наприклад, можна використовувати ID курсу для визначення кольору
+        int colorSeed = eventItem.CourseId % 6;
+
+        switch (colorSeed)
+        {
+            case 0: return "#007bff"; // primary
+            case 1: return "#28a745"; // success
+            case 2: return "#dc3545"; // danger
+            case 3: return "#ffc107"; // warning
+            case 4: return "#17a2b8"; // info
+            case 5: return "#6610f2"; // purple
+            default: return "#007bff";
+        }
+    }
+}

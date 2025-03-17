@@ -1,0 +1,170 @@
+﻿@model schedule_2.Models.Event
+
+<div class="modal-header">
+    <h5 class="modal-title">Створити нову подію</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form id="createEventForm" asp-action="CreateModal" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group mb-3">
+            <label asp-for="Title" class="form-label">Назва події</label>
+            <input asp-for="Title" class="form-control" required />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="StartDateTime" class="form-label">Дата та час початку</label>
+            <input asp-for="StartDateTime" type="datetime-local" class="form-control" required />
+            <span asp-validation-for="StartDateTime" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="EndDateTime" class="form-label">Дата та час закінчення</label>
+            <input asp-for="EndDateTime" type="datetime-local" class="form-control" required />
+            <span asp-validation-for="EndDateTime" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="IsRecurring" class="form-label">Повторювана подія</label>
+            <select asp-for="IsRecurring" class="form-control">
+                <option value="false">Ні</option>
+                <option value="true">Так</option>
+            </select>
+            <span asp-validation-for="IsRecurring" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="RecurrencePattern" class="form-label">Шаблон повторення</label>
+            <input asp-for="RecurrencePattern" class="form-control" />
+            <span asp-validation-for="RecurrencePattern" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="TeacherId" class="form-label">Викладач</label>
+            <select asp-for="TeacherId" asp-items="ViewBag.Teachers" class="form-control" required>
+                <option value="">-- Виберіть викладача --</option>
+            </select>
+            <span asp-validation-for="TeacherId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="CourseId" class="form-label">Курс</label>
+            <select asp-for="CourseId" asp-items="ViewBag.Courses" class="form-control" required>
+                <option value="">-- Виберіть курс --</option>
+            </select>
+            <span asp-validation-for="CourseId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="ClassroomId" class="form-label">Аудиторія</label>
+            <select asp-for="ClassroomId" asp-items="ViewBag.Classrooms" class="form-control" required>
+                <option value="">-- Виберіть аудиторію --</option>
+            </select>
+            <span asp-validation-for="ClassroomId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="ScheduleId" class="form-label">Розклад</label>
+            <select asp-for="ScheduleId" asp-items="ViewBag.Schedules" class="form-control" required>
+                <option value="">-- Виберіть розклад --</option>
+            </select>
+            <span asp-validation-for="ScheduleId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="selectedGroups" class="form-label">Групи</label>
+            <select id="selectedGroups" name="selectedGroups" class="form-control" multiple>
+                @foreach (var group in ViewBag.Groups)
+                {
+                    <option value="@group.Value">@group.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="selectedSubgroups" class="form-label">Підгрупи</label>
+            <select id="selectedSubgroups" name="selectedSubgroups" class="form-control" multiple>
+                @foreach (var subgroup in ViewBag.Subgroups)
+                {
+                    <option value="@subgroup.Id">@subgroup.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="text-center mt-3">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+            <button type="submit" class="btn btn-primary">Створити</button>
+        </div>
+    </form>
+</div>
+
+<script>
+        $('#createEventForm').submit(function (e) {
+        e.preventDefault();
+
+        // Перевіряємо, чи обрані обов'язкові поля
+        var teacherId = $('#TeacherId').val();
+        var courseId = $('#CourseId').val();
+        var classroomId = $('#ClassroomId').val();
+        var scheduleId = $('#ScheduleId').val();
+
+        // Перевірка на порожні значення перед відправкою
+        if (!teacherId || !courseId || !classroomId || !scheduleId) {
+            alert("Будь ласка, заповніть всі обов'язкові поля (Викладач, Курс, Аудиторія, Розклад)");
+            return;
+        }
+
+        // Збираємо дані форми
+        var form = $(this);
+        var formData = {
+            Title: $('#Title').val(),
+            StartDateTime: $('#StartDateTime').val(),
+            EndDateTime: $('#EndDateTime').val(),
+            IsRecurring: $('#IsRecurring').val() === "true",
+            RecurrencePattern: $('#RecurrencePattern').val(),
+            TeacherId: parseInt(teacherId),
+            CourseId: parseInt(courseId),
+            ClassroomId: parseInt(classroomId),
+            ScheduleId: parseInt(scheduleId),
+            selectedGroups: $('#selectedGroups').val(),
+            selectedSubgroups: $('#selectedSubgroups').val()
+        };
+
+        console.log("Дані форми:", formData);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: formData,
+            headers: {
+                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {
+                console.log("Відповідь:", response);
+                if (response.success) {
+                    $('#createModal').modal('hide');
+                    alert(response.message);
+                    location.reload();
+                } else {
+                    if (response.errors && Array.isArray(response.errors)) {
+                        var errorMessage = "Помилки:\n";
+                        response.errors.forEach(function(item) {
+                            if (item.errors && Array.isArray(item.errors)) {
+                                errorMessage += item.key + ": " + item.errors.join(", ") + "\n";
+                            }
+                        });
+                        alert(errorMessage);
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX помилка:", xhr.responseText);
+                alert('Виникла помилка при створенні події.');
+            }
+        });
+    });
+</script>

@@ -1,0 +1,17 @@
+﻿@model schedule_2.Models.Classroom
+
+<div class="modal-header">
+    <h5 class="modal-title">Підтвердження видалення</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <p>Ви впевнені, що хочете видалити аудиторію <strong>@Model.Name</strong>?</p>
+    <p>Це видалить усі пов’язані дані, включаючи події.</p>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+    <form asp-action="DeleteModal" method="post" id="deleteClassroomForm">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn btn-danger">Видалити</button>
+    </form>
+</div>

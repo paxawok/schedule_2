@@ -1,0 +1,69 @@
+﻿@model schedule_2.Models.Event
+
+<div class="modal-header">
+    <h5 class="modal-title">Деталі події</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <dl class="row">
+        <dt class="col-sm-4">Назва події:</dt>
+        <dd class="col-sm-8">@Model.Title</dd>
+
+        <dt class="col-sm-4">Дата початку:</dt>
+        <dd class="col-sm-8">@Model.StartDateTime.ToString("dd.MM.yyyy HH:mm")</dd>
+
+        <dt class="col-sm-4">Дата закінчення:</dt>
+        <dd class="col-sm-8">@Model.EndDateTime.ToString("dd.MM.yyyy HH:mm")</dd>
+
+        <dt class="col-sm-4">Повторювана подія:</dt>
+        <dd class="col-sm-8">@(Model.IsRecurring ? "Так" : "Ні")</dd>
+
+        @if (Model.IsRecurring && !string.IsNullOrEmpty(Model.RecurrencePattern))
+        {
+            <dt class="col-sm-4">Шаблон повторення:</dt>
+            <dd class="col-sm-8">@Model.RecurrencePattern</dd>
+        }
+
+        <dt class="col-sm-4">Викладач:</dt>
+        <dd class="col-sm-8">@Model.Teacher.LastName @Model.Teacher.FirstName</dd>
+
+        <dt class="col-sm-4">Курс:</dt>
+        <dd class="col-sm-8">@Model.Course.Name</dd>
+
+        <dt class="col-sm-4">Аудиторія:</dt>
+        <dd class="col-sm-8">@Model.Classroom.Name</dd>
+
+        <dt class="col-sm-4">Розклад:</dt>
+        <dd class="col-sm-8">@Model.Schedule.Name</dd>
+
+        @if (Model.EventGroups != null && Model.EventGroups.Any())
+        {
+            <dt class="col-sm-4">Групи:</dt>
+            <dd class="col-sm-8">
+                <ul class="list-unstyled">
+                    @foreach (var eventGroup in Model.EventGroups)
+                    {
+                        <li>@eventGroup.Group.Name</li>
+                    }
+                </ul>
+            </dd>
+        }
+
+        @if (Model.SubgroupEvents != null && Model.SubgroupEvents.Any())
+        {
+            <dt class="col-sm-4">Підгрупи:</dt>
+            <dd class="col-sm-8">
+                <ul class="list-unstyled">
+                    @foreach (var subgroupEvent in Model.SubgroupEvents)
+                    {
+                        <li>@subgroupEvent.Subgroup.Name</li>
+                    }
+                </ul>
+            </dd>
+        }
+    </dl>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+    <button type="button" class="btn btn-warning" onclick="showEdit(@Model.Id)">Редагувати</button>
+</div>

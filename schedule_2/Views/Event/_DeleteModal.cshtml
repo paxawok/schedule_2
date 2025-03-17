@@ -1,0 +1,55 @@
+﻿@model schedule_2.Models.Event
+
+<div class="modal-header">
+    <h5 class="modal-title">Підтвердження видалення</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <p>Ви впевнені, що хочете видалити подію <strong>@Model.Title</strong>?</p>
+    <p>Ця дія не може бути скасована та видалить усі пов'язані зв'язки.</p>
+
+    <div class="alert alert-info">
+        <strong>Деталі події:</strong>
+        <ul class="list-unstyled mt-2">
+            <li><strong>Дата початку:</strong> @Model.StartDateTime.ToString("dd.MM.yyyy HH:mm")</li>
+            <li><strong>Дата закінчення:</strong> @Model.EndDateTime.ToString("dd.MM.yyyy HH:mm")</li>
+            <li><strong>Викладач:</strong> @Model.Teacher.LastName @Model.Teacher.FirstName</li>
+            <li><strong>Курс:</strong> @Model.Course.Name</li>
+        </ul>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+    <button type="button" class="btn btn-danger" id="confirmDelete" data-id="@Model.Id">Видалити</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#confirmDelete').click(function () {
+            var eventId = $(this).data('id');
+
+            $.ajax({
+                url: '/Event/DeleteConfirmed/' + eventId,
+                type: 'POST',
+                data: {
+                    id: eventId,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {
+                    console.log("Відповідь:", response);
+                    if (response.success) {
+                        $('#deleteModal').modal('hide');
+                        alert(response.message);
+                        location.reload();
+                    } else {
+                        alert(response.message || 'Помилка при видаленні події');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX помилка:", xhr.responseText);
+                    alert('Виникла помилка при видаленні події.');
+                }
+            });
+        });
+    });
+</script>
