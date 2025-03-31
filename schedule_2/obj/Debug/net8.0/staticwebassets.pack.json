@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\wwwroot\\img\\img1_japanese.jpg",
+      "PackagePath": "staticwebassets\\img\\img1_japanese.jpg"
+    },
+    {
       "Id": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

@@ -2387,6 +2387,88 @@
       ]
     },
     {
+      "Route": "img/img1_japanese.jpg",
+      "AssetFile": "img/img1_japanese.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "659784"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Mar 2025 12:21:00 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY="
+        }
+      ]
+    },
+    {
+      "Route": "img/img1_japanese.w3qo2iewjz.jpg",
+      "AssetFile": "img/img1_japanese.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "659784"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Mar 2025 12:21:00 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "w3qo2iewjz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY="
+        },
+        {
+          "Name": "label",
+          "Value": "img/img1_japanese.jpg"
+        }
+      ]
+    },
+    {
       "Route": "js/site.js",
       "AssetFile": "js/site.js",
       "Selectors": [],

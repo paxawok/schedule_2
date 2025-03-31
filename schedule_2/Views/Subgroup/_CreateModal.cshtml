@@ -1,45 +1,90 @@
 ﻿@model schedule_2.Models.Subgroup
-
 <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">Створити нову підгрупу</h5>
+    <h5 class="modal-title" id="exampleModalLabel">Create new subgroup</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
     <form id="createSubgroupForm" method="post" asp-action="Create">
         <div class="mb-3">
-            <label for="Name" class="form-label">Назва підгрупи</label>
-            <input type="text" class="form-control" id="Name" name="Name" required />
+            <label for="Name" class="form-label">Subgroup name</label>
+            <input type="text" class="form-control" id="Name" name="Name" required maxlength="18" />
+            <span class="text-danger field-validation-error" id="nameError"></span>
         </div>
         <div class="mb-3">
-            <label for="Groups" class="form-label">Група</label>
-            <select class="form-select" id="GroupId" name="Groups" required>
-                <option value="">Оберіть групу</option>
-                @foreach (var group in ViewBag.AllGroups as List<schedule_2.Models.Group>)
+            <label for="GroupId" class="form-label">Group</label>
+            <select class="form-select" id="GroupId" name="GroupId" required>
+                <option value="">Select group</option>
+                @foreach (var group in ViewBag.Groups)
                 {
-                    <option value="@group.Id">@group.Name</option>
+                    <option value="@group.Value">@group.Text</option>
                 }
             </select>
+            <span class="text-danger field-validation-error" id="groupError"></span>
         </div>
         <div class="mb-3">
-            <label for="SubgroupCourses" class="form-label">Курси</label>
-            <select multiple class="form-select" id="SubgroupCourses" name="SubgroupCourses">
-                <option value="">Оберіть курс</option>
-                @foreach (var course in ViewBag.AllCourses as List<schedule_2.Models.Course>)
+            <label for="selectedCourses" class="form-label">Courses</label>
+            <select multiple class="form-select" id="selectedCourses" name="selectedCourses">
+                @foreach (var course in ViewBag.Courses)
                 {
                     <option value="@course.Id">@course.Name</option>
                 }
             </select>
         </div>
-        <div class="mb-3">
-            <label for="SubgroupEvents" class="form-label">Події</label>
-            <select multiple class="form-select" id="SubgroupEvents" name="SubgroupEvents">
-                <option value="">Оберіть події</option>
-                @foreach (var eventItem in ViewBag.AllEvents as List<schedule_2.Models.Event>)
-                {
-                    <option value="@eventItem.Id">@eventItem.Title</option>
-                }
-            </select>
+        <div class="text-center mt-3">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Create</button>
         </div>
-        <button type="submit" class="btn btn-primary">Створити</button>
     </form>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#createSubgroupForm').submit(function(e) {
+            e.preventDefault();
+
+            // Reset error messages
+            $('#nameError').text('');
+            $('#groupError').text('');
+
+            var formData = {
+                Name: $('#Name').val(),
+                GroupId: $('#GroupId').val(),
+                selectedCourses: $('#selectedCourses').val()
+            };
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#createModal').modal('hide');
+                        alert(response.message);
+                        location.reload();
+                    } else {
+                        if (response.errors) {
+                            response.errors.forEach(function(error) {
+                                if (error.includes('Name')) {
+                                    $('#nameError').text(error);
+                                } else if (error.includes('Group')) {
+                                    $('#groupError').text(error);
+                                } else {
+                                    alert(error);
+                                }
+                            });
+                        } else {
+                            alert(response.message);
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX error:", xhr.responseText);
+                    alert('An error occurred while creating the subgroup.');
+                }
+            });
+        });
+    });
+</script>

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "3OwwBsASjr8M+v+9YBi3TZY1mh1FL7MLt3mLQhrgc0s=",
+  "Hash": "QeGshWkcXSc7g9FNmP7k5hJDMEHYKxzMqgAoAYg/+N8=",
   "Source": "schedule_2",
   "BasePath": "_content/schedule_2",
   "Mode": "Default",
@@ -1359,6 +1359,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\wwwroot\\img\\img1_japanese.jpg",
+      "SourceId": "schedule_2",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\wwwroot\\",
+      "BasePath": "_content/schedule_2",
+      "RelativePath": "img/img1_japanese#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "w3qo2iewjz",
+      "Integrity": "LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\img1_japanese.jpg"
     },
     {
       "Identity": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\wwwroot\\js\\site.js",
@@ -4961,6 +4982,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-16aFlqtpsG9RyieKZUUUjkJpqTgcJtWXwT312I4Iz1s="
+        }
+      ]
+    },
+    {
+      "Route": "img/img1_japanese.jpg",
+      "AssetFile": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\wwwroot\\img\\img1_japanese.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "659784"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Mar 2025 12:21:00 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY="
+        }
+      ]
+    },
+    {
+      "Route": "img/img1_japanese.w3qo2iewjz.jpg",
+      "AssetFile": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\wwwroot\\img\\img1_japanese.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "659784"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Mar 2025 12:21:00 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "w3qo2iewjz"
+        },
+        {
+          "Name": "label",
+          "Value": "img/img1_japanese.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY="
         }
       ]
     },

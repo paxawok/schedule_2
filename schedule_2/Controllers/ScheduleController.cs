@@ -188,17 +188,30 @@ namespace schedule_2.Controllers
 
             // Визначаємо часові слоти (пари)
             // Можна налаштувати ці значення відповідно до розкладу вашого навчального закладу
-            var timeStart = new TimeSpan(8, 0, 0); // Початок занять о 8:00
-            var timeEnd = new TimeSpan(20, 0, 0);  // Кінець занять о 20:00
-            var lessonDuration = 90; // тривалість пари в хвилинах
-            var breakDuration = 15;  // тривалість перерви в хвилинах
+            // Визначаємо часові слоти (пари)
+            var timeStart = new TimeSpan(9, 0, 0); // Початок занять о 9:00
+            var timeEnd = new TimeSpan(19, 30, 0);  // Кінець занять о 20:00
+            var lessonDuration = 80; // тривалість пари в хвилинах
+            var breakDuration = 10;  // звичайна тривалість перерви в хвилинах
+            var longBreakDuration = 20; // тривалість довгої перерви після 2-ї пари
 
             var timeSlots = new List<(TimeSpan Start, TimeSpan End, string Label)>();
-            for (var time = timeStart; time < timeEnd; time = time.Add(TimeSpan.FromMinutes(lessonDuration + breakDuration)))
+            var currentTime = timeStart;
+            int lessonCount = 0;
+
+            while (currentTime < timeEnd)
             {
-                var endTime = time.Add(TimeSpan.FromMinutes(lessonDuration));
-                var label = $"{time.ToString(@"hh\:mm")} - {endTime.ToString(@"hh\:mm")}";
-                timeSlots.Add((time, endTime, label));
+                var endTime = currentTime.Add(TimeSpan.FromMinutes(lessonDuration));
+                var label = $"{currentTime.ToString(@"hh\:mm")} - {endTime.ToString(@"hh\:mm")}";
+                timeSlots.Add((currentTime, endTime, label));
+
+                lessonCount++;
+
+                // Визначаємо тривалість перерви
+                int currentBreakDuration = (lessonCount == 2) ? longBreakDuration : breakDuration;
+
+                // Додаємо до часу тривалість пари + тривалість перерви
+                currentTime = endTime.Add(TimeSpan.FromMinutes(currentBreakDuration));
             }
 
             // Створюємо структуру даних для розкладу

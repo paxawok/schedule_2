@@ -15,4 +15,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.12" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\img\img1_japanese.jpg" />
+  </ItemGroup>
+
 </Project>
