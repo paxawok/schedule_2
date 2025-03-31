@@ -1,9 +1,13 @@
 ﻿@model IEnumerable<schedule_2.Models.Schedule>
+@using System.Security.Claims
 
 <h2>Список розкладів</h2>
 
 <!-- Кнопка для відкриття модального вікна створення -->
-<button type="button" class="btn btn-primary" onclick="showCreate()">Створити новий розклад</button>
+@if (User.IsInRole("Administrator"))
+{
+    <button type="button" class="btn btn-primary" onclick="showCreate()">Створити новий розклад</button>
+}
 
 <table class="table">
     <thead>
@@ -29,9 +33,12 @@
                     }
                 </td>
                 <td>
-                    <button type="button" class="btn btn-info" onclick="showDetails(@item.Id)">Деталі</button> |
-                    <button type="button" class="btn btn-warning" onclick="showEdit(@item.Id)">Редагувати</button> |
-                    <button type="button" class="btn btn-danger" onclick="showDelete(@item.Id)">Видалити</button>
+                    <!-- Тільки адміністратор може редагувати і видаляти -->
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <button type="button" class="btn btn-warning" onclick="showEdit(@item.Id)">Редагувати</button>
+                        <button type="button" class="btn btn-danger" onclick="showDelete(@item.Id)">Видалити</button>
+                    }
                     <a asp-action="Weekly" asp-route-id="@item.Id" class="btn btn-primary">Тижневий вигляд</a>
                 </td>
             </tr>

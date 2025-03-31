@@ -1,5 +1,6 @@
 ﻿@model schedule_2.Models.Schedule
 @using System.Linq
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Тижневий розклад";
@@ -9,22 +10,45 @@
     var currentDate = ViewBag.CurrentDate as DateTime?;
     var previousWeek = ViewBag.PreviousWeek as DateTime?;
     var nextWeek = ViewBag.NextWeek as DateTime?;
+    var showOnlyMine = ViewBag.ShowOnlyMine as bool? ?? false;
+    var isTeacher = ViewBag.IsTeacher as bool? ?? false;
+    var currentTeacher = ViewBag.CurrentTeacher as Teacher;
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Тижневий розклад: @Model.Name</h2>
     <div>
-        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@previousWeek?.ToString("yyyy-MM-dd")" class="btn btn-outline-primary">
+        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@previousWeek?.ToString("yyyy-MM-dd")" asp-route-showOnlyMine="@showOnlyMine.ToString().ToLower()" class="btn btn-outline-primary">
             <i class="bi bi-arrow-left"></i> Попередній тиждень
         </a>
-        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@DateTime.Today.ToString("yyyy-MM-dd")" class="btn btn-outline-secondary">
+        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@DateTime.Today.ToString("yyyy-MM-dd")" asp-route-showOnlyMine="@showOnlyMine.ToString().ToLower()" class="btn btn-outline-secondary">
             Поточний тиждень
         </a>
-        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@nextWeek?.ToString("yyyy-MM-dd")" class="btn btn-outline-primary">
+        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@nextWeek?.ToString("yyyy-MM-dd")" asp-route-showOnlyMine="@showOnlyMine.ToString().ToLower()" class="btn btn-outline-primary">
             Наступний тиждень <i class="bi bi-arrow-right"></i>
         </a>
     </div>
 </div>
+
+@if (isTeacher)
+{
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="toggleMyEvents" @(showOnlyMine ? "checked" : "")>
+                <label class="form-check-label" for="toggleMyEvents">
+                    Показувати тільки мої події
+                </label>
+            </div>
+            @if (currentTeacher != null)
+            {
+                <div class="mt-2 text-muted">
+                    Викладач: @currentTeacher.LastName @currentTeacher.FirstName
+                </div>
+            }
+        </div>
+    </div>
+}
 
 <div class="table-responsive">
     <table class="table table-bordered">
@@ -84,15 +108,6 @@
     <a asp-action="Index" class="btn btn-secondary">Повернутися до списку</a>
 </div>
 
-<!-- Модальне вікно для подій -->
-<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" id="eventModalContent">
-            <!-- Сюди буде завантажено вміст модального вікна -->
-        </div>
-    </div>
-</div>
-
 @section Styles {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
@@ -122,9 +137,9 @@
             font-size: 0.8rem;
         }
 
-            .event-body p {
-                margin-bottom: 0.25rem;
-            }
+        .event-body p {
+            margin-bottom: 0.25rem;
+        }
 
         th {
             background-color: #f8f9fa;
@@ -132,6 +147,20 @@
 
         .create-event-cell:hover {
             background-color: #f0f8ff;
+        }
+
+        .form-check-input {
+            cursor: pointer;
+        }
+
+        .form-switch .form-check-input {
+            width: 3em;
+            height: 1.5em;
+        }
+
+        .form-switch .form-check-input:checked {
+            background-color: #28a745;
+            border-color: #28a745;
         }
     </style>
 }
@@ -157,6 +186,21 @@
 }
 
 @section Scripts {
+    <script>
+        $(document).ready(function() {            
+            // Обробник перемикача "Показувати тільки мої події"
+            $("#toggleMyEvents").change(function() {
+                var showOnlyMine = $(this).is(":checked");
+                var currentUrl = new URL(window.location.href);
+
+                // Оновлюємо або додаємо параметр showOnlyMine в URL
+                currentUrl.searchParams.set("showOnlyMine", showOnlyMine);
+
+                // Перенаправляємо на оновлений URL
+                window.location.href = currentUrl.toString();
+            });
+        });
+    </script>
     <script>
         $(document).ready(function() {
             // Обробник кліку на комірку розкладу
