@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using schedule_2.Data;
 using schedule_2.Models;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace schedule_2.Controllers
 {
+    [Authorize]
     public class TeacherController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -43,16 +46,18 @@ namespace schedule_2.Controllers
             return PartialView("_DetailsModal", teacher);
         }
 
-        // GET: /Teacher/Create
+        // GET: /Teacher/Create -- тільки адміністраторам
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             return PartialView("_CreateModal");
         }
 
-        // POST: /Teacher/Create
+        // POST: /Teacher/Create -- тільки адміністраторам
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create(Teacher teacher)
         {
             if (ModelState.IsValid)
@@ -86,6 +91,13 @@ namespace schedule_2.Controllers
             if (teacher == null)
                 return NotFound();
 
+            // Перевірка, чи поточний користувач є адміністратором або власником профілю
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!User.IsInRole("Administrator") && teacher.UserId != userId)
+            {
+                return Forbid();
+            }
+
             return PartialView("_EditModal", teacher);
         }
 
@@ -110,6 +122,13 @@ namespace schedule_2.Controllers
                     if (teacherInDb == null)
                         return Json(new { success = false, message = "Викладач не знайдений." });
 
+                    // Перевірка, чи поточний користувач є адміністратором або власником профілю
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    if (!User.IsInRole("Administrator") && teacherInDb.UserId != userId)
+                    {
+                        return Json(new { success = false, message = "У вас немає прав на редагування цього викладача." });
+                    }
+
                     teacherInDb.FirstName = teacher.FirstName;
                     teacherInDb.LastName = teacher.LastName;
                     teacherInDb.Email = teacher.Email;
@@ -125,8 +144,9 @@ namespace schedule_2.Controllers
             return PartialView("_EditModal", teacher);
         }
 
-        // GET: /Teacher/Delete/{id} (Partial View для модального вікна підтвердження)
+        // GET: /Teacher/Delete/{id} (Partial View для модального вікна підтвердження) -- тільки адміністраторам
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteModal(int id)
         {
             var teacher = await _context.Teachers
@@ -141,9 +161,10 @@ namespace schedule_2.Controllers
             return PartialView("_DeleteModal", teacher);
         }
 
-        // POST: /Teacher/DeleteConfirmed/{id} (AJAX для видалення через модальне вікно)
+        // POST: /Teacher/DeleteConfirmed/{id} (AJAX для видалення через модальне вікно) -- тільки адміністраторам
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var teacher = await _context.Teachers
@@ -169,6 +190,17 @@ namespace schedule_2.Controllers
             await _context.SaveChangesAsync();
 
             return Json(new { success = true, message = "Викладач успішно видалений." });
+        }
+
+        // Допоміжний метод для перевірки, чи є користувач власником профілю викладача
+        private async Task<bool> IsTeacherOwner(int teacherId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return false;
+
+            var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.Id == teacherId);
+            return teacher != null && teacher.UserId == userId;
         }
     }
 }
