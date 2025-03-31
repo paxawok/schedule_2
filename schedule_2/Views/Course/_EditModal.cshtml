@@ -17,14 +17,23 @@
 
         <!-- Викладачі -->
         <div class="mb-3">
-            <label for="CourseTeachers" class="form-label">Вибір викладачів</label>
-            <select class="form-control" id="CourseTeachers" name="courseTeachers" multiple>
-                <option value="">-- Вибрати викладача --</option>
-                @foreach (var teacher in ViewData["Teachers"] as List<schedule_2.Models.Teacher>)
-                {
-                    <option value="@teacher.Id">@teacher.LastName</option>
-                }
-            </select>
+            <label class="form-label">Вибір викладачів</label>
+            <div class="mb-2">
+                <input type="text" class="form-control" id="teacherSearch" placeholder="Пошук викладача...">
+            </div>
+            <div class="border p-3 rounded" style="max-height: 200px; overflow-y: auto;">
+                <div id="teacherList">
+                    @foreach (var teacher in ViewData["Teachers"] as List<schedule_2.Models.Teacher>)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="courseTeachers" value="@teacher.Id" id="teacher-@teacher.Id">
+                            <label class="form-check-label" for="teacher-@teacher.Id">
+                                @teacher.LastName @teacher.FirstName (@teacher.Email)
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
 
         <!-- Групи -->
@@ -54,3 +63,15 @@
         <button type="submit" class="btn btn-primary">Зберегти зміни</button>
     </form>
 </div>
+
+<script>
+    $(document).ready(function() {
+        // Пошук викладачів
+        $("#teacherSearch").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#teacherList .form-check").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
