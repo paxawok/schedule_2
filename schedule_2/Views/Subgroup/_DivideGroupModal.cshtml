@@ -1,0 +1,93 @@
+﻿@model schedule_2.Models.Group
+@{
+    var isAdministrator = ViewBag.IsAdministrator as bool? ?? false;
+    var isTeacher = ViewBag.IsTeacher as bool? ?? false;
+    var canManageGroups = isAdministrator || isTeacher;
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">Поділити групу на підгрупи</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <p>Група: <strong>@Model.Name</strong></p>
+
+    <form id="divideGroupForm" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="groupId" value="@Model.Id" />
+
+        <div class="mb-3">
+            <label for="numberOfSubgroups" class="form-label">Кількість підгруп</label>
+            <select class="form-select" id="numberOfSubgroups" name="numberOfSubgroups" required>
+                <option value="">Виберіть кількість</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="prefixStyle" class="form-label">Стиль індексації</label>
+            <select class="form-select" id="prefixStyle" name="prefixStyle" required>
+                <option value="numeric">Числова (1, 2, 3...)</option>
+                <option value="alphabetic">Алфавітна (A, B, C...)</option>
+                <option value="roman">Римська (I, II, III...)</option>
+            </select>
+        </div>
+
+        <div id="subgroupNamesContainer">
+            <!-- Тут будуть динамічно додаватися поля для імен підгруп -->
+        </div>
+
+        <div class="text-center mt-3">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+            <button type="submit" class="btn btn-primary">Створити підгрупи</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Генерація полів імен на основі вибраної кількості підгруп
+        $('#numberOfSubgroups, #prefixStyle').change(function() {
+            updateSubgroupNames();
+        });
+
+        function updateSubgroupNames() {
+            const count = parseInt($('#numberOfSubgroups').val()) || 0;
+            const style = $('#prefixStyle').val();
+            const groupName = '@Model.Name';
+            const container = $('#subgroupNamesContainer');
+
+            container.empty();
+
+            if (count > 0) {
+                container.append('<div class="mb-3"><h6>Назви підгруп:</h6></div>');
+
+                for (let i = 0; i < count; i++) {
+                    let index = '';
+
+                    if (style === 'numeric') {
+                        index = (i + 1).toString();
+                    } else if (style === 'alphabetic') {
+                        index = String.fromCharCode(65 + i); // A, B, C, ...
+                    } else if (style === 'roman') {
+                        const romans = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+                        index = romans[i] || (i + 1).toString();
+                    }
+
+                    const proposedName = `${groupName}-${index}`;
+
+                    container.append(`
+                        <div class="mb-2">
+                            <label class="form-label">Підгрупа ${index}</label>
+                            <input type="text" class="form-control"
+                                   name="subgroupNames[${i}]"
+                                   value="${proposedName}" required />
+                        </div>
+                    `);
+                }
+            }
+        }
+    });
+</script>

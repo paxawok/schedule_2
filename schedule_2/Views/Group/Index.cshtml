@@ -2,6 +2,8 @@
 @{
     ViewData["Title"] = "Групи";
     var isAdministrator = ViewBag.IsAdministrator as bool? ?? false;
+    var isTeacher = ViewBag.IsTeacher as bool? ?? false;
+    var canManageGroups = isAdministrator || isTeacher;
 }
 
 <h2>Список груп</h2>
@@ -32,7 +34,17 @@
                         @string.Join(", ", item.CourseGroups.Select(cg => cg.Course.Name))
                     </td>
                     <td>
-                        @string.Join(", ", item.Subgroups.Select(s => s.Name))
+                        @if (item.Subgroups != null && item.Subgroups.Any())
+                        {
+                            @foreach (var subgroup in item.Subgroups)
+                            {
+                                <span class="badge bg-info me-1">@subgroup.Name</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-muted">Немає підгруп</span>
+                        }
                     </td>
                     <td>
                         <div class="btn-group">
@@ -48,6 +60,13 @@
 
                                 <button type="button" class="btn btn-sm btn-danger" onclick="showDelete(@item.Id)">
                                     <i class="bi bi-trash"></i> Видалити
+                                </button>
+                            }
+
+                            @if (canManageGroups)
+                            {
+                                <button type="button" class="btn btn-sm btn-success" onclick="showDivideGroup(@item.Id)">
+                                    <i class="bi bi-diagram-3"></i> Поділити на підгрупи
                                 </button>
                             }
                         </div>
@@ -87,6 +106,15 @@
 
 <!-- Модальне вікно для видалення -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
+</div>
+
+<!-- Модальне вікно для поділу групи на підгрупи -->
+<div class="modal fade" id="divideGroupModal" tabindex="-1" aria-labelledby="divideGroupModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <!-- Вміст завантажуватиметься через AJAX -->
@@ -166,6 +194,28 @@
             });
         }
 
+        // Відкриття модального вікна для поділу групи на підгрупи
+        function showDivideGroup(id) {
+            $.ajax({
+                url: '/Subgroup/DivideGroupModal/' + id,
+                success: function (result) {
+                    $('#divideGroupModal .modal-content').html(result);
+                    $('#divideGroupModal').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 403) {
+                        alert('У вас немає дозволу на поділ цієї групи.');
+                    } else {
+                        console.error("Error:", xhr.responseText);
+                        console.error("Status:", status);
+                        console.error("Error object:", error);
+                        alert('Помилка завантаження форми поділу групи. ' +
+                              'Будь ласка, зверніться до адміністратора системи.');
+                    }
+                }
+            });
+        }
+
         // Обробка форми створення групи через AJAX
         $(document).on('submit', '#createGroupForm', function (e) {
             e.preventDefault();
@@ -235,5 +285,31 @@
             });
         });
 
+        // Обробка форми поділу на підгрупи через AJAX
+        $(document).on('submit', '#divideGroupForm', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: '/Subgroup/DivideGroup',
+                type: 'POST',
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#divideGroupModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(response.message || 'Помилка при поділі групи.');
+                    }
+                },
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        alert('У вас немає дозволу на поділ групи.');
+                    } else {
+                        alert('Помилка при обробці запиту.');
+                    }
+                }
+            });
+        });
     </script>
 }
