@@ -4,16 +4,57 @@ using schedule_2.Data;
 using schedule_2.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace schedule_2.Controllers
 {
+    [Authorize] // Дозволити доступ тільки авторизованим користувачам
     public class CourseController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public CourseController(ApplicationDbContext context)
+        public CourseController(
+            ApplicationDbContext context,
+            UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+        }
+
+        // Метод для перевірки, чи є користувач адміністратором
+        private async Task<bool> IsAdministratorAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return false;
+            return await _userManager.IsInRoleAsync(user, "Administrator");
+        }
+
+        // Метод для отримання ID викладача, пов'язаного з поточним користувачем
+        private async Task<int?> GetCurrentTeacherIdAsync()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return null;
+
+            var teacher = await _context.Teachers
+                .FirstOrDefaultAsync(t => t.UserId == userId);
+
+            return teacher?.Id;
+        }
+
+        // Метод для перевірки, чи є поточний користувач викладачем даного курсу
+        private async Task<bool> IsTeacherOfCourseAsync(int courseId)
+        {
+            // Якщо адміністратор, повертаємо true одразу
+            if (await IsAdministratorAsync()) return true;
+
+            var teacherId = await GetCurrentTeacherIdAsync();
+            if (!teacherId.HasValue) return false;
+
+            return await _context.CourseTeachers
+                .AnyAsync(ct => ct.CourseId == courseId && ct.TeacherId == teacherId.Value);
         }
 
         // GET: /Course/Index
@@ -37,6 +78,14 @@ namespace schedule_2.Controllers
                 course.SubgroupCourses ??= new List<SubgroupCourse>();
             }
 
+            // Передаємо додаткові дані для перевірки прав у View
+            ViewBag.IsAdministrator = await IsAdministratorAsync();
+            ViewBag.TeacherId = await GetCurrentTeacherIdAsync();
+
+            // Перевіряємо чи користувач у ролі Teacher
+            var user = await _userManager.GetUserAsync(User);
+            ViewBag.IsTeacher = user != null && await _userManager.IsInRoleAsync(user, "Teacher");
+
             return View(courses);
         }
 
@@ -57,11 +106,16 @@ namespace schedule_2.Controllers
             if (course == null)
                 return NotFound();
 
+            // Передаємо додаткові дані для перевірки прав у View
+            ViewBag.IsAdministrator = await IsAdministratorAsync();
+            ViewBag.IsTeacherOfCourse = await IsTeacherOfCourseAsync(id);
+
             return PartialView("_DetailsModal", course);
         }
 
         // GET: /Course/Create
         [HttpGet]
+        [Authorize(Roles = "Administrator")] // Тільки адміністратори можуть створювати курси
         public IActionResult Create()
         {
             ViewData["Teachers"] = _context.Teachers.ToList();
@@ -74,6 +128,7 @@ namespace schedule_2.Controllers
         // POST: /Course/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")] // Тільки адміністратори можуть створювати курси
         public async Task<IActionResult> Create(Course course, int[] courseTeachers, int[] courseGroups, int[] subgroupCourses)
         {
             if (ModelState.IsValid)
@@ -81,6 +136,7 @@ namespace schedule_2.Controllers
                 // Призначення викладачів, якщо є
                 if (courseTeachers != null && courseTeachers.Length > 0)
                 {
+                    course.CourseTeachers = new List<CourseTeacher>();
                     foreach (var teacherId in courseTeachers)
                     {
                         var teacher = await _context.Teachers.FindAsync(teacherId);
@@ -94,6 +150,7 @@ namespace schedule_2.Controllers
                 // Призначення груп, якщо є
                 if (courseGroups != null && courseGroups.Length > 0)
                 {
+                    course.CourseGroups = new List<CourseGroup>();
                     foreach (var groupId in courseGroups)
                     {
                         var group = await _context.Groups.FindAsync(groupId);
@@ -107,6 +164,7 @@ namespace schedule_2.Controllers
                 // Призначення підгруп, якщо є
                 if (subgroupCourses != null && subgroupCourses.Length > 0)
                 {
+                    course.SubgroupCourses = new List<SubgroupCourse>();
                     foreach (var subgroupId in subgroupCourses)
                     {
                         var subgroup = await _context.Subgroups.FindAsync(subgroupId);
@@ -143,10 +201,18 @@ namespace schedule_2.Controllers
             if (course == null)
                 return NotFound();
 
+            // Перевірка прав доступу
+            bool isAdmin = await IsAdministratorAsync();
+            bool isTeacherOfCourse = await IsTeacherOfCourseAsync(id);
+
+            if (!isAdmin && !isTeacherOfCourse)
+                return Forbid(); // Повернути 403 Forbidden, якщо немає прав
+
             // Повертаємо до виду необхідні дані
             ViewData["Teachers"] = await _context.Teachers.ToListAsync();
             ViewData["Groups"] = await _context.Groups.ToListAsync();
             ViewData["Subgroups"] = await _context.Subgroups.ToListAsync();
+            ViewBag.IsAdministrator = isAdmin;
 
             return PartialView("_EditModal", course);
         }
@@ -158,6 +224,13 @@ namespace schedule_2.Controllers
         {
             if (id != course.Id)
                 return Json(new { success = false, message = "ID курсу не співпадає." });
+
+            // Перевірка прав доступу
+            bool isAdmin = await IsAdministratorAsync();
+            bool isTeacherOfCourse = await IsTeacherOfCourseAsync(id);
+
+            if (!isAdmin && !isTeacherOfCourse)
+                return Json(new { success = false, message = "У вас немає прав для редагування цього курсу." });
 
             if (ModelState.IsValid)
             {
@@ -173,46 +246,52 @@ namespace schedule_2.Controllers
                 if (courseInDb == null)
                     return Json(new { success = false, message = "Курс не знайдено." });
 
+                // Базові поля (доступні для редагування всім з правами редагування)
                 courseInDb.Name = course.Name;
                 courseInDb.Description = course.Description;
 
-                courseInDb.CourseTeachers.Clear();
-                if (courseTeachers != null && courseTeachers.Length > 0)
+                // Якщо користувач адміністратор, він може змінювати викладачів, групи та підгрупи
+                if (isAdmin)
                 {
-                    foreach (var teacherId in courseTeachers)
+                    // Оновлення викладачів
+                    courseInDb.CourseTeachers.Clear();
+                    if (courseTeachers != null && courseTeachers.Length > 0)
                     {
-                        var teacher = await _context.Teachers.FindAsync(teacherId);
-                        if (teacher != null)
+                        foreach (var teacherId in courseTeachers)
                         {
-                            courseInDb.CourseTeachers.Add(new CourseTeacher { Teacher = teacher });
+                            var teacher = await _context.Teachers.FindAsync(teacherId);
+                            if (teacher != null)
+                            {
+                                courseInDb.CourseTeachers.Add(new CourseTeacher { TeacherId = teacherId, CourseId = id });
+                            }
                         }
                     }
-                }
 
-                // Оновлення груп
-                courseInDb.CourseGroups.Clear();
-                if (courseGroups != null && courseGroups.Length > 0)
-                {
-                    foreach (var groupId in courseGroups)
+                    // Оновлення груп
+                    courseInDb.CourseGroups.Clear();
+                    if (courseGroups != null && courseGroups.Length > 0)
                     {
-                        var group = await _context.Groups.FindAsync(groupId);
-                        if (group != null)
+                        foreach (var groupId in courseGroups)
                         {
-                            courseInDb.CourseGroups.Add(new CourseGroup { Group = group });
+                            var group = await _context.Groups.FindAsync(groupId);
+                            if (group != null)
+                            {
+                                courseInDb.CourseGroups.Add(new CourseGroup { GroupId = groupId, CourseId = id });
+                            }
                         }
                     }
-                }
 
-                // Оновлення підгруп
-                courseInDb.SubgroupCourses.Clear();
-                if (subgroupCourses != null && subgroupCourses.Length > 0)
-                {
-                    foreach (var subgroupId in subgroupCourses)
+                    // Оновлення підгруп
+                    courseInDb.SubgroupCourses.Clear();
+                    if (subgroupCourses != null && subgroupCourses.Length > 0)
                     {
-                        var subgroup = await _context.Subgroups.FindAsync(subgroupId);
-                        if (subgroup != null)
+                        foreach (var subgroupId in subgroupCourses)
                         {
-                            courseInDb.SubgroupCourses.Add(new SubgroupCourse { Subgroup = subgroup });
+                            var subgroup = await _context.Subgroups.FindAsync(subgroupId);
+                            if (subgroup != null)
+                            {
+                                courseInDb.SubgroupCourses.Add(new SubgroupCourse { SubgroupId = subgroupId, CourseId = id });
+                            }
                         }
                     }
                 }
@@ -228,6 +307,7 @@ namespace schedule_2.Controllers
 
         // GET: /Course/Delete/{id} (Partial View для модального вікна підтвердження)
         [HttpGet]
+        [Authorize(Roles = "Administrator")] // Тільки адміністратори можуть видаляти курси
         public async Task<IActionResult> DeleteModal(int id)
         {
             var course = await _context.Courses
@@ -246,6 +326,7 @@ namespace schedule_2.Controllers
         // POST: /Course/DeleteConfirmed/{id} (AJAX для видалення через модальне вікно)
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")] // Тільки адміністратори можуть видаляти курси
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var course = await _context.Courses

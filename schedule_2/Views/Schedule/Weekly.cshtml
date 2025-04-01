@@ -103,6 +103,20 @@
         </tbody>
     </table>
 </div>
+<!-- Модальне вікно для створення/перегляду подій -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalLabel">Деталі події</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="eventModalContent">
+                <!-- Тут буде завантажений контент модального вікна -->
+            </div>
+        </div>
+    </div>
+</div>
 
 <div>
     <a asp-action="Index" class="btn btn-secondary">Повернутися до списку</a>

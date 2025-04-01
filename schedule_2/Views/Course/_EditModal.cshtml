@@ -1,4 +1,7 @@
 ﻿@model schedule_2.Models.Course
+@{
+    var isAdministrator = ViewBag.IsAdministrator as bool? ?? false;
+}
 
 <div class="modal-header">
     <h5 class="modal-title" id="exampleModalLabel">Редагувати курс</h5>
@@ -15,55 +18,110 @@
             <textarea class="form-control" id="Description" name="Description">@Model.Description</textarea>
         </div>
 
-        <!-- Викладачі -->
-        <div class="mb-3">
-            <label class="form-label">Вибір викладачів</label>
-            <div class="mb-2">
-                <input type="text" class="form-control" id="teacherSearch" placeholder="Пошук викладача...">
+        @if (!isAdministrator)
+        {
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> Як викладач курсу, ви можете редагувати тільки назву та опис.
+                Для зміни інших параметрів зверніться до адміністратора.
             </div>
-            <div class="border p-3 rounded" style="max-height: 200px; overflow-y: auto;">
-                <div id="teacherList">
-                    @foreach (var teacher in ViewData["Teachers"] as List<schedule_2.Models.Teacher>)
-                    {
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="courseTeachers" value="@teacher.Id" id="teacher-@teacher.Id">
-                            <label class="form-check-label" for="teacher-@teacher.Id">
-                                @teacher.LastName @teacher.FirstName (@teacher.Email)
-                            </label>
-                        </div>
-                    }
+
+            <!-- Приховані поля для збереження поточних значень -->
+            @foreach (var ct in Model.CourseTeachers)
+            {
+                <input type="hidden" name="courseTeachers" value="@ct.TeacherId" />
+            }
+
+            @foreach (var cg in Model.CourseGroups)
+            {
+                <input type="hidden" name="courseGroups" value="@cg.GroupId" />
+            }
+
+            @foreach (var sc in Model.SubgroupCourses)
+            {
+                <input type="hidden" name="subgroupCourses" value="@sc.SubgroupId" />
+            }
+        }
+
+        @if (isAdministrator)
+        {
+            <!-- Викладачі - тільки для адміністраторів -->
+            <div class="mb-3">
+                <label class="form-label">Вибір викладачів</label>
+                <div class="mb-2">
+                    <input type="text" class="form-control" id="teacherSearch" placeholder="Пошук викладача...">
+                </div>
+                <div class="border p-3 rounded" style="max-height: 200px; overflow-y: auto;">
+                    <div id="teacherList">
+                        @foreach (var teacher in ViewData["Teachers"] as List<schedule_2.Models.Teacher>)
+                        {
+                            bool isSelected = Model.CourseTeachers.Any(ct => ct.TeacherId == teacher.Id);
+                            if (isSelected)
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="courseTeachers"
+                                           value="@teacher.Id" id="teacher-@teacher.Id" checked>
+                                    <label class="form-check-label" for="teacher-@teacher.Id">
+                                        @teacher.LastName @teacher.FirstName (@teacher.Email)
+                                    </label>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="courseTeachers"
+                                           value="@teacher.Id" id="teacher-@teacher.Id">
+                                    <label class="form-check-label" for="teacher-@teacher.Id">
+                                        @teacher.LastName @teacher.FirstName (@teacher.Email)
+                                    </label>
+                                </div>
+                            }
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Групи -->
-        <div class="mb-3">
-            <label for="CourseGroups" class="form-label">Вибір групи</label>
-            <select class="form-control" id="CourseGroups" name="courseGroups" multiple>
-                <option value="">-- Вибрати групу --</option>
-                @foreach (var group in ViewData["Groups"] as List<schedule_2.Models.Group>)
-                {
-                    <option value="@group.Id">@group.Name</option>
-                }
-            </select>
-        </div>
+            <!-- Групи - тільки для адміністраторів -->
+            <div class="mb-3">
+                <label for="CourseGroups" class="form-label">Вибір групи</label>
+                <select class="form-control" id="CourseGroups" name="courseGroups" multiple>
+                    @foreach (var group in ViewData["Groups"] as List<schedule_2.Models.Group>)
+                    {
+                        bool isSelected = Model.CourseGroups.Any(cg => cg.GroupId == group.Id);
+                        if (isSelected)
+                        {
+                            <option value="@group.Id" selected>@group.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@group.Id">@group.Name</option>
+                        }
+                    }
+                </select>
+            </div>
 
-        <!-- Підгрупи -->
-        <div class="mb-3">
-            <label for="SubgroupCourses" class="form-label">Вибір підгрупи</label>
-            <select class="form-control" id="SubgroupCourses" name="subgroupCourses" multiple>
-                <option value="">-- Вибрати підгрупу --</option>
-                @foreach (var subgroup in ViewData["Subgroups"] as List<schedule_2.Models.Subgroup>)
-                {
-                    <option value="@subgroup.Id">@subgroup.Name</option>
-                }
-            </select>
-        </div>
+            <!-- Підгрупи - тільки для адміністраторів -->
+            <div class="mb-3">
+                <label for="SubgroupCourses" class="form-label">Вибір підгрупи</label>
+                <select class="form-control" id="SubgroupCourses" name="subgroupCourses" multiple>
+                    @foreach (var subgroup in ViewData["Subgroups"] as List<schedule_2.Models.Subgroup>)
+                    {
+                        bool isSelected = Model.SubgroupCourses.Any(sc => sc.SubgroupId == subgroup.Id);
+                        if (isSelected)
+                        {
+                            <option value="@subgroup.Id" selected>@subgroup.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@subgroup.Id">@subgroup.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+        }
 
         <button type="submit" class="btn btn-primary">Зберегти зміни</button>
     </form>
 </div>
-
 <script>
     $(document).ready(function() {
         // Пошук викладачів
