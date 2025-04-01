@@ -1,52 +1,62 @@
 ﻿@model IEnumerable<schedule_2.Models.Group>
+@{
+    ViewData["Title"] = "Групи";
+    var isAdministrator = ViewBag.IsAdministrator as bool? ?? false;
+}
 
 <h2>Список груп</h2>
 
-<!-- Кнопка для відкриття модального вікна створення -->
-<button type="button" class="btn btn-primary" onclick="showCreate()">Створити нову групу</button>
+@if (isAdministrator)
+{
+    <button type="button" class="btn btn-primary mb-3" onclick="showCreate()">
+        <i class="bi bi-plus-circle"></i> Створити нову групу
+    </button>
+}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Назва</th>
-            <th>Події</th>
-            <th>Курси</th>
-            <th>Підгрупи</th>
-            <th>Дії</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>@item.Name</td>
-                <td>
-                    @foreach (var eventGroup in item.EventGroups)
-                    {
-                        <span>@eventGroup.Event.Title, </span>
-                    }
-                </td>
-                <td>
-                    @foreach (var courseGroup in item.CourseGroups)
-                    {
-                        <span>@courseGroup.Course.Name, </span>
-                    }
-                </td>
-                <td>
-                    @foreach (var subgroup in item.Subgroups)
-                    {
-                        <span>@subgroup.Name, </span>
-                    }
-                </td>
-                <td>
-                    <button type="button" class="btn btn-info" onclick="showDetails(@item.Id)">Деталі</button> |
-                    <button type="button" class="btn btn-warning" onclick="showEdit(@item.Id)">Редагувати</button> |
-                    <button type="button" class="btn btn-danger" onclick="showDelete(@item.Id)">Видалити</button>
-                </td>
+                <th>Назва</th>
+                <th>Курси</th>
+                <th>Підгрупи</th>
+                <th>Дії</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>
+                        @string.Join(", ", item.CourseGroups.Select(cg => cg.Course.Name))
+                    </td>
+                    <td>
+                        @string.Join(", ", item.Subgroups.Select(s => s.Name))
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-info" onclick="showDetails(@item.Id)">
+                                <i class="bi bi-eye"></i> Деталі
+                            </button>
+
+                            @if (isAdministrator)
+                            {
+                                <button type="button" class="btn btn-sm btn-warning" onclick="showEdit(@item.Id)">
+                                    <i class="bi bi-pencil"></i> Редагувати
+                                </button>
+
+                                <button type="button" class="btn btn-sm btn-danger" onclick="showDelete(@item.Id)">
+                                    <i class="bi bi-trash"></i> Видалити
+                                </button>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <!-- Модальне вікно для створення групи -->
 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
@@ -96,8 +106,12 @@
                     $('#createModal .modal-content').html(result);
                     $('#createModal').modal('show');
                 },
-                error: function () {
-                    alert('Помилка завантаження форми створення групи.');
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        alert('У вас немає дозволу на створення групи.');
+                    } else {
+                        alert('Помилка завантаження форми створення групи.');
+                    }
                 }
             });
         }
@@ -124,8 +138,12 @@
                     $('#editModal .modal-content').html(result);
                     $('#editModal').modal('show');
                 },
-                error: function () {
-                    alert('Помилка завантаження форми редагування.');
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        alert('У вас немає дозволу на редагування цієї групи.');
+                    } else {
+                        alert('Помилка завантаження форми редагування.');
+                    }
                 }
             });
         }
@@ -138,8 +156,12 @@
                     $('#deleteModal .modal-content').html(result);
                     $('#deleteModal').modal('show');
                 },
-                error: function () {
-                    alert('Помилка завантаження підтвердження видалення.');
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        alert('У вас немає дозволу на видалення групи.');
+                    } else {
+                        alert('Помилка завантаження підтвердження видалення.');
+                    }
                 }
             });
         }
@@ -159,7 +181,6 @@
                         location.reload();
                     } else {
                         alert(response.message);
-                        $('#createModal .modal-content').html(response);
                     }
                 },
                 error: function () {
@@ -183,7 +204,6 @@
                         location.reload();
                     } else {
                         alert(response.message);
-                        $('#editModal .modal-content').html(response);
                     }
                 },
                 error: function () {
@@ -214,5 +234,6 @@
                 }
             });
         });
+
     </script>
 }
