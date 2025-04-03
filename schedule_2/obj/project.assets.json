@@ -4452,23 +4452,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Користувач\\.nuget\\packages\\": {},
+    "C:\\Users\\Windows10\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\schedule_2.csproj",
+      "projectUniqueName": "C:\\Users\\Windows10\\source\\repos\\schedule_2\\schedule_2\\schedule_2.csproj",
       "projectName": "schedule_2",
-      "projectPath": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\schedule_2.csproj",
-      "packagesPath": "C:\\Users\\Користувач\\.nuget\\packages\\",
-      "outputPath": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\obj\\",
+      "projectPath": "C:\\Users\\Windows10\\source\\repos\\schedule_2\\schedule_2\\schedule_2.csproj",
+      "packagesPath": "C:\\Users\\Windows10\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Користувач\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Windows10\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -4495,7 +4495,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net8.0": {
@@ -4541,7 +4541,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
