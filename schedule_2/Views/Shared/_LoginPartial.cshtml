@@ -3,24 +3,52 @@
 @inject UserManager<IdentityUser> UserManager
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var user = await UserManager.GetUserAsync(User);
+        var roles = await UserManager.GetRolesAsync(user);
+        var role = roles.FirstOrDefault() ?? "Користувач"; // Значення за замовчуванням
+
+        <li class="nav-item position-relative">
+            <button id="profile-btn" class="btn p-0 border-0 bg-transparent">
+                <img src="~/img/profile_pic.webp" alt="Profile" class="rounded-circle" style="width: 34px; height: 34px;">
+            </button>
+            <div id="profile-menu" class="profile-menu shadow rounded p-2 bg-white" style="display: none; position: absolute; top: 40px; right: 0; width: 200px;">
+                <p class="mb-1 fw-bold">@User.Identity?.Name</p>
+                <p class="text-muted mb-2">Роль: @role</p>
+                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="btn btn-danger btn-sm w-100">Вийти</button>
+                </form>
+            </div>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Login" style="font-size: 18px; color: blue; border-bottom: 1px blue">Увійти</a>
+        </li>
+    }
 </ul>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const profileBtn = document.getElementById("profile-btn");
+        const profileMenu = document.getElementById("profile-menu");
+
+        profileBtn.addEventListener("mouseenter", function () {
+            profileMenu.style.display = "block";
+        });
+        
+        profileBtn.addEventListener("mouseleave", function () {
+            setTimeout(() => {
+                if (!profileMenu.matches(":hover")) {
+                    profileMenu.style.display = "none";
+                }
+            }, 300);
+        });
+        
+        profileMenu.addEventListener("mouseleave", function () {
+            profileMenu.style.display = "none";
+        });
+    });
+</script>
