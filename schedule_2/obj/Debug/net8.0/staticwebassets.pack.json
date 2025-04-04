@@ -17,6 +17,14 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\home_side_img.png",
+      "PackagePath": "staticwebassets\\img\\home_side_img.png"
+    },
+    {
+      "Id": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\profile_pic.webp",
+      "PackagePath": "staticwebassets\\img\\profile_pic.webp"
+    },
+    {
       "Id": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

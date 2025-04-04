@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "zjbPrmqT6X6aEXEB4TJ6iuB+dKfpa3kPUBe8ZA8xsLA=",
+  "Hash": "bf8/1MJ+J9y5AroiQM9p7GRxhaQ3qvAH2Ipz+5fiUiQ=",
   "Source": "schedule_2",
   "BasePath": "_content/schedule_2",
   "Mode": "Default",
@@ -1382,6 +1382,48 @@
       "OriginalItemSpec": "wwwroot\\favicon.ico"
     },
     {
+      "Identity": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\home_side_img.png",
+      "SourceId": "schedule_2",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\",
+      "BasePath": "_content/schedule_2",
+      "RelativePath": "img/home_side_img#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "9ekio62v5v",
+      "Integrity": "wQe9hRfdjU9k4s1j9W9g1LcUxJLwHfMNMSJE0KmwfHk=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\home_side_img.png"
+    },
+    {
+      "Identity": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\profile_pic.webp",
+      "SourceId": "schedule_2",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\",
+      "BasePath": "_content/schedule_2",
+      "RelativePath": "img/profile_pic#[.{fingerprint}]?.webp",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "c6urp0o0ss",
+      "Integrity": "fPUVRYALCDTMd2yeoPCCBU2mnrJS8xkJIB2gdtDPVNE=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\profile_pic.webp"
+    },
+    {
       "Identity": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\js\\site.js",
       "SourceId": "schedule_2",
       "SourceType": "Discovered",
@@ -2706,7 +2748,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 04 Apr 2025 14:21:22 GMT"
+          "Value": "Fri, 04 Apr 2025 14:31:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2743,7 +2785,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 04 Apr 2025 14:21:22 GMT"
+          "Value": "Fri, 04 Apr 2025 14:31:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -5068,6 +5110,170 @@
       ]
     },
     {
+      "Route": "img/home_side_img.9ekio62v5v.png",
+      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\home_side_img.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "523548"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wQe9hRfdjU9k4s1j9W9g1LcUxJLwHfMNMSJE0KmwfHk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 04 Apr 2025 14:30:35 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "9ekio62v5v"
+        },
+        {
+          "Name": "label",
+          "Value": "img/home_side_img.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-wQe9hRfdjU9k4s1j9W9g1LcUxJLwHfMNMSJE0KmwfHk="
+        }
+      ]
+    },
+    {
+      "Route": "img/home_side_img.png",
+      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\home_side_img.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "523548"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wQe9hRfdjU9k4s1j9W9g1LcUxJLwHfMNMSJE0KmwfHk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 04 Apr 2025 14:30:35 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-wQe9hRfdjU9k4s1j9W9g1LcUxJLwHfMNMSJE0KmwfHk="
+        }
+      ]
+    },
+    {
+      "Route": "img/profile_pic.c6urp0o0ss.webp",
+      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\profile_pic.webp",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "13030"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/webp"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"fPUVRYALCDTMd2yeoPCCBU2mnrJS8xkJIB2gdtDPVNE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 04 Apr 2025 14:30:35 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "c6urp0o0ss"
+        },
+        {
+          "Name": "label",
+          "Value": "img/profile_pic.webp"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-fPUVRYALCDTMd2yeoPCCBU2mnrJS8xkJIB2gdtDPVNE="
+        }
+      ]
+    },
+    {
+      "Route": "img/profile_pic.webp",
+      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\profile_pic.webp",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "13030"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/webp"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"fPUVRYALCDTMd2yeoPCCBU2mnrJS8xkJIB2gdtDPVNE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 04 Apr 2025 14:30:35 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-fPUVRYALCDTMd2yeoPCCBU2mnrJS8xkJIB2gdtDPVNE="
+        }
+      ]
+    },
+    {
       "Route": "js/site.js",
       "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\js\\site.js",
       "Selectors": [],
@@ -5090,7 +5296,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 04 Apr 2025 14:16:33 GMT"
+          "Value": "Fri, 04 Apr 2025 14:31:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -5127,7 +5333,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 04 Apr 2025 14:16:33 GMT"
+          "Value": "Fri, 04 Apr 2025 14:31:08 GMT"
         },
         {
           "Name": "Cache-Control",
