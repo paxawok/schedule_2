@@ -1,0 +1,39 @@
+﻿/* Контейнер для скролу */
+#calendar-wrapper {
+    /*max-height: 70vh;*/ /* 70% від висоти екрана */
+    /*overflow-y: auto;*/
+}
+
+/* Задати ширину таблиці */
+#calendar {
+    width: 100%;
+    table-layout: fixed;
+}
+
+/* Часова колонка */
+.time-column {
+    width: 80px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #f8f9fa;
+}
+
+/* Комірки календаря */
+.calendar-cell {
+    height: 60px; /* Висота комірки */
+    position: relative;
+    border: 1px solid #dee2e6;
+}
+
+/* Події */
+.event {
+    background-color: #007bff;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 14px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+}

@@ -1,68 +1,124 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/schedule_2.styles.css" asp-append-version="true" />
-    @await RenderSectionAsync("Styles", required: false)
 
+    <style>
+        /* Робимо сторінку на всю висоту */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Контейнер для контенту */
+        .wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Основний контент, що займає вільний простір */
+        .content {
+            flex: 1;
+        }
+
+        /* Футер завжди внизу, але не прилипає при скролі */
+        .footer {
+            width: 100%;
+            background: #f8f9fa; /* Світлий фон */
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Розклад</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Schedule" asp-action="Index">Розклад</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Event" asp-action="Index">Події</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Classroom" asp-action="Index">Аудиторії</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Group" asp-action="Index">Групи</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Course" asp-action="Index">Курси</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Teacher" asp-action="Index">Викладачі</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Subgroup" asp-action="Index">Підгрупи</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
+    <!-- Основний контейнер -->
+    <div class="wrapper">
+        <div class="content">
+            <!-- Header -->
+            <header class="border-bottom py-2">
+                <div style="height: 70px" class="container d-flex justify-content-between align-items-center">
+                    <a style="font-size: 32px !important" class="navbar-brand fs-4 fw-bold text-dark" asp-area="" asp-controller="Home" asp-action="Index">Schedule</a>
+
+                    <div class="d-flex align-items-center gap-3">
+                        <span style="font-size: 20px; padding-right: 5px" class="fw-bold">UA</span>
+
+                        <!-- Кнопка профілю -->
+                        <div class="position-relative">
+                            <button id="profile-btn" class="btn p-0 border-0 bg-transparent">
+                                <img src="~/img/profile_pic.webp" alt="Profile" class="rounded-circle" style="width: 34px; height: 34px;">
+                            </button>
+
+                            <!-- Випадаюче вікно профілю -->
+                            <div id="profile-menu" class="profile-menu shadow rounded p-2 bg-white" style="display: none; position: absolute; top: 40px; right: 0; width: 200px;">
+                                <p class="mb-1 fw-bold">Ім'я Користувача</p>
+                                <p class="text-muted mb-2">Роль: Адміністратор</p>
+                                <button class="btn btn-danger btn-sm w-100">Вийти</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </header>
+
+            <!-- Main Content -->
+            <div class="container content mt-5">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <!-- Footer  -->
+    <footer class="border-top text-muted py-3">
         <div class="container">
-            &copy; 2025 - MIT-41 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - MIT-41
         </div>
     </footer>
+
+    <!-- Edit window -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Select an Entity to Edit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Choose what you want to edit:</p>
+                    <div class="d-flex flex-column gap-2">
+                        <a href="/Event" class="btn btn-primary">Edit Event</a>
+                        <a href="/Teacher" class="btn btn-primary">Edit Teacher</a>
+                        <a href="/Classroom" class="btn btn-primary">Edit Classroom</a>
+                        <a href="/Course" class="btn btn-primary">Edit Course</a>
+                        <a href="/Group" class="btn btn-primary">Edit Group</a>
+                        <a href="/Schedule" class="btn btn-primary">Edit Schedule</a>
+                        <a href="/Subgroup" class="btn btn-primary">Edit Subgroup</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -71,6 +127,33 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const profileBtn = document.getElementById("profile-btn");
+            const profileMenu = document.getElementById("profile-menu");
+
+            if (!profileBtn || !profileMenu) return;
+
+            function showMenu() {
+                profileMenu.style.display = "block";
+            }
+
+            function hideMenu() {
+                setTimeout(() => {
+                    if (!profileMenu.matches(":hover") && !profileBtn.matches(":hover")) {
+                        profileMenu.style.display = "none";
+                    }
+                }, 200);
+            }
+
+            profileBtn.addEventListener("mouseenter", showMenu);
+            profileMenu.addEventListener("mouseenter", showMenu);
+            profileBtn.addEventListener("mouseleave", hideMenu);
+            profileMenu.addEventListener("mouseleave", hideMenu);
+        });
+
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
