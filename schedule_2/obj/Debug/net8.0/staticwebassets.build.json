@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "DGs4NWwswHyH3rD+vWIRC8iFQzDaPb9NjwHkdYIdm+M=",
+  "Hash": "v1ubPxwKoqS0DKTSIzIXuNzfJXwq+G3yqGih1aQS0L8=",
   "Source": "schedule_2",
   "BasePath": "_content/schedule_2",
   "Mode": "Default",
@@ -1319,27 +1319,6 @@
       "OriginalItemSpec": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\schedule_2.bundle.scp.css"
     },
     {
-      "Identity": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\css\\admin.css",
-      "SourceId": "schedule_2",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\",
-      "BasePath": "_content/schedule_2",
-      "RelativePath": "css/admin#[.{fingerprint}]?.css",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "Fingerprint": "id8qccgybc",
-      "Integrity": "5mgWbNsQpWQCmyS9NVlAS0X0kD3e/ryNyLvZFnIkw/Q=",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\css\\admin.css"
-    },
-    {
       "Identity": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\css\\site.css",
       "SourceId": "schedule_2",
       "SourceType": "Discovered",
@@ -2643,88 +2622,6 @@
     }
   ],
   "Endpoints": [
-    {
-      "Route": "css/admin.css",
-      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\css\\admin.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "832"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"5mgWbNsQpWQCmyS9NVlAS0X0kD3e/ryNyLvZFnIkw/Q=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 04 Apr 2025 14:21:18 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-5mgWbNsQpWQCmyS9NVlAS0X0kD3e/ryNyLvZFnIkw/Q="
-        }
-      ]
-    },
-    {
-      "Route": "css/admin.id8qccgybc.css",
-      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\css\\admin.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "832"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"5mgWbNsQpWQCmyS9NVlAS0X0kD3e/ryNyLvZFnIkw/Q=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 04 Apr 2025 14:21:18 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "id8qccgybc"
-        },
-        {
-          "Name": "label",
-          "Value": "css/admin.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-5mgWbNsQpWQCmyS9NVlAS0X0kD3e/ryNyLvZFnIkw/Q="
-        }
-      ]
-    },
     {
       "Route": "css/site.css",
       "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\css\\site.css",

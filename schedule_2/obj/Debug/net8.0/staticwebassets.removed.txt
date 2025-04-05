@@ -1,1 +1,1 @@
-C:\Users\Windows10\Source\Repos\schedule_2\schedule_2\wwwroot\LoginRedirectMiddleware.cs
+C:\Users\Windows10\Source\Repos\schedule_2\schedule_2\wwwroot\css\admin.css
