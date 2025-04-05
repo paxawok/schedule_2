@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="utf-8" />
@@ -91,7 +95,7 @@
                     <div class="d-flex align-items-center gap-3">
                         <!-- Кнопка меню -->
                         
-                        @if (User.IsInRole("Administrator"))
+                        @if (SignInManager.IsSignedIn(User))
                         {
                             <button class="hamburger-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideMenuDrawer" aria-controls="sideMenuDrawer" aria-label="Toggle menu">
                                 <span></span>
@@ -137,11 +141,11 @@
             <a href="/Course" class="btn btn-outline-primary w-100 text-start">Редагувати курси</a>
             <a href="/Group" class="btn btn-outline-primary w-100 text-start">Редагувати групи</a>
             <a href="/Schedule" class="btn btn-outline-primary w-100 text-start">Редагувати розклад</a>
-            <a href="/Subgroup" class="btn btn-outline-primary w-100 text-start">Редагувати підгрупи</a>
-            <a class="btn btn-outline-primary w-100 text-start" asp-controller="StudentManagement" asp-action="Index">Редагувати студентів</a>
-            <hr />
+            <a href="/Subgroup" class="btn btn-outline-primary w-100 text-start">Редагувати підгрупи</a>          
             @if (User.IsInRole("Administrator"))
             {
+                <hr />
+                <a class="btn btn-outline-primary w-100 text-start" asp-controller="StudentManagement" asp-action="Index">Керування студентами</a>
                 <a class="btn btn-outline-primary w-100 text-start bottom-btn" asp-controller="UserManagement" asp-action="Index">Керування користувачами</a>
             }
         </div>
