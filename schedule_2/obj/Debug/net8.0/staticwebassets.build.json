@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Kcz6xC2eN/D4gstzQDaZ77fjqO9NjUwGll+qOWQ4zCQ=",
+  "Hash": "XW6z8QJzX5TKpkc8PRXK+bexq5V1SL1gWZ97vWGDsDs=",
   "Source": "schedule_2",
   "BasePath": "_content/schedule_2",
   "Mode": "Default",
@@ -2640,6 +2640,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\LoginRedirectMiddleware.cs",
+      "SourceId": "schedule_2",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\",
+      "BasePath": "_content/schedule_2",
+      "RelativePath": "LoginRedirectMiddleware#[.{fingerprint}]?.cs",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "pogba1engm",
+      "Integrity": "x0jqALYr4mC4c0AftjG2HXih756bLIaBtTgw30WZ+eY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\LoginRedirectMiddleware.cs"
     }
   ],
   "Endpoints": [
@@ -10026,6 +10047,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-16aFlqtpsG9RyieKZUUUjkJpqTgcJtWXwT312I4Iz1s="
+        }
+      ]
+    },
+    {
+      "Route": "LoginRedirectMiddleware.cs",
+      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\LoginRedirectMiddleware.cs",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "231"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"x0jqALYr4mC4c0AftjG2HXih756bLIaBtTgw30WZ+eY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 05 Apr 2025 09:38:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-x0jqALYr4mC4c0AftjG2HXih756bLIaBtTgw30WZ+eY="
+        }
+      ]
+    },
+    {
+      "Route": "LoginRedirectMiddleware.pogba1engm.cs",
+      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\LoginRedirectMiddleware.cs",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "231"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"x0jqALYr4mC4c0AftjG2HXih756bLIaBtTgw30WZ+eY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 05 Apr 2025 09:38:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "pogba1engm"
+        },
+        {
+          "Name": "label",
+          "Value": "LoginRedirectMiddleware.cs"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-x0jqALYr4mC4c0AftjG2HXih756bLIaBtTgw30WZ+eY="
         }
       ]
     },

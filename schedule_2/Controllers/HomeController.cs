@@ -15,6 +15,11 @@ namespace schedule_2.Controllers
 
         public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Schedule");
+            }
+
             return View();
         }
 
