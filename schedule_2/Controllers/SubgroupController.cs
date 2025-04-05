@@ -57,82 +57,6 @@ namespace schedule_2.Controllers
             return PartialView("_DetailsModal", subgroup);
         }
 
-        // GET: /Subgroup/Create
-        [HttpGet]
-        public IActionResult Create()
-        {
-            PrepareViewBagForCreate();
-            return PartialView("_CreateModal");
-        }
-
-        // POST: /Subgroup/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm] Subgroup subgroup, [FromForm] int[] selectedCourses)
-        {
-            try
-            {
-                // Server-side validation
-                if (string.IsNullOrWhiteSpace(subgroup.Name))
-                {
-                    ModelState.AddModelError("Name", "Name is required");
-                }
-                else if (subgroup.Name.Length > 18)
-                {
-                    ModelState.AddModelError("Name", "Name cannot exceed 18 characters");
-                }
-
-                if (subgroup.GroupId == 0)
-                {
-                    ModelState.AddModelError("GroupId", "Group is required");
-                }
-
-                // Check for duplicate subgroup name within the same group
-                var duplicateName = await _context.Subgroups
-                    .AnyAsync(s => s.GroupId == subgroup.GroupId && s.Name == subgroup.Name);
-
-                if (duplicateName)
-                {
-                    ModelState.AddModelError("Name", "A subgroup with this name already exists in the selected group");
-                }
-
-                if (ModelState.IsValid)
-                {
-                    _context.Subgroups.Add(subgroup);
-                    await _context.SaveChangesAsync();
-
-                    // Add course relationships
-                    if (selectedCourses != null && selectedCourses.Length > 0)
-                    {
-                        foreach (var courseId in selectedCourses)
-                        {
-                            _context.SubgroupCourses.Add(new SubgroupCourse
-                            {
-                                SubgroupId = subgroup.Id,
-                                CourseId = courseId
-                            });
-                        }
-                        await _context.SaveChangesAsync();
-                    }
-
-                    return Json(new { success = true, message = "Підгрупу успішно створено!" });
-                }
-
-                // If validation fails, return errors
-                var errors = ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage)
-                    .ToList();
-
-                return Json(new { success = false, message = "Невірні дані. Перевірте форму.", errors });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Помилка при створенні підгрупи");
-                return Json(new { success = false, message = $"Помилка при створенні підгрупи: {ex.Message}" });
-            }
-        }
-
         // GET: /Subgroup/Edit/{id} (Partial View for modal window)
         [HttpGet]
         public async Task<IActionResult> EditModal(int id)
@@ -145,90 +69,97 @@ namespace schedule_2.Controllers
             if (subgroup == null)
                 return NotFound();
 
-            PrepareViewBagForEdit(subgroup);
+            // Підготовка даних для представлення
+            ViewBag.Groups = new SelectList(await _context.Groups.OrderBy(g => g.Name).ToListAsync(), "Id", "Name", subgroup.GroupId);
+            ViewBag.Courses = await _context.Courses.OrderBy(c => c.Name).ToListAsync();
+
+            // Отримуємо ID курсів, пов'язаних з цією підгрупою
+            ViewBag.SelectedCourses = subgroup.SubgroupCourses
+                .Select(sc => sc.CourseId)
+                .ToList();
+
             return PartialView("_EditModal", subgroup);
         }
 
-        // POST: /Subgroup/Edit/{id} (AJAX for updating via modal window)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditModal(int id, [FromForm] Subgroup subgroup, [FromForm] int[] selectedCourses)
+        public async Task<IActionResult> EditModal(int id, Subgroup subgroup, int[] selectedCourses)
         {
             if (id != subgroup.Id)
-                return Json(new { success = false, message = "ID mismatch." });
+                return Json(new { success = false, message = "ID не співпадає." });
 
-            // Server-side validation
+            // Валідація даних
             if (string.IsNullOrWhiteSpace(subgroup.Name))
             {
-                ModelState.AddModelError("Name", "Name is required");
-            }
-            else if (subgroup.Name.Length > 18)
-            {
-                ModelState.AddModelError("Name", "Name cannot exceed 18 characters");
+                return Json(new { success = false, message = "Назва підгрупи обов'язкова." });
             }
 
-            if (subgroup.GroupId == 0)
+            if (subgroup.GroupId <= 0)
             {
-                ModelState.AddModelError("GroupId", "Group is required");
+                return Json(new { success = false, message = "Потрібно вибрати групу." });
             }
 
-            // Check for duplicate subgroup name within the same group (excluding current subgroup)
+            // Перевірка на дублікати
             var duplicateName = await _context.Subgroups
                 .AnyAsync(s => s.GroupId == subgroup.GroupId && s.Name == subgroup.Name && s.Id != id);
 
             if (duplicateName)
             {
-                ModelState.AddModelError("Name", "A subgroup with this name already exists in the selected group");
+                return Json(new { success = false, message = "Підгрупа з такою назвою вже існує в цій групі." });
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
+                // Отримуємо існуючу підгрупу з бази
+                var subgroupToUpdate = await _context.Subgroups
+                    .Include(s => s.SubgroupCourses)
+                    .FirstOrDefaultAsync(s => s.Id == id);
+
+                if (subgroupToUpdate == null)
+                    return Json(new { success = false, message = "Підгрупу не знайдено." });
+
+                // Оновлення базових властивостей
+                subgroupToUpdate.Name = subgroup.Name;
+                subgroupToUpdate.GroupId = subgroup.GroupId;
+
+                // Починаємо транзакцію для забезпечення цілісності даних
+                using (var transaction = await _context.Database.BeginTransactionAsync())
                 {
-                    var subgroupToUpdate = await _context.Subgroups
-                        .Include(s => s.SubgroupCourses)
-                        .FirstOrDefaultAsync(s => s.Id == id);
-
-                    if (subgroupToUpdate == null)
-                        return Json(new { success = false, message = "Subgroup not found." });
-
-                    // Update basic properties
-                    subgroupToUpdate.Name = subgroup.Name;
-                    subgroupToUpdate.GroupId = subgroup.GroupId;
-
-                    // Update course relationships
-                    // First, remove existing relationships
-                    _context.SubgroupCourses.RemoveRange(subgroupToUpdate.SubgroupCourses);
-
-                    // Then add new relationships
-                    if (selectedCourses != null && selectedCourses.Length > 0)
+                    try
                     {
-                        foreach (var courseId in selectedCourses)
-                        {
-                            _context.SubgroupCourses.Add(new SubgroupCourse
-                            {
-                                SubgroupId = subgroup.Id,
-                                CourseId = courseId
-                            });
-                        }
-                    }
+                        // Видаляємо всі існуючі зв'язки з курсами
+                        _context.SubgroupCourses.RemoveRange(subgroupToUpdate.SubgroupCourses);
+                        await _context.SaveChangesAsync();
 
-                    await _context.SaveChangesAsync();
-                    return Json(new { success = true, message = "Data updated successfully." });
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    return Json(new { success = false, message = "Error updating data. The record may have been modified by another user." });
+                        // Додаємо нові зв'язки з курсами
+                        if (selectedCourses != null && selectedCourses.Length > 0)
+                        {
+                            foreach (var courseId in selectedCourses)
+                            {
+                                _context.SubgroupCourses.Add(new SubgroupCourse
+                                {
+                                    SubgroupId = id,
+                                    CourseId = courseId
+                                });
+                            }
+                        }
+
+                        await _context.SaveChangesAsync();
+                        await transaction.CommitAsync();
+
+                        return Json(new { success = true, message = "Підгрупу успішно оновлено." });
+                    }
+                    catch (Exception ex)
+                    {
+                        await transaction.RollbackAsync();
+                        throw; // Повторно кидаємо виняток для зовнішнього обробника
+                    }
                 }
             }
-
-            // If validation fails, return errors
-            var errors = ModelState.Values
-                .SelectMany(v => v.Errors)
-                .Select(e => e.ErrorMessage)
-                .ToList();
-
-            return Json(new { success = false, message = "Invalid data. Please check the form.", errors });
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Помилка при оновленні підгрупи: {ex.Message}" });
+            }
         }
 
         // GET: /Subgroup/Delete/{id} (Partial View for confirmation modal)
@@ -339,11 +270,11 @@ namespace schedule_2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DivideGroup(
-     int groupId,
-     int numberOfSubgroups,
-     string prefixStyle,
-     string[] subgroupNames,
-     int[] selectedCourses)
+    int groupId,
+    int numberOfSubgroups,
+    string prefixStyle,
+    string[] subgroupNames,
+    int[] selectedCourses)
         {
             try
             {
