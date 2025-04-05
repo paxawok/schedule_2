@@ -1,79 +1,72 @@
-html {
-    font-size: 14px;
+/* Додаткові стилі для бокового меню */
+.custom-side-menu {
+    background-color: #f4f6f9;
+    border-right: 1px solid #dee2e6;
+    width: 260px;
 }
 
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
+/* Кнопка меню */
+.menu-toggle-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+    .menu-toggle-btn i {
+        vertical-align: middle;
     }
+
+/* Кнопки меню */
+.custom-side-menu .btn {
+    font-size: 16px;
+    padding: 10px 16px;
+    transition: all 0.2s ease-in-out;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
+    .custom-side-menu .btn:hover {
+        background-color: #0d6efd;
+        color: white;
+    }
 
-html {
+/* Стилі для кнопки "Гамбургер" */
+
+.hamburger-btn {
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
     position: relative;
-    min-height: 100%;
-}
-
-body {
-    margin-bottom: 60px;
-}
-
-.wrapper {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.content {
-    flex-grow: 1;
-}
-
-.home-content {
-    display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically */
-    height: 60vh;
-}
-
-footer {
-    text-align: center;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    height: 70px;
+    justify-content: center;
+    transition: all 0.3s ease;
 }
 
-/*Profile*/
-/*.profile-menu {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    width: 180px;
-    display: none;
-    z-index: 100;
-}
-*/
-
-.profile-menu {
-    display: none;
-    position: absolute;
-    top: 40px;
-    right: 0;
-    width: 200px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    z-index: 1000;
-}
-
-    .profile-menu p {
-        margin: 0;
-        font-size: 14px;
+    .hamburger-btn::before,
+    .hamburger-btn::after,
+    .hamburger-btn span {
+        content: '';
+        position: absolute;
+        width: 22px;
+        height: 2px;
+        background-color: #0d6efd;
+        transition: all 0.3s ease;
     }
 
-    .profile-menu .btn {
-        font-size: 14px;
+    .hamburger-btn::before {
+        top: 10px;
     }
+
+    .hamburger-btn::after {
+        bottom: 10px;
+    }
+
+    .hamburger-btn span {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+* {
+    transition: all 0.2s ease-in-out;
+    scroll-behavior: smooth;
+}

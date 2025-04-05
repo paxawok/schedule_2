@@ -2223,88 +2223,6 @@
       ]
     },
     {
-      "Route": "LoginRedirectMiddleware.cs",
-      "AssetFile": "LoginRedirectMiddleware.cs",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "231"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "application/octet-stream"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"x0jqALYr4mC4c0AftjG2HXih756bLIaBtTgw30WZ+eY=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Sat, 05 Apr 2025 09:38:30 GMT"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-x0jqALYr4mC4c0AftjG2HXih756bLIaBtTgw30WZ+eY="
-        }
-      ]
-    },
-    {
-      "Route": "LoginRedirectMiddleware.pogba1engm.cs",
-      "AssetFile": "LoginRedirectMiddleware.cs",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "231"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "application/octet-stream"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"x0jqALYr4mC4c0AftjG2HXih756bLIaBtTgw30WZ+eY=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Sat, 05 Apr 2025 09:38:30 GMT"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "pogba1engm"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-x0jqALYr4mC4c0AftjG2HXih756bLIaBtTgw30WZ+eY="
-        },
-        {
-          "Name": "label",
-          "Value": "LoginRedirectMiddleware.cs"
-        }
-      ]
-    },
-    {
       "Route": "css/admin.css",
       "AssetFile": "css/admin.css",
       "Selectors": [],
@@ -2401,7 +2319,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1326"
+          "Value": "1402"
         },
         {
           "Name": "Content-Type",
@@ -2409,22 +2327,22 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"2asurJJ6ueC+L7WDF0C6JQ5MqXw1SdGFpb85S2RbYPo=\""
+          "Value": "\"HwtWT+HZuq5DzY/9i75MEtbk4ESTap7NeOh8MKHNjDA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 04 Apr 2025 15:17:22 GMT"
+          "Value": "Sat, 05 Apr 2025 11:34:53 GMT"
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-2asurJJ6ueC+L7WDF0C6JQ5MqXw1SdGFpb85S2RbYPo="
+          "Value": "sha256-HwtWT+HZuq5DzY/9i75MEtbk4ESTap7NeOh8MKHNjDA="
         }
       ]
     },
     {
-      "Route": "css/site.vamt2n8z1q.css",
+      "Route": "css/site.zvqwjqel5s.css",
       "AssetFile": "css/site.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -2438,7 +2356,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1326"
+          "Value": "1402"
         },
         {
           "Name": "Content-Type",
@@ -2446,21 +2364,21 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"2asurJJ6ueC+L7WDF0C6JQ5MqXw1SdGFpb85S2RbYPo=\""
+          "Value": "\"HwtWT+HZuq5DzY/9i75MEtbk4ESTap7NeOh8MKHNjDA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 04 Apr 2025 15:17:22 GMT"
+          "Value": "Sat, 05 Apr 2025 11:34:53 GMT"
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "vamt2n8z1q"
+          "Value": "zvqwjqel5s"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-2asurJJ6ueC+L7WDF0C6JQ5MqXw1SdGFpb85S2RbYPo="
+          "Value": "sha256-HwtWT+HZuq5DzY/9i75MEtbk4ESTap7NeOh8MKHNjDA="
         },
         {
           "Name": "label",
