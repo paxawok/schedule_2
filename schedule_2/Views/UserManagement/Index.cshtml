@@ -1,0 +1,88 @@
+﻿@model IEnumerable<schedule_2.ViewModels.UserViewModel>
+@{
+    ViewData["Title"] = "Управління користувачами";
+}
+
+<h2>Управління користувачами</h2>
+
+<div class="row mb-3">
+    <div class="col">
+        <div class="btn-group">
+            <a asp-action="CreateTeacher" class="btn btn-primary">
+                <i class="bi bi-person-add"></i> Додати викладача
+            </a>
+            <a asp-action="CreateStudent" class="btn btn-success">
+                <i class="bi bi-person-add"></i> Додати студента
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Ролі</th>
+                <th>Тип</th>
+                <th>Група</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>
+                        @foreach (var role in user.Roles)
+                        {
+                            <span class="badge bg-primary">@role</span>
+                        }
+                    </td>
+                    <td>
+                        @if (user.IsTeacher)
+                        {
+                            <span class="badge bg-info">Викладач</span>
+                        }
+                        else if (user.IsStudent)
+                        {
+                            <span class="badge bg-success">Студент</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Користувач</span>
+                        }
+                    </td>
+                    <td>
+                        @if (user.IsStudent && !string.IsNullOrEmpty(user.GroupName))
+                        {
+                            @user.GroupName
+                        }
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a asp-action="EditRoles" asp-route-userId="@user.Id" class="btn btn-sm btn-warning">
+                                <i class="bi bi-shield"></i> Ролі
+                            </a>
+
+                            @if (user.IsTeacher && user.TeacherId.HasValue)
+                            {
+                                <a asp-controller="Teacher" asp-action="Details" asp-route-id="@user.TeacherId" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i> Профіль
+                                </a>
+                            }
+
+                            @if (user.IsStudent && user.StudentId.HasValue)
+                            {
+                                <a asp-controller="StudentManagement" asp-action="Details" asp-route-id="@user.StudentId" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i> Профіль
+                                </a>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

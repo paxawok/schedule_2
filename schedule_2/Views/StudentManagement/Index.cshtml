@@ -1,0 +1,57 @@
+﻿@model IEnumerable<schedule_2.Models.Student>
+@{
+    ViewData["Title"] = "Студенти";
+    var isAdmin = User.IsInRole("Administrator");
+}
+
+<h2>Список студентів</h2>
+
+@if (isAdmin)
+{
+    <p>
+        <a asp-controller="UserManagement" asp-action="CreateStudent" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Створити нового студента
+        </a>
+    </p>
+}
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Прізвище</th>
+                <th>Ім'я</th>
+                <th>Email</th>
+                <th>Група</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.LastName</td>
+                    <td>@item.FirstName</td>
+                    <td>@item.Email</td>
+                    <td>@item.Group.Name</td>
+                    <td>
+                        <div class="btn-group">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">
+                                <i class="bi bi-eye"></i> Деталі
+                            </a>
+                            @if (isAdmin)
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil"></i> Редагувати
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i> Видалити
+                                </a>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
