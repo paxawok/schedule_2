@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+ï»¿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using schedule_2.Data;
 
@@ -42,7 +42,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-// ²í³ö³àë³çàö³ÿ ðîëåé
+// Â²Ã­Â³Ã¶Â³Ã Ã«Â³Ã§Ã Ã¶Â³Ã¿ Ã°Ã®Ã«Ã¥Ã©
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;

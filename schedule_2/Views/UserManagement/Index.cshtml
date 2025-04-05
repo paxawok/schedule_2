@@ -23,9 +23,7 @@
         <thead>
             <tr>
                 <th>Email</th>
-                <th>Ролі</th>
-                <th>Тип</th>
-                <th>Група</th>
+                <th>Роль</th>
                 <th>Дії</th>
             </tr>
         </thead>
@@ -41,34 +39,14 @@
                         }
                     </td>
                     <td>
-                        @if (user.IsTeacher)
-                        {
-                            <span class="badge bg-info">Викладач</span>
-                        }
-                        else if (user.IsStudent)
-                        {
-                            <span class="badge bg-success">Студент</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary">Користувач</span>
-                        }
-                    </td>
-                    <td>
-                        @if (user.IsStudent && !string.IsNullOrEmpty(user.GroupName))
-                        {
-                            @user.GroupName
-                        }
-                    </td>
-                    <td>
                         <div class="btn-group">
                             <a asp-action="EditRoles" asp-route-userId="@user.Id" class="btn btn-sm btn-warning">
-                                <i class="bi bi-shield"></i> Ролі
+                                <i class="bi bi-shield"></i> Роль
                             </a>
 
                             @if (user.IsTeacher && user.TeacherId.HasValue)
                             {
-                                <a asp-controller="Teacher" asp-action="Details" asp-route-id="@user.TeacherId" class="btn btn-sm btn-info">
+                                <a asp-controller="Teacher" asp-action="DetailsModal" asp-route-id="@user.TeacherId" class="btn btn-sm btn-info">
                                     <i class="bi bi-eye"></i> Профіль
                                 </a>
                             }
@@ -85,4 +63,12 @@
             }
         </tbody>
     </table>
+</div>
+<!-- Модальне вікно для деталей -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
 </div>

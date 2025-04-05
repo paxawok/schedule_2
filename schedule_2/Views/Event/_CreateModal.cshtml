@@ -101,28 +101,6 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        // Початкова перевірка при завантаженні сторінки
-        toggleRecurrencePattern();
-
-        // Додавання обробника події при зміні значення IsRecurring
-        $('#IsRecurring').change(function() {
-            toggleRecurrencePattern();
-        });
-
-        // Функція для відображення/приховування поля шаблону повторення
-        function toggleRecurrencePattern() {
-            if ($('#IsRecurring').val() === "true") {
-                $('#recurrencePatternContainer').show();
-            } else {
-                $('#recurrencePatternContainer').hide();
-                // Опціонально: очищення значення поля при приховуванні
-                $('#RecurrencePattern').val('');
-            }
-        }
-    });
-</script>
-<script>
         $('#createEventForm').submit(function (e) {
         e.preventDefault();
 
