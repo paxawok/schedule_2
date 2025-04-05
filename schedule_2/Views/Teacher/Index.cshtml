@@ -2,14 +2,17 @@
 
 <h2>Список викладачів</h2>
 
-<!-- Кнопка для відкриття модального вікна створення -->
-<button type="button" class="btn btn-primary" onclick="showCreate()">Створити нового викладача</button>
+<!-- Кнопка для відкриття модального вікна створення доступна тільки для адміністраторів -->
+@if (User.IsInRole("Administrator"))
+{
+    <button type="button" class="btn btn-primary" onclick="showCreate()">Створити нового викладача</button>
+}
 
 <table class="table">
     <thead>
         <tr>
             <th>Ім'я</th>
-            <th>Призвище</th>
+            <th>Прізвище</th>
             <th>Електронна пошта</th>
             <th>Події</th>
             <th>Дії</th>
@@ -29,9 +32,22 @@
                     }
                 </td>
                 <td>
-                    <button type="button" class="btn btn-info" onclick="showDetails(@item.Id)">Деталі</button> |
-                    <button type="button" class="btn btn-warning" onclick="showEdit(@item.Id)">Редагувати</button> |
-                    <button type="button" class="btn btn-danger" onclick="showDelete(@item.Id)">Видалити</button>
+                    <button type="button" class="btn btn-info" onclick="showDetails(@item.Id)">Деталі</button>
+
+                    @{
+                        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                        bool isOwner = item.UserId == userId;
+                    }
+
+                    @if (User.IsInRole("Administrator") || isOwner)
+                    {
+                        <button type="button" class="btn btn-warning" onclick="showEdit(@item.Id)">Редагувати</button>
+                    }
+
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <button type="button" class="btn btn-danger" onclick="showDelete(@item.Id)">Видалити</button>
+                    }
                 </td>
             </tr>
         }

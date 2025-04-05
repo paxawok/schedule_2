@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using schedule_2.Data;
 using schedule_2.Models;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace schedule_2.Controllers
@@ -34,7 +36,7 @@ namespace schedule_2.Controllers
             return View(events);
         }
 
-        // GET: /Event/Details/{id} - Modal View
+        // GET: /Event/Details/{id} - Модальне вікно
         [HttpGet]
         public async Task<IActionResult> DetailsModal(int id)
         {
@@ -55,17 +57,48 @@ namespace schedule_2.Controllers
             return PartialView("_DetailsModal", eventItem);
         }
 
-        // GET: /Event/Create - Modal View
+        // GET: /Event/Create - Модальне вікно
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> CreateModal()
         {
-            // Create a list of teachers with lastname + firstname as display text
+            // Якщо користувач не адміністратор і не викладач, забороняємо доступ
+            if (!User.IsInRole("Administrator") && !User.IsInRole("Teacher"))
+            {
+                return Forbid();
+            }
+
+            // Створюємо список викладачів з прізвищем + ім'ям як текст для відображення
             var teachers = await _context.Teachers.ToListAsync();
             var teacherItems = teachers.Select(t => new
             {
                 Id = t.Id,
                 Name = $"{t.LastName} {t.FirstName}"
             });
+
+            // Для викладачів обмежуємо вибір лише власним профілем
+            var courses = await _context.Courses.ToListAsync();
+
+            if (User.IsInRole("Teacher") && !User.IsInRole("Administrator"))
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+
+                if (teacher != null)
+                {
+                    teacherItems = teacherItems.Where(t => t.Id == teacher.Id);
+
+                    // Отримуємо тільки курси, пов'язані з цим викладачем
+                    var teacherCourseIds = await _context.CourseTeachers
+                        .Where(ct => ct.TeacherId == teacher.Id)
+                        .Select(ct => ct.CourseId)
+                        .ToListAsync();
+
+                    courses = await _context.Courses
+                        .Where(c => teacherCourseIds.Contains(c.Id))
+                        .ToListAsync();
+                }
+            }
 
             ViewBag.Teachers = new SelectList(teacherItems, "Id", "Name");
             ViewBag.Courses = new SelectList(await _context.Courses.ToListAsync(), "Id", "Name");
@@ -77,12 +110,41 @@ namespace schedule_2.Controllers
             return PartialView("_CreateModal");
         }
 
+        // POST: /Event/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> CreateModal(string Title, DateTime StartDateTime,
-    DateTime EndDateTime, int TeacherId, int CourseId, int ClassroomId, int ScheduleId,
-    bool IsRecurring, string RecurrencePattern, int[] selectedGroups, int[] selectedSubgroups)
+            DateTime EndDateTime, int TeacherId, int CourseId, int ClassroomId, int ScheduleId,
+            bool IsRecurring, string RecurrencePattern, int[] selectedGroups, int[] selectedSubgroups)
         {
+            // Якщо користувач не адміністратор і не викладач, забороняємо доступ
+            if (!User.IsInRole("Administrator") && !User.IsInRole("Teacher"))
+            {
+                return Json(new { success = false, message = "Недостатньо прав для створення події" });
+            }
+
+            // Для викладачів: перевірка, що подія створюється для себе
+            if (User.IsInRole("Teacher") && !User.IsInRole("Administrator"))
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+
+                if (teacher == null || teacher.Id != TeacherId)
+                {
+                    return Json(new { success = false, message = "Ви можете створювати події тільки для себе" });
+                }
+
+                // Перевірка, що викладач має доступ до вибраного курсу
+                var hasCourseAccess = await _context.CourseTeachers
+                    .AnyAsync(ct => ct.CourseId == CourseId && ct.TeacherId == teacher.Id);
+
+                if (!hasCourseAccess)
+                {
+                    return Json(new { success = false, message = "Ви можете створювати події тільки для своїх курсів" });
+                }
+            }
+
             // Перевіряємо наявність обов'язкових полів
             if (string.IsNullOrEmpty(Title) || TeacherId == 0 || CourseId == 0 ||
                 ClassroomId == 0 || ScheduleId == 0)
@@ -90,16 +152,16 @@ namespace schedule_2.Controllers
                 var errorList = new List<object>();
 
                 if (TeacherId == 0)
-                    errorList.Add(new { key = "Teacher", errors = new[] { "The Teacher field is required." } });
+                    errorList.Add(new { key = "Teacher", errors = new[] { "Поле Викладач є обов'язковим." } });
 
                 if (CourseId == 0)
-                    errorList.Add(new { key = "Course", errors = new[] { "The Course field is required." } });
+                    errorList.Add(new { key = "Course", errors = new[] { "Поле Курс є обов'язковим." } });
 
                 if (ClassroomId == 0)
-                    errorList.Add(new { key = "Classroom", errors = new[] { "The Classroom field is required." } });
+                    errorList.Add(new { key = "Classroom", errors = new[] { "Поле Аудиторія є обов'язковим." } });
 
                 if (ScheduleId == 0)
-                    errorList.Add(new { key = "Schedule", errors = new[] { "The Schedule field is required." } });
+                    errorList.Add(new { key = "Schedule", errors = new[] { "Поле Розклад є обов'язковим." } });
 
                 return Json(new { success = false, message = "Невалідна модель", errors = errorList });
             }
@@ -150,10 +212,11 @@ namespace schedule_2.Controllers
                 return Json(new { success = false, message = "Помилка при створенні події: " + ex.Message });
             }
         }
-        
-        
-        // GET: /Event/Edit/{id} - Modal View
+
+
+        // GET: /Event/Edit/{id} - Модальне вікно
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> EditModal(int id)
         {
             var eventItem = await _context.Events
@@ -164,6 +227,27 @@ namespace schedule_2.Controllers
             if (eventItem == null)
                 return NotFound();
 
+            // Доступ для адміністраторів або для викладачів до власних подій
+            if (!User.IsInRole("Administrator"))
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+
+                if (teacher == null || teacher.Id != eventItem.TeacherId)
+                {
+                    return Forbid();
+                }
+
+                // Перевірка, що викладач має доступ до курсу події
+                var hasCourseAccess = await _context.CourseTeachers
+                    .AnyAsync(ct => ct.CourseId == eventItem.CourseId && ct.TeacherId == teacher.Id);
+
+                if (!hasCourseAccess)
+                {
+                    return Forbid();
+                }
+            }
+
             // Підготовка даних для вибору
             var teachers = await _context.Teachers.ToListAsync();
             var teacherItems = teachers.Select(t => new
@@ -171,8 +255,46 @@ namespace schedule_2.Controllers
                 Id = t.Id,
                 Name = $"{t.LastName} {t.FirstName}"
             });
+
+            // Для викладачів обмежуємо вибір тільки собою
+            if (User.IsInRole("Teacher") && !User.IsInRole("Administrator"))
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+
+                if (teacher != null)
+                {
+                    teacherItems = teacherItems.Where(t => t.Id == teacher.Id);
+                }
+            }
+
             ViewBag.Teachers = new SelectList(teacherItems, "Id", "Name", eventItem.TeacherId);
-            ViewBag.Courses = new SelectList(await _context.Courses.ToListAsync(), "Id", "Name", eventItem.CourseId);
+
+            // Для викладачів обмежуємо вибір курсів, до яких вони мають доступ
+            if (User.IsInRole("Teacher") && !User.IsInRole("Administrator"))
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+
+                if (teacher != null)
+                {
+                    var teacherCourses = await _context.CourseTeachers
+                        .Where(ct => ct.TeacherId == teacher.Id)
+                        .Select(ct => ct.Course)
+                        .ToListAsync();
+
+                    ViewBag.Courses = new SelectList(teacherCourses, "Id", "Name", eventItem.CourseId);
+                }
+                else
+                {
+                    ViewBag.Courses = new SelectList(new List<Course>(), "Id", "Name");
+                }
+            }
+            else
+            {
+                ViewBag.Courses = new SelectList(await _context.Courses.ToListAsync(), "Id", "Name", eventItem.CourseId);
+            }
+
             ViewBag.Classrooms = new SelectList(await _context.Classrooms.ToListAsync(), "Id", "Name", eventItem.ClassroomId);
             ViewBag.Schedules = new SelectList(await _context.Schedules.ToListAsync(), "Id", "Name", eventItem.ScheduleId);
 
@@ -190,31 +312,11 @@ namespace schedule_2.Controllers
         // POST: /Event/Edit/{id} - AJAX
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> EditModal(int id, string Title, DateTime StartDateTime,
             DateTime EndDateTime, int TeacherId, int CourseId, int ClassroomId, int ScheduleId,
             bool IsRecurring, string RecurrencePattern, int[] selectedGroups, int[] selectedSubgroups)
         {
-            // Перевіряємо наявність обов'язкових полів
-            if (string.IsNullOrEmpty(Title) || TeacherId == 0 || CourseId == 0 ||
-                ClassroomId == 0 || ScheduleId == 0)
-            {
-                var errorList = new List<object>();
-
-                if (TeacherId == 0)
-                    errorList.Add(new { key = "Teacher", errors = new[] { "The Teacher field is required." } });
-
-                if (CourseId == 0)
-                    errorList.Add(new { key = "Course", errors = new[] { "The Course field is required." } });
-
-                if (ClassroomId == 0)
-                    errorList.Add(new { key = "Classroom", errors = new[] { "The Classroom field is required." } });
-
-                if (ScheduleId == 0)
-                    errorList.Add(new { key = "Schedule", errors = new[] { "The Schedule field is required." } });
-
-                return Json(new { success = false, message = "Невалідна модель", errors = errorList });
-            }
-
             var eventInDb = await _context.Events
                 .Include(e => e.EventGroups)
                 .Include(e => e.SubgroupEvents)
@@ -222,6 +324,54 @@ namespace schedule_2.Controllers
 
             if (eventInDb == null)
                 return Json(new { success = false, message = "Подію не знайдено." });
+
+            // Доступ для адміністраторів або для викладачів до власних подій
+            if (!User.IsInRole("Administrator"))
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+
+                if (teacher == null || teacher.Id != eventInDb.TeacherId)
+                {
+                    return Json(new { success = false, message = "У вас немає прав на редагування цієї події" });
+                }
+
+                // Перевіряємо, що викладач не намагається змінити TeacherId
+                if (TeacherId != teacher.Id)
+                {
+                    return Json(new { success = false, message = "Ви не можете змінити викладача події" });
+                }
+
+                // Перевірка, що викладач має доступ до вибраного курсу
+                var hasCourseAccess = await _context.CourseTeachers
+                    .AnyAsync(ct => ct.CourseId == CourseId && ct.TeacherId == teacher.Id);
+
+                if (!hasCourseAccess)
+                {
+                    return Json(new { success = false, message = "Ви можете обирати тільки свої курси" });
+                }
+            }
+
+            // Перевіряємо наявність обов'язкових полів
+            if (string.IsNullOrEmpty(Title) || TeacherId == 0 || CourseId == 0 ||
+                ClassroomId == 0 || ScheduleId == 0)
+            {
+                var errorList = new List<object>();
+
+                if (TeacherId == 0)
+                    errorList.Add(new { key = "Teacher", errors = new[] { "Поле Викладач є обов'язковим." } });
+
+                if (CourseId == 0)
+                    errorList.Add(new { key = "Course", errors = new[] { "Поле Курс є обов'язковим." } });
+
+                if (ClassroomId == 0)
+                    errorList.Add(new { key = "Classroom", errors = new[] { "Поле Аудиторія є обов'язковим." } });
+
+                if (ScheduleId == 0)
+                    errorList.Add(new { key = "Schedule", errors = new[] { "Поле Розклад є обов'язковим." } });
+
+                return Json(new { success = false, message = "Невалідна модель", errors = errorList });
+            }
 
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
@@ -273,9 +423,10 @@ namespace schedule_2.Controllers
                 }
             }
         }
-        
-        // GET: /Event/Delete/{id} - Modal View
+
+        // GET: /Event/Delete/{id} - Модальне вікно
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> DeleteModal(int id)
         {
             var eventItem = await _context.Events
@@ -288,12 +439,25 @@ namespace schedule_2.Controllers
             if (eventItem == null)
                 return NotFound();
 
+            // Доступ для адміністраторів або для викладачів до власних подій
+            if (!User.IsInRole("Administrator"))
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+
+                if (teacher == null || teacher.Id != eventItem.TeacherId)
+                {
+                    return Forbid();
+                }
+            }
+
             return PartialView("_DeleteModal", eventItem);
         }
 
         // POST: /Event/DeleteConfirmed/{id} - AJAX
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
@@ -305,6 +469,18 @@ namespace schedule_2.Controllers
 
                 if (eventItem == null)
                     return Json(new { success = false, message = "Подію не знайдено." });
+
+                // Доступ для адміністраторів або для викладачів до власних подій
+                if (!User.IsInRole("Administrator"))
+                {
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+
+                    if (teacher == null || teacher.Id != eventItem.TeacherId)
+                    {
+                        return Json(new { success = false, message = "У вас немає прав на видалення цієї події" });
+                    }
+                }
 
                 // Видаляємо всі зв'язки з групами
                 _context.EventGroups.RemoveRange(eventItem.EventGroups);
@@ -324,7 +500,7 @@ namespace schedule_2.Controllers
             }
         }
 
-        // Helper method to check if Event exists
+        // Допоміжний метод для перевірки існування події
         private bool EventExists(int id)
         {
             return _context.Events.Any(e => e.Id == id);

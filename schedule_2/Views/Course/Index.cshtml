@@ -1,9 +1,20 @@
 ﻿@model IEnumerable<schedule_2.Models.Course>
+@{
+    ViewData["Title"] = "Курси";
+    var isAdministrator = ViewBag.IsAdministrator as bool? ?? false;
+    var isTeacher = ViewBag.IsTeacher as bool? ?? false;
+    var teacherId = ViewBag.TeacherId as int?;
+}
 
 <h2>Список курсів</h2>
 
-<!-- Кнопка для відкриття модального вікна створення -->
-<button type="button" class="btn btn-primary" onclick="showCreate()">Створити новий курс</button>
+<!-- Кнопка для відкриття модального вікна створення (тільки для адміністраторів) -->
+@if (isAdministrator)
+{
+    <button type="button" class="btn btn-primary mb-3" onclick="showCreate()">
+        <i class="bi bi-plus-circle"></i> Створити новий курс
+    </button>
+}
 
 <table class="table">
     <thead>
@@ -20,6 +31,8 @@
     <tbody>
         @foreach (var item in Model)
         {
+            var canEdit = isAdministrator || (isTeacher && item.CourseTeachers.Any(ct => ct.TeacherId == teacherId));
+
             <tr>
                 <td>@item.Name</td>
                 <td>@item.Description</td>
@@ -48,9 +61,17 @@
                     }
                 </td>
                 <td>
-                    <button type="button" class="btn btn-info" onclick="showDetails(@item.Id)">Деталі</button> |
-                    <button type="button" class="btn btn-warning" onclick="showEdit(@item.Id)">Редагувати</button> |
-                    <button type="button" class="btn btn-danger" onclick="showDelete(@item.Id)">Видалити</button>
+                    <button type="button" class="btn btn-info" onclick="showDetails(@item.Id)">Деталі</button>
+
+                    @if (canEdit)
+                    {
+                        <button type="button" class="btn btn-warning" onclick="showEdit(@item.Id)">Редагувати</button>
+                    }
+
+                    @if (isAdministrator)
+                    {
+                        <button type="button" class="btn btn-danger" onclick="showDelete(@item.Id)">Видалити</button>
+                    }
                 </td>
             </tr>
         }
@@ -105,8 +126,12 @@
                     $('#createModal .modal-content').html(result);
                     $('#createModal').modal('show');
                 },
-                error: function () {
-                    alert('Помилка завантаження форми створення курсу.');
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        alert('У вас немає дозволу на створення курсу.');
+                    } else {
+                        alert('Помилка завантаження форми створення курсу.');
+                    }
                 }
             });
         }
@@ -133,8 +158,12 @@
                     $('#editModal .modal-content').html(result);
                     $('#editModal').modal('show');
                 },
-                error: function () {
-                    alert('Помилка завантаження форми редагування.');
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        alert('У вас немає дозволу на редагування цього курсу.');
+                    } else {
+                        alert('Помилка завантаження форми редагування.');
+                    }
                 }
             });
         }
@@ -147,8 +176,12 @@
                     $('#deleteModal .modal-content').html(result);
                     $('#deleteModal').modal('show');
                 },
-                error: function () {
-                    alert('Помилка завантаження підтвердження видалення.');
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        alert('У вас немає дозволу на видалення курсу.');
+                    } else {
+                        alert('Помилка завантаження підтвердження видалення.');
+                    }
                 }
             });
         }
@@ -168,7 +201,6 @@
                         location.reload();
                     } else {
                         alert(response.message);
-                        $('#createModal .modal-content').html(response);
                     }
                 },
                 error: function () {
@@ -192,7 +224,6 @@
                         location.reload();
                     } else {
                         alert(response.message);
-                        $('#editModal .modal-content').html(response);
                     }
                 },
                 error: function () {

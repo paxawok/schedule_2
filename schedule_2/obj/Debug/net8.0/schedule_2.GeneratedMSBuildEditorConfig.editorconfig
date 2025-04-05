@@ -164,8 +164,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViZ3JvdXBcX0RldGFpbHNNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Subgroup/_DivideGroupModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViZ3JvdXBcX0RpdmlkZUdyb3VwTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Subgroup/_EditModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViZ3JvdXBcX0VkaXRNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/TeacherRegistration/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlclJlZ2lzdHJhdGlvblxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Teacher/Index.cshtml]
@@ -186,6 +194,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Teacher/_EditModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlclxfRWRpdE1vZGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/UserManagement/CreateTeacher.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlck1hbmFnZW1lbnRcQ3JlYXRlVGVhY2hlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/_ViewImports.cshtml]

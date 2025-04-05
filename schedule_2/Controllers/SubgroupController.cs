@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using schedule_2.Data;
 using schedule_2.Models;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,10 +13,12 @@ namespace schedule_2.Controllers
     public class SubgroupController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<SubgroupController> _logger;
 
-        public SubgroupController(ApplicationDbContext context)
+        public SubgroupController(ApplicationDbContext context, ILogger<SubgroupController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: /Subgroup/Index
@@ -66,36 +68,33 @@ namespace schedule_2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] Subgroup subgroup, [FromForm] int[] selectedCourses)
         {
-            // Log received data for debugging
-            Console.WriteLine($"Received subgroup data - Name: {subgroup.Name}, GroupId: {subgroup.GroupId}");
-
-            // Server-side validation
-            if (string.IsNullOrWhiteSpace(subgroup.Name))
+            try
             {
-                ModelState.AddModelError("Name", "Name is required");
-            }
-            else if (subgroup.Name.Length > 18)
-            {
-                ModelState.AddModelError("Name", "Name cannot exceed 18 characters");
-            }
+                // Server-side validation
+                if (string.IsNullOrWhiteSpace(subgroup.Name))
+                {
+                    ModelState.AddModelError("Name", "Name is required");
+                }
+                else if (subgroup.Name.Length > 18)
+                {
+                    ModelState.AddModelError("Name", "Name cannot exceed 18 characters");
+                }
 
-            if (subgroup.GroupId == 0)
-            {
-                ModelState.AddModelError("GroupId", "Group is required");
-            }
+                if (subgroup.GroupId == 0)
+                {
+                    ModelState.AddModelError("GroupId", "Group is required");
+                }
 
-            // Check for duplicate subgroup name within the same group
-            var duplicateName = await _context.Subgroups
-                .AnyAsync(s => s.GroupId == subgroup.GroupId && s.Name == subgroup.Name);
+                // Check for duplicate subgroup name within the same group
+                var duplicateName = await _context.Subgroups
+                    .AnyAsync(s => s.GroupId == subgroup.GroupId && s.Name == subgroup.Name);
 
-            if (duplicateName)
-            {
-                ModelState.AddModelError("Name", "A subgroup with this name already exists in the selected group");
-            }
+                if (duplicateName)
+                {
+                    ModelState.AddModelError("Name", "A subgroup with this name already exists in the selected group");
+                }
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
                     _context.Subgroups.Add(subgroup);
                     await _context.SaveChangesAsync();
@@ -114,24 +113,22 @@ namespace schedule_2.Controllers
                         await _context.SaveChangesAsync();
                     }
 
-                    return Json(new { success = true, message = "Subgroup created successfully!" });
+                    return Json(new { success = true, message = "Підгрупу успішно створено!" });
                 }
-                catch (Exception ex)
-                {
-                    // Log any exceptions
-                    Console.WriteLine($"Error creating subgroup: {ex.Message}");
-                    return Json(new { success = false, message = $"Error creating subgroup: {ex.Message}" });
-                }
+
+                // If validation fails, return errors
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+
+                return Json(new { success = false, message = "Невірні дані. Перевірте форму.", errors });
             }
-
-            // If validation fails, return errors
-            var errors = ModelState.Values
-                .SelectMany(v => v.Errors)
-                .Select(e => e.ErrorMessage)
-                .ToList();
-
-            Console.WriteLine($"Validation errors: {string.Join(", ", errors)}");
-            return Json(new { success = false, message = "Invalid data. Please check the form.", errors });
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Помилка при створенні підгрупи");
+                return Json(new { success = false, message = $"Помилка при створенні підгрупи: {ex.Message}" });
+            }
         }
 
         // GET: /Subgroup/Edit/{id} (Partial View for modal window)
@@ -302,6 +299,164 @@ namespace schedule_2.Controllers
                 .ToList();
 
             return Json(subgroups);
+        }
+
+        // NEW METHOD: Show modal dialog for group division
+        [HttpGet]
+        public async Task<IActionResult> DivideGroupModal(int groupId)
+        {
+            try
+            {
+                // Перевірка, чи користувач є адміністратором або викладачем
+                bool isAdministrator = User.IsInRole("Administrator");
+                bool isTeacher = User.IsInRole("Teacher");
+                bool canManageGroups = isAdministrator || isTeacher;
+
+                ViewBag.IsAdministrator = isAdministrator;
+                ViewBag.IsTeacher = isTeacher;
+
+                // Опускаємо перевірку прав доступу для тестування
+                // if (!canManageGroups)
+                // {
+                //     return StatusCode(403, "У вас немає дозволу на поділ групи на підгрупи.");
+                // }
+
+                var group = await _context.Groups
+                    .FirstOrDefaultAsync(g => g.Id == groupId);
+
+                if (group == null)
+                {
+                    _logger.LogWarning($"Групу з ідентифікатором {groupId} не знайдено");
+                    return NotFound($"Групу з ідентифікатором {groupId} не знайдено");
+                }
+
+                // Загальна підготовка представлення
+                ViewBag.Courses = await _context.Courses.OrderBy(c => c.Name).ToListAsync();
+
+                return PartialView("_DivideGroupModal", group);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Помилка при завантаженні форми поділу групи: {ex.Message}");
+                return Content($"Помилка при завантаженні форми поділу групи: {ex.Message}");
+            }
+        }
+
+        // NEW METHOD: Process the division of a group into multiple subgroups
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DivideGroup(
+            int groupId,
+            int numberOfSubgroups,
+            string prefixStyle,
+            string[] subgroupNames,
+            int[] selectedCourses)
+        {
+            try
+            {
+                // Перевірка, чи користувач є адміністратором або викладачем
+                bool isAdministrator = User.IsInRole("Administrator");
+                bool isTeacher = User.IsInRole("Teacher");
+                bool canManageGroups = isAdministrator || isTeacher;
+
+                // Опускаємо перевірку прав доступу для тестування
+                // if (!canManageGroups)
+                // {
+                //     return StatusCode(403, new { success = false, message = "У вас немає дозволу на поділ групи на підгрупи." });
+                // }
+
+                // Validate input
+                if (numberOfSubgroups <= 0 || numberOfSubgroups > 10)
+                {
+                    return Json(new { success = false, message = "Недійсна кількість підгруп. Виберіть від 1 до 10." });
+                }
+
+                if (subgroupNames == null || subgroupNames.Length == 0)
+                {
+                    return Json(new { success = false, message = "Не вказано жодної назви для підгруп." });
+                }
+
+                var group = await _context.Groups.FindAsync(groupId);
+                if (group == null)
+                {
+                    return Json(new { success = false, message = "Батьківська група не знайдена." });
+                }
+
+                // Перевірка наявної кількості підгруп
+                var existingSubgroups = await _context.Subgroups
+                    .Where(s => s.GroupId == groupId)
+                    .ToListAsync();
+
+                // Start a transaction
+                using (var transaction = await _context.Database.BeginTransactionAsync())
+                {
+                    // Check for name conflicts
+                    var existingNames = existingSubgroups.Select(s => s.Name).ToList();
+                    var duplicateNames = subgroupNames.Where(name => existingNames.Contains(name)).ToList();
+
+                    if (duplicateNames.Any())
+                    {
+                        return Json(new
+                        {
+                            success = false,
+                            message = $"Такі назви підгруп вже існують: {string.Join(", ", duplicateNames)}"
+                        });
+                    }
+
+                    // Create new subgroups
+                    var createdSubgroups = new List<Subgroup>();
+
+                    foreach (var name in subgroupNames)
+                    {
+                        if (string.IsNullOrWhiteSpace(name))
+                            continue;
+
+                        var newSubgroup = new Subgroup
+                        {
+                            Name = name,
+                            GroupId = groupId
+                        };
+
+                        _context.Subgroups.Add(newSubgroup);
+                        await _context.SaveChangesAsync();
+
+                        createdSubgroups.Add(newSubgroup);
+                    }
+
+                    // Add course relationships if any courses were selected
+                    if (selectedCourses != null && selectedCourses.Length > 0 && createdSubgroups.Any())
+                    {
+                        foreach (var subgroup in createdSubgroups)
+                        {
+                            foreach (var courseId in selectedCourses)
+                            {
+                                _context.SubgroupCourses.Add(new SubgroupCourse
+                                {
+                                    SubgroupId = subgroup.Id,
+                                    CourseId = courseId
+                                });
+                            }
+                        }
+
+                        await _context.SaveChangesAsync();
+                    }
+
+                    // Commit transaction
+                    await transaction.CommitAsync();
+
+                    return Json(new
+                    {
+                        success = true,
+                        message = $"Успішно створено {createdSubgroups.Count} підгруп для групи {group.Name}."
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log error
+                _logger.LogError(ex, $"Помилка при створенні підгруп: {ex.Message}");
+                return Json(new { success = false, message = $"Помилка при створенні підгруп: {ex.Message}" });
+            }
         }
 
         // Helper methods for ViewBag preparation

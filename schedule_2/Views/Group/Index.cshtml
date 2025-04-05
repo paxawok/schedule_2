@@ -1,52 +1,81 @@
 ﻿@model IEnumerable<schedule_2.Models.Group>
+@{
+    ViewData["Title"] = "Групи";
+    var isAdministrator = ViewBag.IsAdministrator as bool? ?? false;
+    var isTeacher = ViewBag.IsTeacher as bool? ?? false;
+    var canManageGroups = isAdministrator || isTeacher;
+}
 
 <h2>Список груп</h2>
 
-<!-- Кнопка для відкриття модального вікна створення -->
-<button type="button" class="btn btn-primary" onclick="showCreate()">Створити нову групу</button>
+@if (isAdministrator)
+{
+    <button type="button" class="btn btn-primary mb-3" onclick="showCreate()">
+        <i class="bi bi-plus-circle"></i> Створити нову групу
+    </button>
+}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Назва</th>
-            <th>Події</th>
-            <th>Курси</th>
-            <th>Підгрупи</th>
-            <th>Дії</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>@item.Name</td>
-                <td>
-                    @foreach (var eventGroup in item.EventGroups)
-                    {
-                        <span>@eventGroup.Event.Title, </span>
-                    }
-                </td>
-                <td>
-                    @foreach (var courseGroup in item.CourseGroups)
-                    {
-                        <span>@courseGroup.Course.Name, </span>
-                    }
-                </td>
-                <td>
-                    @foreach (var subgroup in item.Subgroups)
-                    {
-                        <span>@subgroup.Name, </span>
-                    }
-                </td>
-                <td>
-                    <button type="button" class="btn btn-info" onclick="showDetails(@item.Id)">Деталі</button> |
-                    <button type="button" class="btn btn-warning" onclick="showEdit(@item.Id)">Редагувати</button> |
-                    <button type="button" class="btn btn-danger" onclick="showDelete(@item.Id)">Видалити</button>
-                </td>
+                <th>Назва</th>
+                <th>Курси</th>
+                <th>Підгрупи</th>
+                <th>Дії</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>
+                        @string.Join(", ", item.CourseGroups.Select(cg => cg.Course.Name))
+                    </td>
+                    <td>
+                        @if (item.Subgroups != null && item.Subgroups.Any())
+                        {
+                            @foreach (var subgroup in item.Subgroups)
+                            {
+                                <span class="badge bg-info me-1">@subgroup.Name</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-muted">Немає підгруп</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-info" onclick="showDetails(@item.Id)">
+                                <i class="bi bi-eye"></i> Деталі
+                            </button>
+
+                            @if (isAdministrator)
+                            {
+                                <button type="button" class="btn btn-sm btn-warning" onclick="showEdit(@item.Id)">
+                                    <i class="bi bi-pencil"></i> Редагувати
+                                </button>
+
+                                <button type="button" class="btn btn-sm btn-danger" onclick="showDelete(@item.Id)">
+                                    <i class="bi bi-trash"></i> Видалити
+                                </button>
+                            }
+
+                            @if (canManageGroups)
+                            {
+                                <button type="button" class="btn btn-sm btn-success" onclick="showDivideGroup(@item.Id)">
+                                    <i class="bi bi-diagram-3"></i> Поділити на підгрупи
+                                </button>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <!-- Модальне вікно для створення групи -->
 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
@@ -84,6 +113,15 @@
     </div>
 </div>
 
+<!-- Модальне вікно для поділу групи на підгрупи -->
+<div class="modal fade" id="divideGroupModal" tabindex="-1" aria-labelledby="divideGroupModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -96,8 +134,12 @@
                     $('#createModal .modal-content').html(result);
                     $('#createModal').modal('show');
                 },
-                error: function () {
-                    alert('Помилка завантаження форми створення групи.');
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        alert('У вас немає дозволу на створення групи.');
+                    } else {
+                        alert('Помилка завантаження форми створення групи.');
+                    }
                 }
             });
         }
@@ -124,8 +166,12 @@
                     $('#editModal .modal-content').html(result);
                     $('#editModal').modal('show');
                 },
-                error: function () {
-                    alert('Помилка завантаження форми редагування.');
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        alert('У вас немає дозволу на редагування цієї групи.');
+                    } else {
+                        alert('Помилка завантаження форми редагування.');
+                    }
                 }
             });
         }
@@ -138,8 +184,34 @@
                     $('#deleteModal .modal-content').html(result);
                     $('#deleteModal').modal('show');
                 },
-                error: function () {
-                    alert('Помилка завантаження підтвердження видалення.');
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        alert('У вас немає дозволу на видалення групи.');
+                    } else {
+                        alert('Помилка завантаження підтвердження видалення.');
+                    }
+                }
+            });
+        }
+
+        // Відкриття модального вікна для поділу групи на підгрупи
+        function showDivideGroup(id) {
+            $.ajax({
+                url: '/Subgroup/DivideGroupModal/' + id,
+                success: function (result) {
+                    $('#divideGroupModal .modal-content').html(result);
+                    $('#divideGroupModal').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 403) {
+                        alert('У вас немає дозволу на поділ цієї групи.');
+                    } else {
+                        console.error("Error:", xhr.responseText);
+                        console.error("Status:", status);
+                        console.error("Error object:", error);
+                        alert('Помилка завантаження форми поділу групи. ' +
+                              'Будь ласка, зверніться до адміністратора системи.');
+                    }
                 }
             });
         }
@@ -159,7 +231,6 @@
                         location.reload();
                     } else {
                         alert(response.message);
-                        $('#createModal .modal-content').html(response);
                     }
                 },
                 error: function () {
@@ -183,7 +254,6 @@
                         location.reload();
                     } else {
                         alert(response.message);
-                        $('#editModal .modal-content').html(response);
                     }
                 },
                 error: function () {
@@ -211,6 +281,33 @@
                 },
                 error: function () {
                     alert('Помилка при видаленні.');
+                }
+            });
+        });
+
+        // Обробка форми поділу на підгрупи через AJAX
+        $(document).on('submit', '#divideGroupForm', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: '/Subgroup/DivideGroup',
+                type: 'POST',
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#divideGroupModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(response.message || 'Помилка при поділі групи.');
+                    }
+                },
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        alert('У вас немає дозволу на поділ групи.');
+                    } else {
+                        alert('Помилка при обробці запиту.');
+                    }
                 }
             });
         });

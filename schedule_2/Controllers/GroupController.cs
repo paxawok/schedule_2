@@ -4,16 +4,32 @@ using schedule_2.Data;
 using schedule_2.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace schedule_2.Controllers
 {
+    [Authorize] // Дозволити доступ тільки авторизованим користувачам
     public class GroupController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public GroupController(ApplicationDbContext context)
+        public GroupController(
+            ApplicationDbContext context,
+            UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+        }
+
+        // Метод для перевірки, чи є користувач адміністратором
+        private async Task<bool> IsAdministratorAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return false;
+            return await _userManager.IsInRoleAsync(user, "Administrator");
         }
 
         // GET: /Group/Index
@@ -26,6 +42,10 @@ namespace schedule_2.Controllers
                     .ThenInclude(cg => cg.Course)
                 .Include(g => g.Subgroups)
                 .ToListAsync();
+
+            // Передаємо інформацію про роль користувача у ViewBag
+            ViewBag.IsAdministrator = await IsAdministratorAsync();
+
             return View(groups);
         }
 
@@ -49,6 +69,7 @@ namespace schedule_2.Controllers
 
         // GET: /Group/Create
         [HttpGet]
+        [Authorize(Roles = "Administrator")] // Тільки адміністратори можуть створювати групи
         public IActionResult Create()
         {
             // Ініціалізація колекцій за замовчуванням, щоб уникнути null
@@ -63,6 +84,7 @@ namespace schedule_2.Controllers
         // POST: Group/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")] // Тільки адміністратори можуть створювати групи
         public async Task<IActionResult> Create(Group group, int[] EventGroups, int[] CourseGroups, int[] Subgroups)
         {
             if (ModelState.IsValid)
@@ -70,30 +92,33 @@ namespace schedule_2.Controllers
                 // Якщо передані EventGroups, CourseGroups, Subgroups, то додаємо їх до групи
                 if (EventGroups != null && EventGroups.Length > 0)
                 {
+                    group.EventGroups = new List<EventGroup>();
                     foreach (var eventId in EventGroups)
                     {
-                        var eventGroup = await _context.Events.FindAsync(eventId);
-                        if (eventGroup != null)
+                        var eventItem = await _context.Events.FindAsync(eventId);
+                        if (eventItem != null)
                         {
-                            group.EventGroups.Add(new EventGroup { GroupId = group.Id, EventId = eventGroup.Id });
+                            group.EventGroups.Add(new EventGroup { Event = eventItem });
                         }
                     }
                 }
 
                 if (CourseGroups != null && CourseGroups.Length > 0)
                 {
+                    group.CourseGroups = new List<CourseGroup>();
                     foreach (var courseId in CourseGroups)
                     {
-                        var courseGroup = await _context.Courses.FindAsync(courseId);
-                        if (courseGroup != null)
+                        var course = await _context.Courses.FindAsync(courseId);
+                        if (course != null)
                         {
-                            group.CourseGroups.Add(new CourseGroup { GroupId = group.Id, CourseId = courseGroup.Id });
+                            group.CourseGroups.Add(new CourseGroup { Course = course });
                         }
                     }
                 }
 
                 if (Subgroups != null && Subgroups.Length > 0)
                 {
+                    group.Subgroups = new List<Subgroup>();
                     foreach (var subgroupId in Subgroups)
                     {
                         var subgroup = await _context.Subgroups.FindAsync(subgroupId);
@@ -114,6 +139,7 @@ namespace schedule_2.Controllers
 
         // GET: /Group/Edit/{id} (Partial View для модального вікна)
         [HttpGet]
+        [Authorize(Roles = "Administrator")] // Тільки адміністратори можуть редагувати групи
         public async Task<IActionResult> EditModal(int id)
         {
             var group = await _context.Groups
@@ -137,6 +163,7 @@ namespace schedule_2.Controllers
         // POST: /Group/Edit/{id} (AJAX для оновлення через модальне вікно)
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")] // Тільки адміністратори можуть редагувати групи
         public async Task<IActionResult> EditModal(int id, Group group, int[] EventGroups, int[] CourseGroups, int[] Subgroups)
         {
             if (id != group.Id)
@@ -146,9 +173,7 @@ namespace schedule_2.Controllers
             {
                 var groupInDb = await _context.Groups
                         .Include(g => g.EventGroups)
-                            .ThenInclude(eg => eg.Event)
                         .Include(g => g.CourseGroups)
-                            .ThenInclude(cg => cg.Course)
                         .Include(g => g.Subgroups)
                         .FirstOrDefaultAsync(g => g.Id == id);
 
@@ -157,30 +182,28 @@ namespace schedule_2.Controllers
 
                 groupInDb.Name = group.Name;
 
+                // Оновлення зв'язків з подіями
+                groupInDb.EventGroups.Clear();
                 if (EventGroups != null && EventGroups.Length > 0)
                 {
                     foreach (var eventId in EventGroups)
                     {
-                        var eventGroup = await _context.Events.FindAsync(eventId);
-                        if (eventGroup != null)
-                        {
-                            group.EventGroups.Add(new EventGroup { GroupId = group.Id, EventId = eventGroup.Id });
-                        }
+                        groupInDb.EventGroups.Add(new EventGroup { GroupId = id, EventId = eventId });
                     }
                 }
 
+                // Оновлення зв'язків з курсами
+                groupInDb.CourseGroups.Clear();
                 if (CourseGroups != null && CourseGroups.Length > 0)
                 {
                     foreach (var courseId in CourseGroups)
                     {
-                        var courseGroup = await _context.Courses.FindAsync(courseId);
-                        if (courseGroup != null)
-                        {
-                            group.CourseGroups.Add(new CourseGroup { GroupId = group.Id, CourseId = courseGroup.Id });
-                        }
+                        groupInDb.CourseGroups.Add(new CourseGroup { GroupId = id, CourseId = courseId });
                     }
                 }
 
+                // Оновлення зв'язків з підгрупами
+                groupInDb.Subgroups.Clear();
                 if (Subgroups != null && Subgroups.Length > 0)
                 {
                     foreach (var subgroupId in Subgroups)
@@ -188,7 +211,7 @@ namespace schedule_2.Controllers
                         var subgroup = await _context.Subgroups.FindAsync(subgroupId);
                         if (subgroup != null)
                         {
-                            group.Subgroups.Add(subgroup);
+                            groupInDb.Subgroups.Add(subgroup);
                         }
                     }
                 }
@@ -196,11 +219,12 @@ namespace schedule_2.Controllers
                 await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "Дані успішно оновлено." });
             }
-            return PartialView("_EditModal", group);
+            return Json(new { success = false, message = "Невірні дані форми." });
         }
 
         // GET: /Group/Delete/{id} (Partial View для модального вікна підтвердження)
         [HttpGet]
+        [Authorize(Roles = "Administrator")] // Тільки адміністратори можуть видаляти групи
         public async Task<IActionResult> DeleteModal(int id)
         {
             var group = await _context.Groups
@@ -218,6 +242,7 @@ namespace schedule_2.Controllers
         // POST: /Group/DeleteConfirmed/{id} (AJAX для видалення через модальне вікно)
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")] // Тільки адміністратори можуть видаляти групи
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var group = await _context.Groups
@@ -229,7 +254,7 @@ namespace schedule_2.Controllers
             if (group == null)
                 return Json(new { success = false });
 
-            // Optionally remove related entities before deleting the group
+            // Видалення пов'язаних сутностей перед видаленням групи
             foreach (var eventGroup in group.EventGroups.ToList())
             {
                 _context.EventGroups.Remove(eventGroup);

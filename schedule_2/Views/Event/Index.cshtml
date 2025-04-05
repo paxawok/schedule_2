@@ -1,11 +1,16 @@
 ﻿@model IEnumerable<schedule_2.Models.Event>
+@using System.Security.Claims
 
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Список подій</h2>
-        <button type="button" class="btn btn-primary" onclick="showCreate()">
-            Створити нову подію
-        </button>
+
+        @if (User.IsInRole("Administrator") || User.IsInRole("Teacher"))
+        {
+            <button type="button" class="btn btn-primary" onclick="showCreate()">
+                Створити нову подію
+            </button>
+        }
     </div>
 
     <div class="table-responsive">
@@ -36,8 +41,28 @@
                         <td>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-sm btn-info" onclick="showDetails(@item.Id)">Деталі</button>
-                                <button type="button" class="btn btn-sm btn-warning" onclick="showEdit(@item.Id)">Редагувати</button>
-                                <button type="button" class="btn btn-sm btn-danger" onclick="showDelete(@item.Id)">Видалити</button>
+
+                                @{
+                                    bool canEdit = User.IsInRole("Administrator");
+                                    bool canDelete = User.IsInRole("Administrator");
+
+                                    if (User.IsInRole("Teacher"))
+                                    {
+                                        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                                        canEdit = item.Teacher?.UserId == userId;
+                                        canDelete = item.Teacher?.UserId == userId;
+                                    }
+                                }
+
+                                @if (canEdit)
+                                {
+                                    <button type="button" class="btn btn-sm btn-warning" onclick="showEdit(@item.Id)">Редагувати</button>
+                                }
+
+                                @if (canDelete)
+                                {
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="showDelete(@item.Id)">Видалити</button>
+                                }
                             </div>
                         </td>
                     </tr>
@@ -120,7 +145,11 @@
                     $('#editModal').modal('show');
                 },
                 error: function (error) {
-                    alert('Помилка при завантаженні форми редагування події.');
+                    if (error.status === 403) {
+                        alert('У вас немає прав для редагування цієї події.');
+                    } else {
+                        alert('Помилка при завантаженні форми редагування події.');
+                    }
                 }
             });
         }
@@ -134,7 +163,11 @@
                     $('#deleteModal').modal('show');
                 },
                 error: function (error) {
-                    alert('Помилка при завантаженні форми видалення події.');
+                    if (error.status === 403) {
+                        alert('У вас немає прав для видалення цієї події.');
+                    } else {
+                        alert('Помилка при завантаженні форми видалення події.');
+                    }
                 }
             });
         }

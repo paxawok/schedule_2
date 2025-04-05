@@ -105,6 +105,12 @@ namespace schedule_2.Data
                 .HasOne(se => se.Event)
                 .WithMany(e => e.SubgroupEvents)
                 .HasForeignKey(se => se.EventId);
+
+            // Налаштування зв’язку між Teacher i IdentityUser
+            modelBuilder.Entity<Teacher>()
+                .HasOne(t => t.User)
+                .WithOne()
+                .HasForeignKey<Teacher>(t => t.UserId);
         }
     }
 }

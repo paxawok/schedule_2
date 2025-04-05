@@ -4,6 +4,7 @@ using schedule_2.Data;
 using schedule_2.Models;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace schedule_2.Controllers
@@ -156,7 +157,7 @@ namespace schedule_2.Controllers
         }
 
         // GET: /Schedule/Weekly/{id}
-        public async Task<IActionResult> Weekly(int id, DateTime? date = null)
+        public async Task<IActionResult> Weekly(int id, DateTime? date = null, bool showOnlyMine = false)
         {
             var schedule = await _context.Schedules
                 .Include(s => s.Events)
@@ -187,13 +188,12 @@ namespace schedule_2.Controllers
             var weekDays = Enumerable.Range(0, 7).Select(i => startDay.AddDays(i)).ToList();
 
             // Визначаємо часові слоти (пари)
-            // Можна налаштувати ці значення відповідно до розкладу вашого навчального закладу
-            // Визначаємо часові слоти (пари)
-            var timeStart = new TimeSpan(9, 0, 0); // Початок занять о 9:00
-            var timeEnd = new TimeSpan(19, 30, 0);  // Кінець занять о 20:00
-            var lessonDuration = 80; // тривалість пари в хвилинах
-            var breakDuration = 10;  // звичайна тривалість перерви в хвилинах
-            var longBreakDuration = 20; // тривалість довгої перерви після 2-ї пари
+            // Весь ваш існуючий код для часових слотів...
+            var timeStart = new TimeSpan(9, 0, 0);
+            var timeEnd = new TimeSpan(19, 30, 0);
+            var lessonDuration = 80;
+            var breakDuration = 10;
+            var longBreakDuration = 20;
 
             var timeSlots = new List<(TimeSpan Start, TimeSpan End, string Label)>();
             var currentTime = timeStart;
@@ -206,11 +206,7 @@ namespace schedule_2.Controllers
                 timeSlots.Add((currentTime, endTime, label));
 
                 lessonCount++;
-
-                // Визначаємо тривалість перерви
                 int currentBreakDuration = (lessonCount == 2) ? longBreakDuration : breakDuration;
-
-                // Додаємо до часу тривалість пари + тривалість перерви
                 currentTime = endTime.Add(TimeSpan.FromMinutes(currentBreakDuration));
             }
 
@@ -226,8 +222,22 @@ namespace schedule_2.Controllers
                 }
             }
 
+            // Фільтруємо події, якщо користувач - викладач і увімкнений фільтр "Лише мої події"
+            var eventsToDisplay = schedule.Events.ToList();
+
+            if (User.IsInRole("Teacher") && showOnlyMine)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+
+                if (teacher != null)
+                {
+                    eventsToDisplay = eventsToDisplay.Where(e => e.TeacherId == teacher.Id).ToList();
+                }
+            }
+
             // Заповнюємо розклад подіями
-            foreach (var eventItem in schedule.Events)
+            foreach (var eventItem in eventsToDisplay)
             {
                 // Перевіряємо, чи потрапляє подія в поточний тиждень
                 if (eventItem.StartDateTime.Date >= weekDays.First().Date &&
@@ -246,13 +256,23 @@ namespace schedule_2.Controllers
                 }
             }
 
-
             ViewBag.WeekDays = weekDays;
             ViewBag.TimeSlots = timeSlots;
             ViewBag.WeeklySchedule = weeklySchedule;
             ViewBag.CurrentDate = currentDate;
             ViewBag.PreviousWeek = startDay.AddDays(-7);
             ViewBag.NextWeek = startDay.AddDays(7);
+            ViewBag.ShowOnlyMine = showOnlyMine;
+
+            // Визначаємо, чи є користувач викладачем (для відображення фільтра)
+            ViewBag.IsTeacher = User.IsInRole("Teacher");
+
+            if (User.IsInRole("Teacher"))
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+                ViewBag.CurrentTeacher = teacher;
+            }
 
             return View(schedule);
         }
