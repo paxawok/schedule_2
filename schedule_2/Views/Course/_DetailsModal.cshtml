@@ -12,20 +12,11 @@
         <dt>Опис</dt>
         <dd>@Model.Description</dd>
 
-        <dt>Події</dt>
-        <dd>
-            @foreach (var eventItem in Model.Events)
-            {
-                <p>@eventItem.Title (@eventItem.StartDateTime.ToShortDateString() - @eventItem.EndDateTime.ToShortDateString())</p>
-            }
-        </dd>
-
         <dt>Викладачі</dt>
         <dd>
             @foreach (var courseTeacher in Model.CourseTeachers)
             {
-                <p>@courseTeacher.Teacher.LastName</p>
-                <p>@courseTeacher.Teacher.FirstName</p>
+                <p>@courseTeacher.Teacher.LastName @courseTeacher.Teacher.FirstName</p>
             }
         </dd>
 
@@ -34,14 +25,6 @@
             @foreach (var courseGroup in Model.CourseGroups)
             {
                 <p>@courseGroup.Group.Name</p>
-            }
-        </dd>
-
-        <dt>Підгрупи</dt>
-        <dd>
-            @foreach (var subgroupCourse in Model.SubgroupCourses)
-            {
-                <p>@subgroupCourse.Subgroup.Name</p>
             }
         </dd>
     </dl>
