@@ -9,221 +9,221 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = schedule_2
 build_property.RootNamespace = schedule_2
-build_property.ProjectDir = E:\Study KNU\VIII\git\schedule_2\schedule_2\
+build_property.ProjectDir = C:\Users\Windows10\Source\Repos\schedule_2\schedule_2\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = E:\Study KNU\VIII\git\schedule_2\schedule_2
+build_property.MSBuildProjectDirectory = C:\Users\Windows10\Source\Repos\schedule_2\schedule_2
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Areas/Identity/Pages/_ViewStart.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Areas/Identity/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Classroom/Index.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Classroom/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3Nyb29tXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Classroom/_CreateModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Classroom/_CreateModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3Nyb29tXF9DcmVhdGVNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Classroom/_DeleteModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Classroom/_DeleteModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3Nyb29tXF9EZWxldGVNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Classroom/_DetailsModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Classroom/_DetailsModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3Nyb29tXF9EZXRhaWxzTW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Classroom/_EditModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Classroom/_EditModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3Nyb29tXF9FZGl0TW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Course/Index.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Course/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Course/_CreateModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Course/_CreateModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXF9DcmVhdGVNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Course/_DeleteModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Course/_DeleteModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXF9EZWxldGVNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Course/_DetailsModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Course/_DetailsModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXF9EZXRhaWxzTW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Course/_EditModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Course/_EditModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXF9FZGl0TW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Event/Index.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Event/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Event/_CreateModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Event/_CreateModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRcX0NyZWF0ZU1vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Event/_DeleteModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Event/_DeleteModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRcX0RlbGV0ZU1vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Event/_DetailsModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Event/_DetailsModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRcX0RldGFpbHNNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Event/_EditModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Event/_EditModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRcX0VkaXRNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Group/Index.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Group/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Group/_CreateModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Group/_CreateModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBcX0NyZWF0ZU1vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Group/_DeleteModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Group/_DeleteModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBcX0RlbGV0ZU1vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Group/_DetailsModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Group/_DetailsModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBcX0RldGFpbHNNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Group/_EditModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Group/_EditModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBcX0VkaXRNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Home/Index.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Home/Privacy.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Schedule/Index.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Schedule/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Schedule/Weekly.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Schedule/Weekly.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcV2Vla2x5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Schedule/_CreateModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Schedule/_CreateModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcX0NyZWF0ZU1vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Schedule/_DeleteModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Schedule/_DeleteModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcX0RlbGV0ZU1vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Schedule/_DetailsModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Schedule/_DetailsModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcX0RldGFpbHNNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Schedule/_EditModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Schedule/_EditModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVcX0VkaXRNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Shared/Error.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Shared/_LoginPartial.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/StudentManagement/Delete.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/StudentManagement/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudE1hbmFnZW1lbnRcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/StudentManagement/Details.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/StudentManagement/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudE1hbmFnZW1lbnRcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/StudentManagement/Edit.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/StudentManagement/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudE1hbmFnZW1lbnRcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/StudentManagement/Index.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/StudentManagement/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudE1hbmFnZW1lbnRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Subgroup/Index.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Subgroup/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViZ3JvdXBcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Subgroup/_DeleteModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Subgroup/_DeleteModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViZ3JvdXBcX0RlbGV0ZU1vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Subgroup/_DetailsModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Subgroup/_DetailsModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViZ3JvdXBcX0RldGFpbHNNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Subgroup/_DivideGroupModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Subgroup/_DivideGroupModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViZ3JvdXBcX0RpdmlkZUdyb3VwTW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Subgroup/_EditModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Subgroup/_EditModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViZ3JvdXBcX0VkaXRNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Teacher/Index.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Teacher/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Teacher/_CreateModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Teacher/_CreateModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlclxfQ3JlYXRlTW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Teacher/_DeleteModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Teacher/_DeleteModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlclxfRGVsZXRlTW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Teacher/_DetailsModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Teacher/_DetailsModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlclxfRGV0YWlsc01vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Teacher/_EditModal.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Teacher/_EditModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlclxfRWRpdE1vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/UserManagement/CreateStudent.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/UserManagement/CreateStudent.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlck1hbmFnZW1lbnRcQ3JlYXRlU3R1ZGVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/UserManagement/CreateTeacher.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/UserManagement/CreateTeacher.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlck1hbmFnZW1lbnRcQ3JlYXRlVGVhY2hlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/UserManagement/Index.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/UserManagement/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlck1hbmFnZW1lbnRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/_ViewImports.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/_ViewStart.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Study KNU/VIII/git/schedule_2/schedule_2/Views/Shared/_Layout.cshtml]
+[C:/Users/Windows10/Source/Repos/schedule_2/schedule_2/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-du7tunioru
