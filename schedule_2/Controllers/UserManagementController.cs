@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using schedule_2.Data;
 using schedule_2.Models;
@@ -37,6 +38,7 @@ namespace schedule_2.Controllers
             {
                 var roles = await _userManager.GetRolesAsync(user);
                 var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == user.Id);
+                var student = await _context.Set<Student>().FirstOrDefaultAsync(s => s.UserId == user.Id);
 
                 userViewModels.Add(new UserViewModel
                 {
@@ -45,7 +47,10 @@ namespace schedule_2.Controllers
                     UserName = user.UserName,
                     Roles = roles.ToList(),
                     IsTeacher = teacher != null,
-                    TeacherId = teacher?.Id
+                    TeacherId = teacher?.Id,
+                    IsStudent = student != null,
+                    StudentId = student?.Id,
+                    GroupName = student?.Group?.Name
                 });
             }
 
@@ -181,14 +186,19 @@ namespace schedule_2.Controllers
         // GET: /UserManagement/CreateStudent
         public IActionResult CreateStudent()
         {
+            var groups = _context.Groups.ToList();
+            ViewBag.Groups = new SelectList(groups, "Id", "Name");
             return View();
         }
 
         // POST: /UserManagement/CreateStudent
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateStudent(RegisterViewModel model)
+        public async Task<IActionResult> CreateStudent(StudentRegistrationViewModel model)
         {
+            var groups = _context.Groups.ToList();
+            ViewBag.Groups = new SelectList(groups, "Id", "Name", model.GroupId);
+
             if (ModelState.IsValid)
             {
                 // Перевірка чи вже існує користувач з таким email
@@ -196,6 +206,22 @@ namespace schedule_2.Controllers
                 if (existingUser != null)
                 {
                     ModelState.AddModelError("Email", "Користувач з таким email вже існує");
+                    return View(model);
+                }
+
+                // Перевірка чи вже існує студент з таким email
+                var studentExists = await _context.Set<Student>().AnyAsync(s => s.Email == model.Email);
+                if (studentExists)
+                {
+                    ModelState.AddModelError("Email", "Студент з такою електронною адресою вже існує");
+                    return View(model);
+                }
+
+                // Перевірка існування групи
+                var group = await _context.Groups.FindAsync(model.GroupId);
+                if (group == null)
+                {
+                    ModelState.AddModelError("GroupId", "Вибрана група не існує");
                     return View(model);
                 }
 
@@ -213,6 +239,19 @@ namespace schedule_2.Controllers
                 {
                     // Призначаємо роль "Student"
                     await _userManager.AddToRoleAsync(user, "Student");
+
+                    // Створюємо запис студента
+                    var student = new Student
+                    {
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        Email = model.Email,
+                        UserId = user.Id,
+                        GroupId = model.GroupId
+                    };
+
+                    _context.Add(student);
+                    await _context.SaveChangesAsync();
 
                     return RedirectToAction("Index");
                 }

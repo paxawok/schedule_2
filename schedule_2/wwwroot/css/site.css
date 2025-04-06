@@ -1,22 +1,73 @@
-html {
-  font-size: 14px;
+/* Додаткові стилі для бокового меню */
+.custom-side-menu {
+    background-color: #f4f6f9;
+    border-right: 1px solid #dee2e6;
+    width: 260px;
 }
 
-@media (min-width: 768px) {
-  html {
+/* Кнопка меню */
+.menu-toggle-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+    .menu-toggle-btn i {
+        vertical-align: middle;
+    }
+
+/* Кнопки меню */
+.custom-side-menu .btn {
     font-size: 16px;
-  }
+    padding: 10px 16px;
+    transition: all 0.2s ease-in-out;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    .custom-side-menu .btn:hover {
+        background-color: #0d6efd;
+        color: white;
+    }
+
+
+/* Стилі для кнопки "Гамбургер" */
+
+.hamburger-btn {
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
+    .hamburger-btn::before,
+    .hamburger-btn::after,
+    .hamburger-btn span {
+        content: '';
+        position: absolute;
+        width: 22px;
+        height: 2px;
+        background-color: #0d6efd;
+        transition: all 0.3s ease;
+    }
 
-body {
-  margin-bottom: 60px;
+    .hamburger-btn::before {
+        top: 10px;
+    }
+
+    .hamburger-btn::after {
+        bottom: 10px;
+    }
+
+    .hamburger-btn span {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+* {
+    transition: all 0.2s ease-in-out;
+    scroll-behavior: smooth;
 }

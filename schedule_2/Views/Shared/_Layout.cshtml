@@ -1,76 +1,201 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
+<html lang="uk">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Bootstrap CSS (CDN only) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/schedule_2.styles.css" asp-append-version="true" />
-    @await RenderSectionAsync("Styles", required: false)
 
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            scroll-behavior: smooth;
+            transition: all 0.3s ease;
+        }
+
+        .wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        .footer {
+            width: 100%;
+            background: #f8f9fa;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        /* Бургер-кнопка */
+        .hamburger-btn {
+            background: none;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transition: all 0.3s ease;
+        }
+
+            .hamburger-btn span,
+            .hamburger-btn::before,
+            .hamburger-btn::after {
+                content: "";
+                display: block;
+                width: 22px;
+                height: 2px;
+                background-color: #333;
+                transition: all 0.3s ease;
+            }
+
+            .hamburger-btn:hover span,
+            .hamburger-btn:hover::before,
+            .hamburger-btn:hover::after {
+                background-color: #007bff;
+            }
+
+        /* Плавність offcanvas */
+        .offcanvas,
+        .offcanvas-backdrop {
+            transition: all 0.3s ease-in-out;
+        }
+
+        a, button {
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+
+    @RenderSection("Styles", required: false)
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Розклад</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Schedule" asp-action="Index">Розклад</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Event" asp-action="Index">Події</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Classroom" asp-action="Index">Аудиторії</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Group" asp-action="Index">Групи</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Course" asp-action="Index">Курси</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Teacher" asp-action="Index">Викладачі</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Subgroup" asp-action="Index">Підгрупи</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
+    <div class="wrapper">
+        <div class="content">
+            <!-- Header -->
+            <header class="border-bottom py-2 shadow-sm bg-light">
+                <div class="container d-flex justify-content-between align-items-center" style="height: 70px">
+                    <div class="d-flex align-items-center gap-3">
+                        <!-- Кнопка меню -->
+                        
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <button class="hamburger-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideMenuDrawer" aria-controls="sideMenuDrawer" aria-label="Toggle menu">
+                                <span></span>
+                            </button>
+                        }
+
+                        <!-- Логотип -->
+                        <a class="navbar-brand fs-4 fw-bold text-dark" asp-area="" asp-controller="Home" asp-action="Index">Schedule</a>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-3">
+                        <span style="font-size: 20px; padding-right: 5px" class="fw-bold">UA</span>
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
+            </header>
+
+            <div class="container content mt-5">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - MIT-41 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top text-muted py-3">
+        <div class="container d-flex justify-content-center">
+            &copy; 2025 - MIT-41
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+
+
+    <!-- Offcanvas меню -->
+    <div class="offcanvas offcanvas-start custom-side-menu" tabindex="-1" id="sideMenuDrawer" aria-labelledby="sideMenuDrawerLabel">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-bold" id="sideMenuDrawerLabel">Меню</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрити"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column gap-2 px-3">
+            <a href="/Event" class="btn btn-outline-primary w-100 text-start">Редагувати події</a>
+            <a href="/Teacher" class="btn btn-outline-primary w-100 text-start">Редагувати викладачів</a>
+            <a href="/Classroom" class="btn btn-outline-primary w-100 text-start">Редагувати аудиторії</a>
+            <a href="/Course" class="btn btn-outline-primary w-100 text-start">Редагувати курси</a>
+            <a href="/Group" class="btn btn-outline-primary w-100 text-start">Редагувати групи</a>
+            <a href="/Schedule" class="btn btn-outline-primary w-100 text-start">Редагувати розклад</a>
+            <a href="/Subgroup" class="btn btn-outline-primary w-100 text-start">Редагувати підгрупи</a>          
+            @if (User.IsInRole("Administrator"))
+            {
+                <hr />
+                <a class="btn btn-outline-primary w-100 text-start" asp-controller="StudentManagement" asp-action="Index">Керування студентами</a>
+                <a class="btn btn-outline-primary w-100 text-start bottom-btn" asp-controller="UserManagement" asp-action="Index">Керування користувачами</a>
+            }
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Автоматичне видалення backdrop -->
+    <script>
+        const offcanvasEl = document.getElementById('sideMenuDrawer');
+
+        offcanvasEl.addEventListener('hidden.bs.offcanvas', function () {
+            const backdrop = document.querySelector('.offcanvas-backdrop');
+            if (backdrop) backdrop.remove();
+            document.body.classList.remove('offcanvas-backdrop');
+        });
+    </script>
+
+    <!-- Hover меню профілю -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const profileBtn = document.getElementById("profile-btn");
+            const profileMenu = document.getElementById("profile-menu");
+
+            if (!profileBtn || !profileMenu) return;
+
+            function showMenu() {
+                profileMenu.style.display = "block";
+            }
+
+            function hideMenu() {
+                setTimeout(() => {
+                    if (!profileMenu.matches(":hover") && !profileBtn.matches(":hover")) {
+                        profileMenu.style.display = "none";
+                    }
+                }, 200);
+            }
+
+            profileBtn.addEventListener("mouseenter", showMenu);
+            profileMenu.addEventListener("mouseenter", showMenu);
+            profileBtn.addEventListener("mouseleave", hideMenu);
+            profileMenu.addEventListener("mouseleave", hideMenu);
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

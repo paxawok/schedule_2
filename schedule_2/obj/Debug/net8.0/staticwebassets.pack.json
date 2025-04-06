@@ -13,8 +13,12 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
-      "Id": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\wwwroot\\img\\img1_japanese.jpg",
-      "PackagePath": "staticwebassets\\img\\img1_japanese.jpg"
+      "Id": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\wwwroot\\img\\home_side_img.png",
+      "PackagePath": "staticwebassets\\img\\home_side_img.png"
+    },
+    {
+      "Id": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\wwwroot\\img\\profile_pic.webp",
+      "PackagePath": "staticwebassets\\img\\profile_pic.webp"
     },
     {
       "Id": "E:\\Study KNU\\VIII\\git\\schedule_2\\schedule_2\\wwwroot\\js\\site.js",
