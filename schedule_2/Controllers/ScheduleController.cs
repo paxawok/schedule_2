@@ -157,7 +157,7 @@ namespace schedule_2.Controllers
         }
 
         // GET: /Schedule/Weekly/{id}
-        public async Task<IActionResult> Weekly(int id, DateTime? date = null, bool showOnlyMine = false)
+        public async Task<IActionResult> Weekly(int id, DateTime? date = null, bool showOnlyMine = false, bool filterBySubgroup = false)
         {
             var schedule = await _context.Schedules
                 .Include(s => s.Events)
@@ -188,7 +188,6 @@ namespace schedule_2.Controllers
             var weekDays = Enumerable.Range(0, 7).Select(i => startDay.AddDays(i)).ToList();
 
             // Визначаємо часові слоти (пари)
-            // Весь ваш існуючий код для часових слотів...
             var timeStart = new TimeSpan(9, 0, 0);
             var timeEnd = new TimeSpan(19, 30, 0);
             var lessonDuration = 80;
@@ -222,17 +221,55 @@ namespace schedule_2.Controllers
                 }
             }
 
-            // Фільтруємо події, якщо користувач - викладач і увімкнений фільтр "Лише мої події"
+            // Початковий список подій
             var eventsToDisplay = schedule.Events.ToList();
 
+            // Отримуємо поточного користувача
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Фільтрація для викладачів
             if (User.IsInRole("Teacher") && showOnlyMine)
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
 
                 if (teacher != null)
                 {
                     eventsToDisplay = eventsToDisplay.Where(e => e.TeacherId == teacher.Id).ToList();
+                }
+            }
+            // Фільтрація для студентів: показуємо тільки події їхньої групи
+            else if (User.IsInRole("Student"))
+            {
+                var student = await _context.Students
+                    .Include(s => s.Group)
+                    .Include(s => s.Subgroup)
+                    .FirstOrDefaultAsync(s => s.UserId == userId);
+
+                if (student != null)
+                {
+                    // Отримуємо GroupId поточного студента
+                    int studentGroupId = student.GroupId;
+
+                    // Фільтруємо події за групою студента
+                    eventsToDisplay = eventsToDisplay.Where(e =>
+                        e.EventGroups.Any(eg => eg.GroupId == studentGroupId)).ToList();
+
+                    // Додаткова фільтрація за підгрупою, якщо вона призначена і користувач вибрав відповідний фільтр
+                    if (filterBySubgroup && student.SubgroupId.HasValue)
+                    {
+                        int studentSubgroupId = student.SubgroupId.Value;
+
+                        // Додаємо до списку події, які призначені для підгрупи студента
+                        // Об'єднуємо з подіями групи, які не призначені для жодної підгрупи
+                        eventsToDisplay = eventsToDisplay.Where(e =>
+                            e.SubgroupEvents.Any(se => se.SubgroupId == studentSubgroupId) ||
+                            !e.SubgroupEvents.Any()).ToList();
+                    }
+
+                    // Додаткова інформація для відображення в представленні
+                    ViewBag.StudentGroup = student.Group;
+                    ViewBag.StudentSubgroup = student.Subgroup;
+                    ViewBag.FilterBySubgroup = filterBySubgroup;
                 }
             }
 
@@ -263,13 +300,14 @@ namespace schedule_2.Controllers
             ViewBag.PreviousWeek = startDay.AddDays(-7);
             ViewBag.NextWeek = startDay.AddDays(7);
             ViewBag.ShowOnlyMine = showOnlyMine;
+            ViewBag.FilterBySubgroup = filterBySubgroup;
 
             // Визначаємо, чи є користувач викладачем (для відображення фільтра)
             ViewBag.IsTeacher = User.IsInRole("Teacher");
+            ViewBag.IsStudent = User.IsInRole("Student");
 
             if (User.IsInRole("Teacher"))
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
                 ViewBag.CurrentTeacher = teacher;
             }

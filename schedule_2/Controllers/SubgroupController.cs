@@ -339,6 +339,48 @@ namespace schedule_2.Controllers
                             await _context.SaveChangesAsync();
                         }
 
+                        // Отримуємо всіх студентів, пов'язаних з цією групою
+                        var students = await _context.Students
+                            .Where(s => s.GroupId == groupId)
+                            .ToListAsync();
+
+                        if (students.Any() && createdSubgroups.Any())
+                        {
+                            // Перемішуємо список студентів для рандомного розподілу
+                            var random = new Random();
+                            var shuffledStudents = students.OrderBy(s => random.Next()).ToList();
+
+                            // Розраховуємо кількість студентів у кожній підгрупі
+                            int studentsPerSubgroup = shuffledStudents.Count / createdSubgroups.Count;
+                            int remainingStudents = shuffledStudents.Count % createdSubgroups.Count;
+
+                            int currentStudentIndex = 0;
+
+                            // Розподіляємо студентів по підгрупах
+                            for (int i = 0; i < createdSubgroups.Count; i++)
+                            {
+                                var subgroup = createdSubgroups[i];
+
+                                // Кількість студентів для цієї підгрупи
+                                // Якщо є залишок, додаємо по одному додатковому студенту
+                                int subgroupSize = studentsPerSubgroup + (i < remainingStudents ? 1 : 0);
+
+                                for (int j = 0; j < subgroupSize && currentStudentIndex < shuffledStudents.Count; j++)
+                                {
+                                    var student = shuffledStudents[currentStudentIndex++];
+
+                                    // Створюємо зв'язок між студентом і підгрупою
+                                    _context.StudentSubgroups.Add(new StudentSubgroup
+                                    {
+                                        StudentId = student.Id,
+                                        SubgroupId = subgroup.Id
+                                    });
+                                }
+                            }
+
+                            await _context.SaveChangesAsync();
+                        }
+
                         // Підтверджуємо транзакцію
                         await transaction.CommitAsync();
 

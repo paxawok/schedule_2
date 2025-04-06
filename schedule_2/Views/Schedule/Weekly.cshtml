@@ -17,33 +17,79 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Тижневий розклад: @Model.Name</h2>
-    <div>
-        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@previousWeek?.ToString("yyyy-MM-dd")" asp-route-showOnlyMine="@showOnlyMine.ToString().ToLower()" class="btn btn-outline-primary">
+    <div class="week-navigation-container">
+        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@previousWeek?.ToString("yyyy-MM-dd")"
+           asp-route-showOnlyMine="@showOnlyMine.ToString().ToLower()"
+           class="btn week-navigation-btn btn-prev">
             <i class="bi bi-arrow-left"></i> Попередній тиждень
         </a>
-        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@DateTime.Today.ToString("yyyy-MM-dd")" asp-route-showOnlyMine="@showOnlyMine.ToString().ToLower()" class="btn btn-outline-secondary">
+        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@DateTime.Today.ToString("yyyy-MM-dd")"
+           asp-route-showOnlyMine="@showOnlyMine.ToString().ToLower()"
+           class="btn week-navigation-btn btn-current">
             Поточний тиждень
         </a>
-        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@nextWeek?.ToString("yyyy-MM-dd")" asp-route-showOnlyMine="@showOnlyMine.ToString().ToLower()" class="btn btn-outline-primary">
+        <a asp-action="Weekly" asp-route-id="@Model.Id" asp-route-date="@nextWeek?.ToString("yyyy-MM-dd")"
+           asp-route-showOnlyMine="@showOnlyMine.ToString().ToLower()"
+           class="btn week-navigation-btn btn-next">
             Наступний тиждень <i class="bi bi-arrow-right"></i>
         </a>
     </div>
 </div>
 
-@if (isTeacher)
+@if (ViewBag.IsStudent)
+{
+    <div class="card mb-4">
+        <div class="card-body">
+            @if (ViewBag.StudentGroup != null)
+            {
+                <div class="alert alert-info">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-info-circle"></i>
+                            Ви переглядаєте розклад для групи <strong>@ViewBag.StudentGroup.Name</strong>
+                            @if (ViewBag.StudentSubgroup != null)
+                            {
+                                <span> / підгрупи <strong>@ViewBag.StudentSubgroup.Name</strong></span>
+                            }
+                        </div>
+
+                        @if (ViewBag.StudentSubgroup != null)
+                        {
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="toggleSubgroupFilter"
+                                @(ViewBag.FilterBySubgroup ? "checked" : "")>
+                                <label class="form-check-label" for="toggleSubgroupFilter">
+                                    Показувати тільки події моєї підгрупи
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i> Ви не призначені до жодної групи. Зверніться до адміністратора.
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@if (ViewBag.IsTeacher)
 {
     <div class="card mb-4">
         <div class="card-body">
             <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="toggleMyEvents" @(showOnlyMine ? "checked" : "")>
+                <input class="form-check-input" type="checkbox" id="toggleMyEvents" @(ViewBag.ShowOnlyMine ? "checked" : "")>
                 <label class="form-check-label" for="toggleMyEvents">
                     Показувати тільки мої події
                 </label>
             </div>
-            @if (currentTeacher != null)
+            @if (ViewBag.CurrentTeacher != null)
             {
                 <div class="mt-2 text-muted">
-                    Викладач: @currentTeacher.LastName @currentTeacher.FirstName
+                    Викладач: @ViewBag.CurrentTeacher.LastName @ViewBag.CurrentTeacher.FirstName
                 </div>
             }
         </div>
@@ -91,6 +137,12 @@
                                             <p class="mb-0">
                                                 <i class="bi bi-people-fill"></i>
                                                 @string.Join(", ", eventItem.EventGroups.Select(eg => eg.Group.Name))
+                                                @if (eventItem.SubgroupEvents != null && eventItem.SubgroupEvents.Any())
+                                                {
+                                                    <span class="badge bg-info ms-1">
+                                                        Підгрупи: @string.Join(", ", eventItem.SubgroupEvents.Select(se => se.Subgroup.Name))
+                                                    </span>
+                                                }
                                             </p>
                                         </div>
                                     </div>
@@ -172,6 +224,58 @@
             background-color: #28a745;
             border-color: #28a745;
         }
+
+        .week-navigation-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .week-navigation-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .btn-prev {
+            background-color: #f8f9fa;
+            color: #495057;
+            border-color: #e9ecef;
+        }
+
+            .btn-prev:hover {
+                background-color: #e9ecef;
+                color: #212529;
+            }
+
+        .btn-current {
+            background-color: #007bff;
+            color: white;
+        }
+
+            .btn-current:hover {
+                background-color: #0056b3;
+            }
+
+        .btn-next {
+            background-color: #28a745;
+            color: white;
+        }
+
+            .btn-next:hover {
+                background-color: #218838;
+            }
+
+        .week-navigation-btn i {
+            margin: 0 5px;
+        }
     </style>
 }
 
@@ -196,6 +300,33 @@
 }
 
 @section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Обробник для перемикача фільтрації за підгрупами
+            $("#toggleSubgroupFilter").change(function() {
+                var filterBySubgroup = $(this).is(":checked");
+                var currentUrl = new URL(window.location.href);
+
+                // Оновлюємо або додаємо параметр filterBySubgroup в URL
+                currentUrl.searchParams.set("filterBySubgroup", filterBySubgroup);
+
+                // Перенаправляємо на оновлений URL
+                window.location.href = currentUrl.toString();
+            });
+
+            // Існуючий обробник для перемикача "Показувати тільки мої події"
+            $("#toggleMyEvents").change(function() {
+                var showOnlyMine = $(this).is(":checked");
+                var currentUrl = new URL(window.location.href);
+
+                // Оновлюємо або додаємо параметр showOnlyMine в URL
+                currentUrl.searchParams.set("showOnlyMine", showOnlyMine);
+
+                // Перенаправляємо на оновлений URL
+                window.location.href = currentUrl.toString();
+            });
+        });
+    </script>
     <script>
         $(document).ready(function() {            
             // Обробник перемикача "Показувати тільки мої події"
@@ -284,4 +415,19 @@
             }
         });
     </script>
+    <script>
+        function showEdit(eventId) {
+            // Формуємо URL для форми редагування події
+            var editUrl = '/Event/EditModal/' + eventId;
+
+            // Закриваємо поточне модальне вікно деталей
+            $('#eventModal').modal('hide');
+
+            // Відкриваємо модальне вікно з формою редагування
+            setTimeout(function() {
+                $('#eventModalContent').load(editUrl, function() {
+                    $('#eventModal').modal('show');
+                });
+            }, 500); // Затримка для коректного закриття попереднього модального вікна
+        }</script>
 }
