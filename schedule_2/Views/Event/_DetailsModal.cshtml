@@ -12,14 +12,9 @@
         <dt class="col-sm-4">Дата закінчення:</dt>
         <dd class="col-sm-8">@Model.EndDateTime.ToString("dd.MM.yyyy HH:mm")</dd>
 
-        <dt class="col-sm-4">Повторювана подія:</dt>
-        <dd class="col-sm-8">@(Model.IsRecurring ? "Так" : "Ні")</dd>
+        <!--<dt class="col-sm-4">Повторювана подія:</dt>
+        <dd class="col-sm-8">@(Model.IsRecurring ? "Так" : "Ні")</dd>-->
 
-        @if (Model.IsRecurring && !string.IsNullOrEmpty(Model.RecurrencePattern))
-        {
-            <dt class="col-sm-4">Шаблон повторення:</dt>
-            <dd class="col-sm-8">@Model.RecurrencePattern</dd>
-        }
 
         <dt class="col-sm-4">Викладач:</dt>
         <dd class="col-sm-8">@Model.Teacher.LastName @Model.Teacher.FirstName</dd>

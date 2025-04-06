@@ -1,0 +1,74 @@
+﻿@model IEnumerable<schedule_2.ViewModels.UserViewModel>
+@{
+    ViewData["Title"] = "Управління користувачами";
+}
+
+<h2>Управління користувачами</h2>
+
+<div class="row mb-3">
+    <div class="col">
+        <div class="btn-group">
+            <a asp-action="CreateTeacher" class="btn btn-primary">
+                <i class="bi bi-person-add"></i> Додати викладача
+            </a>
+            <a asp-action="CreateStudent" class="btn btn-success">
+                <i class="bi bi-person-add"></i> Додати студента
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Роль</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>
+                        @foreach (var role in user.Roles)
+                        {
+                            <span class="badge bg-primary">@role</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a asp-action="EditRoles" asp-route-userId="@user.Id" class="btn btn-sm btn-warning">
+                                <i class="bi bi-shield"></i> Роль
+                            </a>
+
+                            @if (user.IsTeacher && user.TeacherId.HasValue)
+                            {
+                                <a asp-controller="Teacher" asp-action="DetailsModal" asp-route-id="@user.TeacherId" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i> Профіль
+                                </a>
+                            }
+
+                            @if (user.IsStudent && user.StudentId.HasValue)
+                            {
+                                <a asp-controller="StudentManagement" asp-action="Details" asp-route-id="@user.StudentId" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i> Профіль
+                                </a>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<!-- Модальне вікно для деталей -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
+</div>

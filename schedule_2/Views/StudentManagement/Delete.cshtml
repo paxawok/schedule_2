@@ -1,0 +1,43 @@
+﻿@model schedule_2.Models.Student
+@{
+    ViewData["Title"] = "Видалення студента";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="alert alert-danger">
+    <h3>Ви впевнені, що хочете видалити цього студента?</h3>
+    <p>Це призведе до видалення облікового запису користувача та всіх пов'язаних даних.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>@Model.LastName @Model.FirstName</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Прізвище:</dt>
+                    <dd class="col-sm-9">@Model.LastName</dd>
+
+                    <dt class="col-sm-3">Ім'я:</dt>
+                    <dd class="col-sm-9">@Model.FirstName</dd>
+
+                    <dt class="col-sm-3">Email:</dt>
+                    <dd class="col-sm-9">@Model.Email</dd>
+
+                    <dt class="col-sm-3">Група:</dt>
+                    <dd class="col-sm-9">@Model.Group.Name</dd>
+                </dl>
+            </div>
+            <div class="card-footer">
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-danger">Підтвердити видалення</button>
+                    <a asp-action="Index" class="btn btn-secondary">Скасувати</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

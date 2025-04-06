@@ -2,7 +2,6 @@
 @{
     var isAdministrator = ViewBag.IsAdministrator as bool? ?? false;
     var isTeacher = ViewBag.IsTeacher as bool? ?? false;
-    var canManageGroups = isAdministrator || isTeacher;
 }
 
 <div class="modal-header">
@@ -39,6 +38,17 @@
             <!-- Тут будуть динамічно додаватися поля для імен підгруп -->
         </div>
 
+        <div class="mb-3">
+            <label for="selectedCourses" class="form-label">Призначити курси</label>
+            <select class="form-select" id="selectedCourses" name="selectedCourses" multiple>
+                @foreach (var course in ViewBag.Courses)
+                {
+                    <option value="@course.Id">@course.Name</option>
+                }
+            </select>
+            <small class="text-muted">Виберіть курси, які будуть призначені всім створеним підгрупам</small>
+        </div>
+
         <div class="text-center mt-3">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
             <button type="submit" class="btn btn-primary">Створити підгрупи</button>
@@ -48,11 +58,15 @@
 
 <script>
     $(document).ready(function() {
-        // Генерація полів імен на основі вибраної кількості підгруп
+        // Оновлення назв підгруп при зміні кількості чи стилю
         $('#numberOfSubgroups, #prefixStyle').change(function() {
             updateSubgroupNames();
         });
 
+        // Початкове оновлення
+        updateSubgroupNames();
+
+        // Функція для оновлення назв підгруп
         function updateSubgroupNames() {
             const count = parseInt($('#numberOfSubgroups').val()) || 0;
             const style = $('#prefixStyle').val();
@@ -82,7 +96,7 @@
                         <div class="mb-2">
                             <label class="form-label">Підгрупа ${index}</label>
                             <input type="text" class="form-control"
-                                   name="subgroupNames[${i}]"
+                                   name="subgroupNames"
                                    value="${proposedName}" required />
                         </div>
                     `);

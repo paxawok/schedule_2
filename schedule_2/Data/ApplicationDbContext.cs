@@ -18,6 +18,7 @@ namespace schedule_2.Data
         public DbSet<Subgroup> Subgroups { get; set; }
         public DbSet<SubgroupCourse> SubgroupCourses { get; set; }
         public DbSet<SubgroupEvent> SubgroupEvents { get; set; }
+        public DbSet<Student> Students { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -111,6 +112,18 @@ namespace schedule_2.Data
                 .HasOne(t => t.User)
                 .WithOne()
                 .HasForeignKey<Teacher>(t => t.UserId);
+
+            modelBuilder.Entity<Student>()
+                .HasOne(s => s.Group)
+                .WithMany()
+                .HasForeignKey(s => s.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Налаштування зв'язку між Student i IdentityUser
+            modelBuilder.Entity<Student>()
+                .HasOne(s => s.User)
+                .WithOne()
+                .HasForeignKey<Student>(s => s.UserId);
         }
     }
 }

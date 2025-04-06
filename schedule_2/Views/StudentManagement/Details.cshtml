@@ -1,0 +1,40 @@
+﻿@model schedule_2.Models.Student
+@{
+    ViewData["Title"] = "Деталі студента";
+    var isAdmin = User.IsInRole("Administrator");
+}
+
+<h2>Деталі студента</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>@Model.LastName @Model.FirstName</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Прізвище:</dt>
+                    <dd class="col-sm-9">@Model.LastName</dd>
+
+                    <dt class="col-sm-3">Ім'я:</dt>
+                    <dd class="col-sm-9">@Model.FirstName</dd>
+
+                    <dt class="col-sm-3">Email:</dt>
+                    <dd class="col-sm-9">@Model.Email</dd>
+
+                    <dt class="col-sm-3">Група:</dt>
+                    <dd class="col-sm-9">@Model.Group.Name</dd>
+                </dl>
+            </div>
+            <div class="card-footer">
+                <a asp-action="Index" class="btn btn-secondary">Повернутися до списку</a>
+                @if (isAdmin)
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Редагувати</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Видалити</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

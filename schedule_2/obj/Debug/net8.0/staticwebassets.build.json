@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "uS5rRX7Lo5Qheb4/WUJwtAA/18S8q18w+yxLuPR5VfM=",
+  "Hash": "fkEoN4v885NYQbRi4IrRqy2Jrc5Fk2xChY0oA9og5xg=",
   "Source": "schedule_2",
   "BasePath": "_content/schedule_2",
   "Mode": "Default",
@@ -1333,8 +1333,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "u58603jtxh",
-      "Integrity": "0sqUkOU8iM0rMn0kV5qmgNSHyne75auDj9sSoJOfe+E=",
+      "Fingerprint": "c2tiyv64ts",
+      "Integrity": "pAGv4ietcJNk/EwsQZ5BN9+K4MuNYS2a9wl4Jw+q9D0=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
@@ -1361,12 +1361,12 @@
       "OriginalItemSpec": "wwwroot\\favicon.ico"
     },
     {
-      "Identity": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\home_side_img.png",
+      "Identity": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\img1_japanese.jpg",
       "SourceId": "schedule_2",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\",
       "BasePath": "_content/schedule_2",
-      "RelativePath": "img/home_side_img#[.{fingerprint}]?.png",
+      "RelativePath": "img/img1_japanese#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -1375,32 +1375,11 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "9ekio62v5v",
-      "Integrity": "wQe9hRfdjU9k4s1j9W9g1LcUxJLwHfMNMSJE0KmwfHk=",
+      "Fingerprint": "w3qo2iewjz",
+      "Integrity": "LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\img\\home_side_img.png"
-    },
-    {
-      "Identity": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\profile_pic.webp",
-      "SourceId": "schedule_2",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\",
-      "BasePath": "_content/schedule_2",
-      "RelativePath": "img/profile_pic#[.{fingerprint}]?.webp",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "Fingerprint": "c6urp0o0ss",
-      "Integrity": "fPUVRYALCDTMd2yeoPCCBU2mnrJS8xkJIB2gdtDPVNE=",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\img\\profile_pic.webp"
+      "OriginalItemSpec": "wwwroot\\img\\img1_japanese.jpg"
     },
     {
       "Identity": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\js\\site.js",
@@ -2623,6 +2602,51 @@
   ],
   "Endpoints": [
     {
+      "Route": "css/site.c2tiyv64ts.css",
+      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\css\\site.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "362"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"pAGv4ietcJNk/EwsQZ5BN9+K4MuNYS2a9wl4Jw+q9D0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 06 Apr 2025 13:22:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "c2tiyv64ts"
+        },
+        {
+          "Name": "label",
+          "Value": "css/site.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-pAGv4ietcJNk/EwsQZ5BN9+K4MuNYS2a9wl4Jw+q9D0="
+        }
+      ]
+    },
+    {
       "Route": "css/site.css",
       "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\css\\site.css",
       "Selectors": [],
@@ -2633,7 +2657,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1404"
+          "Value": "362"
         },
         {
           "Name": "Content-Type",
@@ -2641,11 +2665,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"0sqUkOU8iM0rMn0kV5qmgNSHyne75auDj9sSoJOfe+E=\""
+          "Value": "\"pAGv4ietcJNk/EwsQZ5BN9+K4MuNYS2a9wl4Jw+q9D0=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 06 Apr 2025 17:42:49 GMT"
+          "Value": "Sun, 06 Apr 2025 13:22:07 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2655,52 +2679,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-0sqUkOU8iM0rMn0kV5qmgNSHyne75auDj9sSoJOfe+E="
-        }
-      ]
-    },
-    {
-      "Route": "css/site.u58603jtxh.css",
-      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\css\\site.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "1404"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"0sqUkOU8iM0rMn0kV5qmgNSHyne75auDj9sSoJOfe+E=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Sun, 06 Apr 2025 17:42:49 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "u58603jtxh"
-        },
-        {
-          "Name": "label",
-          "Value": "css/site.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-0sqUkOU8iM0rMn0kV5qmgNSHyne75auDj9sSoJOfe+E="
+          "Value": "sha256-pAGv4ietcJNk/EwsQZ5BN9+K4MuNYS2a9wl4Jw+q9D0="
         }
       ]
     },
@@ -5007,8 +4986,8 @@
       ]
     },
     {
-      "Route": "img/home_side_img.9ekio62v5v.png",
-      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\home_side_img.png",
+      "Route": "img/img1_japanese.jpg",
+      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\img1_japanese.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -5017,64 +4996,19 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "523548"
+          "Value": "659784"
         },
         {
           "Name": "Content-Type",
-          "Value": "image/png"
+          "Value": "image/jpeg"
         },
         {
           "Name": "ETag",
-          "Value": "\"wQe9hRfdjU9k4s1j9W9g1LcUxJLwHfMNMSJE0KmwfHk=\""
+          "Value": "\"LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 06 Apr 2025 17:42:49 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "9ekio62v5v"
-        },
-        {
-          "Name": "label",
-          "Value": "img/home_side_img.png"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-wQe9hRfdjU9k4s1j9W9g1LcUxJLwHfMNMSJE0KmwfHk="
-        }
-      ]
-    },
-    {
-      "Route": "img/home_side_img.png",
-      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\home_side_img.png",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "523548"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "image/png"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"wQe9hRfdjU9k4s1j9W9g1LcUxJLwHfMNMSJE0KmwfHk=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Sun, 06 Apr 2025 17:42:49 GMT"
+          "Value": "Sun, 06 Apr 2025 13:22:07 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -5084,13 +5018,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-wQe9hRfdjU9k4s1j9W9g1LcUxJLwHfMNMSJE0KmwfHk="
+          "Value": "sha256-LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY="
         }
       ]
     },
     {
-      "Route": "img/profile_pic.c6urp0o0ss.webp",
-      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\profile_pic.webp",
+      "Route": "img/img1_japanese.w3qo2iewjz.jpg",
+      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\img1_japanese.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -5099,19 +5033,19 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "13030"
+          "Value": "659784"
         },
         {
           "Name": "Content-Type",
-          "Value": "image/webp"
+          "Value": "image/jpeg"
         },
         {
           "Name": "ETag",
-          "Value": "\"fPUVRYALCDTMd2yeoPCCBU2mnrJS8xkJIB2gdtDPVNE=\""
+          "Value": "\"LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 06 Apr 2025 13:33:22 GMT"
+          "Value": "Sun, 06 Apr 2025 13:22:07 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -5121,52 +5055,15 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "c6urp0o0ss"
+          "Value": "w3qo2iewjz"
         },
         {
           "Name": "label",
-          "Value": "img/profile_pic.webp"
+          "Value": "img/img1_japanese.jpg"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-fPUVRYALCDTMd2yeoPCCBU2mnrJS8xkJIB2gdtDPVNE="
-        }
-      ]
-    },
-    {
-      "Route": "img/profile_pic.webp",
-      "AssetFile": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\wwwroot\\img\\profile_pic.webp",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "13030"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "image/webp"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"fPUVRYALCDTMd2yeoPCCBU2mnrJS8xkJIB2gdtDPVNE=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Sun, 06 Apr 2025 13:33:22 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=3600, must-revalidate"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-fPUVRYALCDTMd2yeoPCCBU2mnrJS8xkJIB2gdtDPVNE="
+          "Value": "sha256-LESOTyOw/0ljYuX0YvTKaUgotx1PftlIEXN443IWHLY="
         }
       ]
     },
@@ -5193,7 +5090,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 06 Apr 2025 17:42:49 GMT"
+          "Value": "Sun, 06 Apr 2025 13:21:21 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -5230,7 +5127,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 06 Apr 2025 17:42:49 GMT"
+          "Value": "Sun, 06 Apr 2025 13:21:21 GMT"
         },
         {
           "Name": "Cache-Control",

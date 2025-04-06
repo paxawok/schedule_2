@@ -4458,9 +4458,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Windows10\\source\\repos\\schedule_2\\schedule_2\\schedule_2.csproj",
+      "projectUniqueName": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\schedule_2.csproj",
       "projectName": "schedule_2",
-      "projectPath": "C:\\Users\\Windows10\\source\\repos\\schedule_2\\schedule_2\\schedule_2.csproj",
+      "projectPath": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\schedule_2.csproj",
       "packagesPath": "C:\\Users\\Windows10\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Windows10\\Source\\Repos\\schedule_2\\schedule_2\\obj\\",
       "projectStyle": "PackageReference",
