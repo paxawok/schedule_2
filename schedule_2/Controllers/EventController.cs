@@ -68,6 +68,9 @@ namespace schedule_2.Controllers
                 return Forbid();
             }
 
+            // Отримуємо ID поточного користувача
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             // Створюємо список викладачів з прізвищем + ім'ям як текст для відображення
             var teachers = await _context.Teachers.ToListAsync();
             var teacherItems = teachers.Select(t => new
@@ -76,16 +79,21 @@ namespace schedule_2.Controllers
                 Name = $"{t.LastName} {t.FirstName}"
             });
 
-            // Для викладачів обмежуємо вибір лише власним профілем
+            // Отримуємо список курсів
             var courses = await _context.Courses.ToListAsync();
 
+            // Для викладачів обмежуємо вибір
             if (User.IsInRole("Teacher") && !User.IsInRole("Administrator"))
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                // Знаходимо поточного викладача
                 var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
 
                 if (teacher != null)
                 {
+                    // Автоматично вибираємо поточного викладача
+                    ViewBag.CurrentTeacherId = teacher.Id;
+
+                    // Обмежуємо список викладачів лише поточним
                     teacherItems = teacherItems.Where(t => t.Id == teacher.Id);
 
                     // Отримуємо тільки курси, пов'язані з цим викладачем
@@ -101,13 +109,31 @@ namespace schedule_2.Controllers
             }
 
             ViewBag.Teachers = new SelectList(teacherItems, "Id", "Name");
-            ViewBag.Courses = new SelectList(await _context.Courses.ToListAsync(), "Id", "Name");
+            ViewBag.Courses = new SelectList(courses, "Id", "Name");
             ViewBag.Classrooms = new SelectList(await _context.Classrooms.ToListAsync(), "Id", "Name");
             ViewBag.Schedules = new SelectList(await _context.Schedules.ToListAsync(), "Id", "Name");
             ViewBag.Groups = new SelectList(await _context.Groups.ToListAsync(), "Id", "Name");
-            ViewBag.Subgroups = await _context.Subgroups.ToListAsync();
+
+            // Не передаємо підгрупи - вони будуть завантажені через AJAX після вибору групи
 
             return PartialView("_CreateModal");
+        }
+
+        // Додатковий метод для отримання підгруп групи через AJAX
+        [HttpGet]
+        public async Task<IActionResult> GetSubgroupsByGroup(int groupId)
+        {
+            if (groupId <= 0)
+            {
+                return Json(new List<object>());
+            }
+
+            var subgroups = await _context.Subgroups
+                .Where(s => s.GroupId == groupId)
+                .Select(s => new { id = s.Id, name = s.Name })
+                .ToListAsync();
+
+            return Json(subgroups);
         }
 
         // POST: /Event/Create
@@ -147,9 +173,12 @@ namespace schedule_2.Controllers
 
             // Перевіряємо наявність обов'язкових полів
             if (string.IsNullOrEmpty(Title) || TeacherId == 0 || CourseId == 0 ||
-                ClassroomId == 0 || ScheduleId == 0)
+                ClassroomId == 0 || ScheduleId == 0 || selectedGroups == null || selectedGroups.Length == 0)
             {
                 var errorList = new List<object>();
+
+                if (string.IsNullOrEmpty(Title))
+                    errorList.Add(new { key = "Title", errors = new[] { "Назва події є обов'язковою." } });
 
                 if (TeacherId == 0)
                     errorList.Add(new { key = "Teacher", errors = new[] { "Поле Викладач є обов'язковим." } });
@@ -163,7 +192,35 @@ namespace schedule_2.Controllers
                 if (ScheduleId == 0)
                     errorList.Add(new { key = "Schedule", errors = new[] { "Поле Розклад є обов'язковим." } });
 
+                if (selectedGroups == null || selectedGroups.Length == 0)
+                    errorList.Add(new { key = "Groups", errors = new[] { "Має бути вибрана хоча б одна група." } });
+
                 return Json(new { success = false, message = "Невалідна модель", errors = errorList });
+            }
+
+            // Перевіряємо, чи існують вибрані групи
+            foreach (var groupId in selectedGroups)
+            {
+                var group = await _context.Groups.FindAsync(groupId);
+                if (group == null)
+                {
+                    return Json(new { success = false, message = $"Група з ID {groupId} не існує" });
+                }
+            }
+
+            // Якщо вибрані підгрупи, перевіряємо їх приналежність до вибраних груп
+            if (selectedSubgroups != null && selectedSubgroups.Length > 0)
+            {
+                foreach (var subgroupId in selectedSubgroups)
+                {
+                    var subgroup = await _context.Subgroups
+                        .FirstOrDefaultAsync(s => s.Id == subgroupId && selectedGroups.Contains(s.GroupId));
+
+                    if (subgroup == null)
+                    {
+                        return Json(new { success = false, message = $"Підгрупа з ID {subgroupId} не існує або не належить до вибраних груп" });
+                    }
+                }
             }
 
             // Створюємо новий об'єкт події

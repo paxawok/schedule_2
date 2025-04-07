@@ -1,0 +1,50 @@
+﻿@model schedule_2.Models.Student
+@{
+    var isAdmin = User.IsInRole("Administrator");
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">Деталі студента</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="card border-0">
+        <div class="card-header bg-light">
+            <h4>@Model.LastName @Model.FirstName</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Прізвище:</dt>
+                <dd class="col-sm-9">@Model.LastName</dd>
+
+                <dt class="col-sm-3">Ім'я:</dt>
+                <dd class="col-sm-9">@Model.FirstName</dd>
+
+                <dt class="col-sm-3">Email:</dt>
+                <dd class="col-sm-9">@Model.Email</dd>
+
+                <dt class="col-sm-3">Група:</dt>
+                <dd class="col-sm-9">@Model.Group.Name</dd>
+
+                @if (Model.Group.Subgroups != null && Model.Group.Subgroups.Any())
+                {
+                    <dt class="col-sm-3">Підгрупи:</dt>
+                    <dd class="col-sm-9">
+                        @foreach (var subgroup in Model.Group.Subgroups)
+                        {
+                            <span class="badge bg-info me-1">@subgroup.Name</span>
+                        }
+                    </dd>
+                }
+            </dl>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+    @if (isAdmin)
+    {
+        <a href="@Url.Action("Edit", "StudentManagement", new { id = Model.Id })" class="btn btn-warning">Редагувати</a>
+        <a href="@Url.Action("Delete", "StudentManagement", new { id = Model.Id })" class="btn btn-danger">Видалити</a>
+    }
+</div>

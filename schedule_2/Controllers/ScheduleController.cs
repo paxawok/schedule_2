@@ -157,7 +157,7 @@ namespace schedule_2.Controllers
         }
 
         // GET: /Schedule/Weekly/{id}
-        public async Task<IActionResult> Weekly(int id, DateTime? date = null, bool showOnlyMine = false)
+        public async Task<IActionResult> Weekly(int id, DateTime? date = null, bool showOnlyMine = false, int subgroupId = 0)
         {
             var schedule = await _context.Schedules
                 .Include(s => s.Events)
@@ -188,7 +188,6 @@ namespace schedule_2.Controllers
             var weekDays = Enumerable.Range(0, 7).Select(i => startDay.AddDays(i)).ToList();
 
             // Визначаємо часові слоти (пари)
-            // Весь ваш існуючий код для часових слотів...
             var timeStart = new TimeSpan(9, 0, 0);
             var timeEnd = new TimeSpan(19, 30, 0);
             var lessonDuration = 80;
@@ -222,17 +221,62 @@ namespace schedule_2.Controllers
                 }
             }
 
-            // Фільтруємо події, якщо користувач - викладач і увімкнений фільтр "Лише мої події"
+            // Початковий список подій
             var eventsToDisplay = schedule.Events.ToList();
 
-            if (User.IsInRole("Teacher") && showOnlyMine)
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+            // Отримуємо поточного користувача
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                if (teacher != null)
+            // Визначаємо ролі користувача
+            bool isTeacher = User.IsInRole("Teacher");
+            bool isStudent = User.IsInRole("Student");
+            Teacher currentTeacher = null;
+            Group studentGroup = null;
+            List<Subgroup> groupSubgroups = new List<Subgroup>();
+
+            // Фільтрація для викладачів
+            if (isTeacher && showOnlyMine)
+            {
+                currentTeacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+
+                if (currentTeacher != null)
                 {
-                    eventsToDisplay = eventsToDisplay.Where(e => e.TeacherId == teacher.Id).ToList();
+                    eventsToDisplay = eventsToDisplay.Where(e => e.TeacherId == currentTeacher.Id).ToList();
+                }
+            }
+            // Фільтрація для студентів: показуємо тільки події їхньої групи та підгрупи, якщо вибрано
+            else if (isStudent)
+            {
+                // Отримуємо дані студента і його групу
+                var student = await _context.Set<Student>()
+                    .Include(s => s.Group)
+                    .FirstOrDefaultAsync(s => s.UserId == userId);
+
+                if (student != null)
+                {
+                    // Зберігаємо групу студента
+                    studentGroup = student.Group;
+                    int studentGroupId = student.GroupId;
+
+                    // Отримуємо підгрупи групи студента
+                    groupSubgroups = await _context.Subgroups
+                        .Where(sg => sg.GroupId == studentGroupId)
+                        .ToListAsync();
+
+                    // Спершу фільтруємо події за групою студента
+                    eventsToDisplay = eventsToDisplay.Where(e =>
+                        e.EventGroups.Any(eg => eg.GroupId == studentGroupId)).ToList();
+
+                    // Якщо обрана конкретна підгрупа (subgroupId > 0) і у групи є підгрупи
+                    if (subgroupId > 0 && groupSubgroups.Any())
+                    {
+                        // Фільтруємо події, які:
+                        // 1. Або призначені для обраної підгрупи
+                        // 2. Або не призначені для жодної підгрупи (тобто для всієї групи)
+                        eventsToDisplay = eventsToDisplay.Where(e =>
+                            e.SubgroupEvents.Any(se => se.SubgroupId == subgroupId) ||
+                            !e.SubgroupEvents.Any()).ToList();
+                    }
                 }
             }
 
@@ -256,6 +300,7 @@ namespace schedule_2.Controllers
                 }
             }
 
+            // Передаємо всі необхідні дані у ViewBag
             ViewBag.WeekDays = weekDays;
             ViewBag.TimeSlots = timeSlots;
             ViewBag.WeeklySchedule = weeklySchedule;
@@ -263,16 +308,16 @@ namespace schedule_2.Controllers
             ViewBag.PreviousWeek = startDay.AddDays(-7);
             ViewBag.NextWeek = startDay.AddDays(7);
             ViewBag.ShowOnlyMine = showOnlyMine;
+            ViewBag.SelectedSubgroupId = subgroupId;
 
-            // Визначаємо, чи є користувач викладачем (для відображення фільтра)
-            ViewBag.IsTeacher = User.IsInRole("Teacher");
+            // Ролі користувача
+            ViewBag.IsTeacher = isTeacher;
+            ViewBag.IsStudent = isStudent;
 
-            if (User.IsInRole("Teacher"))
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
-                ViewBag.CurrentTeacher = teacher;
-            }
+            // Дані про користувача
+            ViewBag.CurrentTeacher = currentTeacher;
+            ViewBag.StudentGroup = studentGroup;
+            ViewBag.GroupSubgroups = groupSubgroups;
 
             return View(schedule);
         }

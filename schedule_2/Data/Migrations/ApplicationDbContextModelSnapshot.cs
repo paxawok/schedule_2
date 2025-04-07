@@ -418,6 +418,9 @@ namespace schedule_2.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SubgroupId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -426,10 +429,27 @@ namespace schedule_2.Data.Migrations
 
                     b.HasIndex("GroupId");
 
+                    b.HasIndex("SubgroupId");
+
                     b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("schedule_2.Models.StudentSubgroup", b =>
+                {
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubgroupId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StudentId", "SubgroupId");
+
+                    b.HasIndex("SubgroupId");
+
+                    b.ToTable("StudentSubgroups");
                 });
 
             modelBuilder.Entity("schedule_2.Models.Subgroup", b =>
@@ -667,6 +687,10 @@ namespace schedule_2.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("schedule_2.Models.Subgroup", "Subgroup")
+                        .WithMany()
+                        .HasForeignKey("SubgroupId");
+
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithOne()
                         .HasForeignKey("schedule_2.Models.Student", "UserId")
@@ -675,7 +699,28 @@ namespace schedule_2.Data.Migrations
 
                     b.Navigation("Group");
 
+                    b.Navigation("Subgroup");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("schedule_2.Models.StudentSubgroup", b =>
+                {
+                    b.HasOne("schedule_2.Models.Student", "Student")
+                        .WithMany("StudentSubgroups")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("schedule_2.Models.Subgroup", "Subgroup")
+                        .WithMany("StudentSubgroups")
+                        .HasForeignKey("SubgroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Subgroup");
                 });
 
             modelBuilder.Entity("schedule_2.Models.Subgroup", b =>
@@ -773,8 +818,15 @@ namespace schedule_2.Data.Migrations
                     b.Navigation("Events");
                 });
 
+            modelBuilder.Entity("schedule_2.Models.Student", b =>
+                {
+                    b.Navigation("StudentSubgroups");
+                });
+
             modelBuilder.Entity("schedule_2.Models.Subgroup", b =>
                 {
+                    b.Navigation("StudentSubgroups");
+
                     b.Navigation("SubgroupCourses");
 
                     b.Navigation("SubgroupEvents");

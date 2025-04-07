@@ -1,29 +1,83 @@
 ﻿@model schedule_2.Models.Teacher
+@{
+    var isAdmin = User.IsInRole("Administrator");
+}
 
 <div class="modal-header">
     <h5 class="modal-title">Деталі викладача</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-    <dl class="dl-horizontal">
-        <dt>Ім'я</dt>
-        <dd>@Model.FirstName</dd>
+    <div class="card border-0">
+        <div class="card-header bg-light">
+            <h4>@Model.LastName @Model.FirstName</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Прізвище:</dt>
+                <dd class="col-sm-9">@Model.LastName</dd>
 
-        <dt>Призвище</dt>
-        <dd>@Model.LastName</dd>
+                <dt class="col-sm-3">Ім'я:</dt>
+                <dd class="col-sm-9">@Model.FirstName</dd>
 
-        <dt>Електронна пошта</dt>
-        <dd>@Model.Email</dd>
+                <dt class="col-sm-3">Email:</dt>
+                <dd class="col-sm-9">@Model.Email</dd>
 
-        <dt>Події</dt>
-        <dd>
-            @foreach (var eventItem in Model.Events)
-            {
-                <p>@eventItem.Title (@eventItem.StartDateTime.ToShortDateString() - @eventItem.EndDateTime.ToShortDateString())</p>
-            }
-        </dd>
-    </dl>
+                <dt class="col-sm-3">Курси:</dt>
+                <dd class="col-sm-9">
+                    @if (Model.CourseTeachers != null && Model.CourseTeachers.Any())
+                    {
+                        <ul class="list-unstyled mb-0">
+                            @foreach (var courseTeacher in Model.CourseTeachers)
+                            {
+                                <li>@courseTeacher.Course.Name</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Немає призначених курсів</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+    @if (isAdmin)
+    {
+        <button type="button" class="btn btn-warning" onclick="showEditTeacher(@Model.Id)">Редагувати</button>
+        <button type="button" class="btn btn-danger" onclick="showDeleteTeacher(@Model.Id)">Видалити</button>
+    }
 </div>
+
+<script>
+    function showEditTeacher(id) {
+        $('#teacherDetailsModal').modal('hide');
+        $.ajax({
+            url: '/Teacher/EditModal/' + id,
+            success: function (result) {
+                $('#teacherDetailsModal .modal-content').html(result);
+                $('#teacherDetailsModal').modal('show');
+            },
+            error: function () {
+                alert('Помилка завантаження форми редагування.');
+            }
+        });
+    }
+
+    function showDeleteTeacher(id) {
+        $('#teacherDetailsModal').modal('hide');
+        $.ajax({
+            url: '/Teacher/DeleteModal/' + id,
+            success: function (result) {
+                $('#teacherDetailsModal .modal-content').html(result);
+                $('#teacherDetailsModal').modal('show');
+            },
+            error: function () {
+                alert('Помилка завантаження форми видалення.');
+            }
+        });
+    }
+</script>

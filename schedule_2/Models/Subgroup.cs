@@ -14,5 +14,7 @@ namespace schedule_2.Models
 
         // Зв’язок M:M з Event (через нову проміжну таблицю SubgroupEvent)
         public virtual ICollection<SubgroupEvent> SubgroupEvents { get; set; } = new List<SubgroupEvent>();
+        public virtual ICollection<StudentSubgroup> StudentSubgroups { get; set; } = new List<StudentSubgroup>();
+
     }
 }

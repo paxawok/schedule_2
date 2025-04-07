@@ -12,10 +12,6 @@
         <dt class="col-sm-4">Дата закінчення:</dt>
         <dd class="col-sm-8">@Model.EndDateTime.ToString("dd.MM.yyyy HH:mm")</dd>
 
-        <!--<dt class="col-sm-4">Повторювана подія:</dt>
-        <dd class="col-sm-8">@(Model.IsRecurring ? "Так" : "Ні")</dd>-->
-
-
         <dt class="col-sm-4">Викладач:</dt>
         <dd class="col-sm-8">@Model.Teacher.LastName @Model.Teacher.FirstName</dd>
 
@@ -48,9 +44,16 @@
                 <ul class="list-unstyled">
                     @foreach (var subgroupEvent in Model.SubgroupEvents)
                     {
-                        <li>@subgroupEvent.Subgroup.Name</li>
+                        <li><span class="badge bg-info">@subgroupEvent.Subgroup.Name</span></li>
                     }
                 </ul>
+            </dd>
+        }
+        else if (Model.EventGroups != null && Model.EventGroups.Any())
+        {
+            <dt class="col-sm-4">Підгрупи:</dt>
+            <dd class="col-sm-8">
+                <span class="text-muted">Всі підгрупи (загальна подія)</span>
             </dd>
         }
     </dl>

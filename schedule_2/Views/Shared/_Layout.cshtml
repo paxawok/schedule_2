@@ -135,15 +135,33 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрити"></button>
         </div>
         <div class="offcanvas-body d-flex flex-column gap-2 px-3">
-            <a href="/Event" class="btn btn-outline-primary w-100 text-start">Редагувати події</a>
-            <a href="/Teacher" class="btn btn-outline-primary w-100 text-start">Редагувати викладачів</a>
-            <a href="/Classroom" class="btn btn-outline-primary w-100 text-start">Редагувати аудиторії</a>
-            <a href="/Course" class="btn btn-outline-primary w-100 text-start">Редагувати курси</a>
-            <a href="/Group" class="btn btn-outline-primary w-100 text-start">Редагувати групи</a>
-            <a href="/Schedule" class="btn btn-outline-primary w-100 text-start">Редагувати розклад</a>
-            <a href="/Subgroup" class="btn btn-outline-primary w-100 text-start">Редагувати підгрупи</a>          
+            @if (User.IsInRole("Administrator") || User.IsInRole("Teacher"))
+            {
+                <!-- Пункти меню для адміністраторів та викладачів -->
+                <a href="/Event" class="btn btn-outline-primary w-100 text-start">Редагувати події</a>
+            }
+
             @if (User.IsInRole("Administrator"))
             {
+                <!-- Пункти меню тільки для адміністраторів -->
+                <a href="/Teacher" class="btn btn-outline-primary w-100 text-start">Редагувати викладачів</a>
+                <a href="/Classroom" class="btn btn-outline-primary w-100 text-start">Редагувати аудиторії</a>
+            }
+
+            @if (User.IsInRole("Administrator") || User.IsInRole("Teacher"))
+            {
+                <!-- Пункти меню для адміністраторів та викладачів -->
+                <a href="/Course" class="btn btn-outline-primary w-100 text-start">Редагувати курси</a>
+                <a href="/Group" class="btn btn-outline-primary w-100 text-start">Редагувати групи</a>
+                <a href="/Subgroup" class="btn btn-outline-primary w-100 text-start">Редагувати підгрупи</a>
+            }
+
+            <!-- Розклад доступний для всіх ролей: адміністраторів, викладачів і студентів -->
+            <a href="/Schedule" class="btn btn-outline-primary w-100 text-start">Редагувати розклад</a>
+
+            @if (User.IsInRole("Administrator"))
+            {
+                <!-- Додаткові адміністративні інструменти -->
                 <hr />
                 <a class="btn btn-outline-primary w-100 text-start" asp-controller="StudentManagement" asp-action="Index">Керування студентами</a>
                 <a class="btn btn-outline-primary w-100 text-start bottom-btn" asp-controller="UserManagement" asp-action="Index">Керування користувачами</a>

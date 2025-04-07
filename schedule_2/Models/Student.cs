@@ -30,5 +30,9 @@ namespace schedule_2.Models
 
         // Навігаційні властивості для отримання повного імені
         public string FullName => $"{LastName} {FirstName}";
+        public int? SubgroupId { get; set; }
+        public virtual Subgroup Subgroup { get; set; }
+        public virtual ICollection<StudentSubgroup> StudentSubgroups { get; set; } = new List<StudentSubgroup>();
+
     }
 }
