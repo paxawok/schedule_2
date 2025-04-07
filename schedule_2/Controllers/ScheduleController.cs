@@ -157,7 +157,7 @@ namespace schedule_2.Controllers
         }
 
         // GET: /Schedule/Weekly/{id}
-        public async Task<IActionResult> Weekly(int id, DateTime? date = null, bool showOnlyMine = false, bool filterBySubgroup = false)
+        public async Task<IActionResult> Weekly(int id, DateTime? date = null, bool showOnlyMine = false, int subgroupId = 0)
         {
             var schedule = await _context.Schedules
                 .Include(s => s.Events)
@@ -227,49 +227,56 @@ namespace schedule_2.Controllers
             // Отримуємо поточного користувача
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Фільтрація для викладачів
-            if (User.IsInRole("Teacher") && showOnlyMine)
-            {
-                var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+            // Визначаємо ролі користувача
+            bool isTeacher = User.IsInRole("Teacher");
+            bool isStudent = User.IsInRole("Student");
+            Teacher currentTeacher = null;
+            Group studentGroup = null;
+            List<Subgroup> groupSubgroups = new List<Subgroup>();
 
-                if (teacher != null)
+            // Фільтрація для викладачів
+            if (isTeacher && showOnlyMine)
+            {
+                currentTeacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
+
+                if (currentTeacher != null)
                 {
-                    eventsToDisplay = eventsToDisplay.Where(e => e.TeacherId == teacher.Id).ToList();
+                    eventsToDisplay = eventsToDisplay.Where(e => e.TeacherId == currentTeacher.Id).ToList();
                 }
             }
-            // Фільтрація для студентів: показуємо тільки події їхньої групи
-            else if (User.IsInRole("Student"))
+            // Фільтрація для студентів: показуємо тільки події їхньої групи та підгрупи, якщо вибрано
+            else if (isStudent)
             {
-                var student = await _context.Students
+                // Отримуємо дані студента і його групу
+                var student = await _context.Set<Student>()
                     .Include(s => s.Group)
-                    .Include(s => s.Subgroup)
                     .FirstOrDefaultAsync(s => s.UserId == userId);
 
                 if (student != null)
                 {
-                    // Отримуємо GroupId поточного студента
+                    // Зберігаємо групу студента
+                    studentGroup = student.Group;
                     int studentGroupId = student.GroupId;
 
-                    // Фільтруємо події за групою студента
+                    // Отримуємо підгрупи групи студента
+                    groupSubgroups = await _context.Subgroups
+                        .Where(sg => sg.GroupId == studentGroupId)
+                        .ToListAsync();
+
+                    // Спершу фільтруємо події за групою студента
                     eventsToDisplay = eventsToDisplay.Where(e =>
                         e.EventGroups.Any(eg => eg.GroupId == studentGroupId)).ToList();
 
-                    // Додаткова фільтрація за підгрупою, якщо вона призначена і користувач вибрав відповідний фільтр
-                    if (filterBySubgroup && student.SubgroupId.HasValue)
+                    // Якщо обрана конкретна підгрупа (subgroupId > 0) і у групи є підгрупи
+                    if (subgroupId > 0 && groupSubgroups.Any())
                     {
-                        int studentSubgroupId = student.SubgroupId.Value;
-
-                        // Додаємо до списку події, які призначені для підгрупи студента
-                        // Об'єднуємо з подіями групи, які не призначені для жодної підгрупи
+                        // Фільтруємо події, які:
+                        // 1. Або призначені для обраної підгрупи
+                        // 2. Або не призначені для жодної підгрупи (тобто для всієї групи)
                         eventsToDisplay = eventsToDisplay.Where(e =>
-                            e.SubgroupEvents.Any(se => se.SubgroupId == studentSubgroupId) ||
+                            e.SubgroupEvents.Any(se => se.SubgroupId == subgroupId) ||
                             !e.SubgroupEvents.Any()).ToList();
                     }
-
-                    // Додаткова інформація для відображення в представленні
-                    ViewBag.StudentGroup = student.Group;
-                    ViewBag.StudentSubgroup = student.Subgroup;
-                    ViewBag.FilterBySubgroup = filterBySubgroup;
                 }
             }
 
@@ -293,6 +300,7 @@ namespace schedule_2.Controllers
                 }
             }
 
+            // Передаємо всі необхідні дані у ViewBag
             ViewBag.WeekDays = weekDays;
             ViewBag.TimeSlots = timeSlots;
             ViewBag.WeeklySchedule = weeklySchedule;
@@ -300,17 +308,16 @@ namespace schedule_2.Controllers
             ViewBag.PreviousWeek = startDay.AddDays(-7);
             ViewBag.NextWeek = startDay.AddDays(7);
             ViewBag.ShowOnlyMine = showOnlyMine;
-            ViewBag.FilterBySubgroup = filterBySubgroup;
+            ViewBag.SelectedSubgroupId = subgroupId;
 
-            // Визначаємо, чи є користувач викладачем (для відображення фільтра)
-            ViewBag.IsTeacher = User.IsInRole("Teacher");
-            ViewBag.IsStudent = User.IsInRole("Student");
+            // Ролі користувача
+            ViewBag.IsTeacher = isTeacher;
+            ViewBag.IsStudent = isStudent;
 
-            if (User.IsInRole("Teacher"))
-            {
-                var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == userId);
-                ViewBag.CurrentTeacher = teacher;
-            }
+            // Дані про користувача
+            ViewBag.CurrentTeacher = currentTeacher;
+            ViewBag.StudentGroup = studentGroup;
+            ViewBag.GroupSubgroups = groupSubgroups;
 
             return View(schedule);
         }

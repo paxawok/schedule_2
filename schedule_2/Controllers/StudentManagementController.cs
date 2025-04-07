@@ -84,7 +84,6 @@ namespace schedule_2.Controllers
             // Якщо роль не визначена
             return Forbid();
         }
-
         // GET: /StudentManagement/Details/{id}
         public async Task<IActionResult> Details(int id)
         {
@@ -100,7 +99,37 @@ namespace schedule_2.Controllers
             if (!canView)
                 return Forbid();
 
+            // Отримання підгруп, до яких належить студент
+            // Припускаємо, що підгрупи пов'язані з групою студента
+            var studentSubgroups = await _context.Subgroups
+                .Where(sg => sg.GroupId == student.GroupId)
+                .Select(sg => sg.Name)
+                .ToListAsync();
+
+            ViewBag.StudentSubgroups = studentSubgroups;
+
             return View(student);
+        }
+
+        // GET: /StudentManagement/DetailsModal/{id}
+        [HttpGet]
+        public async Task<IActionResult> DetailsModal(int id)
+        {
+            var student = await _context.Set<Student>()
+                .Include(s => s.Group)
+                .ThenInclude(g => g.Subgroups) // Включаємо підгрупи групи
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (student == null)
+                return NotFound();
+
+            // Перевірка прав доступу
+            bool canView = await CanAccessStudent(student);
+            if (!canView)
+                return Forbid();
+
+            // Повертаємо часткове представлення для модального вікна
+            return PartialView("_DetailsModal", student);
         }
 
         // GET: /StudentManagement/Edit/{id}

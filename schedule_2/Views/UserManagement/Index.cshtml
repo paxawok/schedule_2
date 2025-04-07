@@ -2,9 +2,7 @@
 @{
     ViewData["Title"] = "Управління користувачами";
 }
-
 <h2>Управління користувачами</h2>
-
 <div class="row mb-3">
     <div class="col">
         <div class="btn-group">
@@ -17,7 +15,6 @@
         </div>
     </div>
 </div>
-
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
@@ -43,19 +40,17 @@
                             <a asp-action="EditRoles" asp-route-userId="@user.Id" class="btn btn-sm btn-warning">
                                 <i class="bi bi-shield"></i> Роль
                             </a>
-
                             @if (user.IsTeacher && user.TeacherId.HasValue)
                             {
-                                <a asp-controller="Teacher" asp-action="DetailsModal" asp-route-id="@user.TeacherId" class="btn btn-sm btn-info">
+                                <button type="button" class="btn btn-sm btn-info" onclick="showTeacherDetails(@user.TeacherId)">
                                     <i class="bi bi-eye"></i> Профіль
-                                </a>
+                                </button>
                             }
-
                             @if (user.IsStudent && user.StudentId.HasValue)
                             {
-                                <a asp-controller="StudentManagement" asp-action="Details" asp-route-id="@user.StudentId" class="btn btn-sm btn-info">
+                                <button type="button" class="btn btn-sm btn-info" onclick="showStudentDetails(@user.StudentId)">
                                     <i class="bi bi-eye"></i> Профіль
-                                </a>
+                                </button>
                             }
                         </div>
                     </td>
@@ -64,11 +59,105 @@
         </tbody>
     </table>
 </div>
-<!-- Модальне вікно для деталей -->
-<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+
+<!-- Модальне вікно для деталей викладача -->
+<div class="modal fade" id="teacherDetailsModal" tabindex="-1" aria-labelledby="teacherDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <!-- Вміст завантажуватиметься через AJAX -->
         </div>
     </div>
 </div>
+
+<!-- Модальне вікно для редагування викладача -->
+<div class="modal fade" id="editTeacherModal" tabindex="-1" aria-labelledby="editTeacherModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
+</div>
+
+<!-- Модальне вікно для видалення викладача -->
+<div class="modal fade" id="deleteTeacherModal" tabindex="-1" aria-labelledby="deleteTeacherModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
+</div>
+
+<!-- Модальне вікно для деталей студента -->
+<div class="modal fade" id="studentDetailsModal" tabindex="-1" aria-labelledby="studentDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Вміст завантажуватиметься через AJAX -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Функція для відображення деталей викладача в модальному вікні
+        function showTeacherDetails(id) {
+            $.ajax({
+                url: '/Teacher/DetailsModal/' + id,
+                type: 'GET',
+                success: function(result) {
+                    $('#teacherDetailsModal .modal-content').html(result);
+                    $('#teacherDetailsModal').modal('show');
+                },
+                error: function() {
+                    alert('Помилка при завантаженні інформації про викладача.');
+                }
+            });
+        }
+
+        // Функція для відображення деталей студента в модальному вікні
+        function showStudentDetails(id) {
+            $.ajax({
+                url: '/StudentManagement/DetailsModal/' + id,
+                type: 'GET',
+                success: function(result) {
+                    $('#studentDetailsModal .modal-content').html(result);
+                    $('#studentDetailsModal').modal('show');
+                },
+                error: function() {
+                    alert('Помилка при завантаженні інформації про студента.');
+                }
+            });
+        }
+
+        // Функція для відображення форми редагування викладача
+        function showEdit(id) {
+            $('#teacherDetailsModal').modal('hide');
+            $.ajax({
+                url: '/Teacher/EditModal/' + id,
+                type: 'GET',
+                success: function(result) {
+                    $('#editTeacherModal .modal-content').html(result);
+                    $('#editTeacherModal').modal('show');
+                },
+                error: function() {
+                    alert('Помилка при завантаженні форми редагування викладача.');
+                }
+            });
+        }
+
+        // Функція для відображення форми видалення викладача
+        function showDelete(id) {
+            $('#teacherDetailsModal').modal('hide');
+            $.ajax({
+                url: '/Teacher/DeleteModal/' + id,
+                type: 'GET',
+                success: function(result) {
+                    $('#deleteTeacherModal .modal-content').html(result);
+                    $('#deleteTeacherModal').modal('show');
+                },
+                error: function() {
+                    alert('Помилка при завантаженні форми видалення викладача.');
+                }
+            });
+        }
+    </script>
+}
